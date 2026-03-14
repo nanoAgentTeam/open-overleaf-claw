@@ -698,9 +698,32 @@ def gateway(
     port: int = typer.Option(18790, "--port", "-p", help="Gateway port"),
 ):
     """Start the gateway server and UI."""
+    from loguru import logger
+    import sys
+
+    # Configure gateway logging: stderr + rotating log file
+    logger.remove()
+    logger.add(
+        sys.stderr,
+        level="INFO",
+        format="<dim>{time:HH:mm:ss}</dim> | <level>{level: <8}</level> | <dim>{name}:{function}:{line}</dim> - {message}",
+        colorize=True,
+    )
+    log_dir = Path(__file__).resolve().parent.parent / "logs"
+    log_dir.mkdir(exist_ok=True)
+    logger.add(
+        str(log_dir / "gateway.log"),
+        level="DEBUG",
+        format="{time:YYYY-MM-DD HH:mm:ss.SSS} | {level: <8} | {name}:{function}:{line} - {message}",
+        rotation="10 MB",
+        retention="7 days",
+        encoding="utf-8",
+    )
+    logger.info(f"Log file: {log_dir / 'gateway.log'}")
+
     from agent.services.gateway_server import start_gateway_server
     host = "127.0.0.1"
-    console.print(f"[bold green]Starting ContextBot Gateway on http://{host}:{port}[/bold green]")
+    console.print(f"[bold green]Starting Gateway on http://{host}:{port}[/bold green]")
     console.print(f"[blue]Web UI available at http://{host}:{port}/ui[/blue]")
     pid = os.getpid()
     _register_gateway_pid(pid)
