@@ -18,6 +18,7 @@ A self-hosted AI assistant for academic research — manages your papers, search
 </videos>
     Demo
 </iframe>
+https://github.com/user-attachments/assets/ab6dac7c-013e-498b-870a-360a2e3ce347
 
 
 <!-- ![Demo](docs/assets/demo.gif) -->
