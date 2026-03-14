@@ -61,10 +61,16 @@ Bot: ✅ Pushed 3 files to Overleaf.
 - arXiv, PubMed, OpenAlex, Semantic Scholar integration
 - Full-text PDF reading for in-depth analysis
 
+**Research Radar & Automation**
+- Scheduled tasks that automatically track your research field — new papers, trending topics, deadline alerts
+- Daily scans, weekly digests, direction-drift detection — all running unattended
+- Results pushed to Telegram, Feishu, DingTalk, Email, or any Apprise-compatible channel
+- Configure via Web UI or `project.yaml` — each project has its own radar schedule
+
 **Memory & Context**
 - Project-level memory — the agent remembers your research topics, preferences, and prior work across sessions
 - Automated context summarization to stay within token limits without losing information
-- Memory-powered automation — scheduled tasks can read/write project memory for continuity
+- Memory-powered automation — scheduled tasks read/write project memory for continuity
 
 **Access Anywhere**
 - **Web UI** — browser-based dashboard for configuration and monitoring
@@ -335,10 +341,16 @@ Bot: ✅ 已推送 3 个文件到 Overleaf。
 - 集成 arXiv、PubMed、OpenAlex、Semantic Scholar
 - 支持 PDF 全文阅读和深度分析
 
+**研究雷达与自动化**
+- 定时任务自动追踪研究领域 — 新论文、热点趋势、截稿提醒
+- 每日扫描、周报汇总、方向漂移检测 — 全部无人值守运行
+- 结果推送到 Telegram、飞书、钉钉、邮件或任何 Apprise 兼容渠道
+- 通过 Web UI 或 `project.yaml` 配置 — 每个项目有独立的雷达计划
+
 **记忆与上下文**
 - 项目级记忆 — Agent 跨 Session 记住你的研究方向、偏好和先前工作
 - 自动上下文摘要，在 token 限制内不丢失关键信息
-- 记忆驱动的自动化 — 定时任务可读写项目记忆，保持工作连续性
+- 记忆驱动的自动化 — 定时任务读写项目记忆，保持工作连续性
 
 **随时随地访问**
 - **Web UI** — 浏览器端仪表盘，配置和监控
