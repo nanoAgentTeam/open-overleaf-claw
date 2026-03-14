@@ -2,11 +2,11 @@
 
 # Open Overleaf Claw
 
-**Your AI co-pilot for academic paper writing.**
+**Your personal AI research assistant. Any paper. Any venue. The academic claw. 🦞**
 
-Manage LaTeX projects through conversation — with Overleaf sync, Git version control, multi-agent collaboration, and multi-channel access.
+A self-hosted AI assistant for academic research — manages your papers, searches literature, tracks deadlines, and answers you on the channels you already use.
 
-通过对话管理 LaTeX 论文项目 — 支持 Overleaf 同步、Git 版本控制、多 Agent 协作和多渠道访问。
+你自己的 AI 学术研究助手 — 管理论文、检索文献、追踪截稿日期，在你常用的渠道随时响应。
 
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -24,7 +24,7 @@ Manage LaTeX projects through conversation — with Overleaf sync, Git version c
 
 ## What is Open Overleaf Claw?
 
-Open Overleaf Claw is an AI agent system that turns natural language into paper-writing actions. Instead of switching between your editor, Overleaf, terminal, and search engine, you talk to one system that handles it all:
+Open Overleaf Claw is a personal AI research assistant you run on your own machine. It manages your LaTeX projects, syncs with Overleaf, searches literature, tracks deadlines — and answers you on the channels you already use (CLI, Web UI, Telegram, Feishu, QQ, DingTalk). Instead of switching between your editor, Overleaf, terminal, and search engine, you talk to one assistant that handles it all:
 
 ```
 You: Create a paper project "MoE-Survey" and link it to Overleaf.
@@ -304,7 +304,7 @@ MIT License — see [LICENSE](LICENSE).
 
 ## Open Overleaf Claw 是什么？
 
-Open Overleaf Claw 是一个 AI Agent 系统，让你用自然语言完成论文写作的全部操作。不再需要在编辑器、Overleaf、终端和搜索引擎之间来回切换：
+Open Overleaf Claw 是一个运行在你自己机器上的 AI 学术研究助手。它管理你的 LaTeX 论文项目，同步 Overleaf，检索文献，追踪截稿日期——并在你常用的渠道随时响应（CLI、Web UI、Telegram、飞书、QQ、钉钉）。不再需要在编辑器、Overleaf、终端和搜索引擎之间来回切换：
 
 ```
 You: 创建一个叫 "MoE-Survey" 的论文项目，并关联 Overleaf

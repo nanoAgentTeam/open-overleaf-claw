@@ -5,3 +5,9 @@ used_by: context.py
 [MEMORY PROTOCOL]
 1. **Chat Memory**: Stores cross-project summaries and user preferences.
 2. **Project Memory**: Stores session-specific tools calls and deep investigation notes.
+
+[MEMORY TOOLS QUICK REFERENCE]
+- Read profile: `profile_read('research_core')` — get project research direction, keywords, stage.
+- Browse: `memory_nav(domain='all')` → `memory_list(scope='...')` → `memory_get(id='MEM-xxxx')`.
+- Search: `memory_search(query='keyword')`.
+- Save: `memory_write(title, content, scope='project', intent='research_direction')` — use when the user explicitly shares research preferences or important decisions that should persist across sessions.

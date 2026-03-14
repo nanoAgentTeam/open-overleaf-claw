@@ -196,6 +196,8 @@ def build_default_radar_jobs(timezone: str = "UTC") -> list[AutomationJob]:
                 "4) 对比新旧画像：\n"
                 "   - 若 topic、keywords、stage 等有实质变化 → 调用 profile_write('research_core', {...}) "
                 "写入新画像，并调用 notify_push 告知用户画像已更新及主要变化。\n"
+                "   - 若首次提取画像（之前 research_core 为空或全是默认值）→ 即使内容是模板占位符，"
+                "也调用 notify_push 推送一条确认消息，告知用户画像已初始化及当前提取结果。\n"
                 "   - 若仅措辞微调或无变化 → 不更新、不推送，记录【画像与论文内容一致，无需更新】。"
                 + _MEMORY_GUIDANCE
             ),
@@ -267,7 +269,7 @@ def build_default_radar_jobs(timezone: str = "UTC") -> list[AutomationJob]:
                 "4) 评估论文完成度：根据 research_core.stage 判断当前阶段，"
                 "结合关键 tex 文件（如有 experiments.tex、conclusion.tex 等）判断缺失项。\n"
                 "5) 推送策略（对最近的一个截稿日期计算剩余天数）：\n"
-                "   - 剩余 > 30 天：记录即可，不推送。\n"
+                "   - 剩余 > 30 天：简要推送一次会议列表概览（标注距离最近截稿的天数），之后不再重复推送相同内容。\n"
                 "   - 剩余 7-30 天：每 7 天推送一次，内容：会议列表 + 完成度 + 优先建议（3 项）。\n"
                 "   - 剩余 3-7 天：每天推送，内容：倒计时 + 未完成项清单 + 当天必做。\n"
                 "   - 剩余 <= 3 天：每次运行都推送，标记紧急，聚焦最关键 1-3 项。\n"
