@@ -13,7 +13,9 @@ A self-hosted AI assistant for academic research — manages your papers, search
 
 <!-- TODO: 在此放置产品演示 GIF 或视频 -->
 
-<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=116227871737051&bvid=BV1ZJwtzcEcm&cid=36698458561&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
+<video id="video" controls="" preload="none" poster="封面">
+      <source id="mp4" src="README/video/openoverleaf.mp4" type="video/mp4">
+</videos>
     Demo
 </iframe>
 
