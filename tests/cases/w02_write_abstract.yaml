@@ -1,0 +1,13 @@
+name: "W02 - Write Abstract"
+project_id: "E2E_Test_W02"
+overleaf_id: "699ec306609aec5bb3f3ee77"
+main_tex: "main.tex"
+query: "根据我论文里 method.tex 和 experiments.tex 的内容，帮我写一个 Abstract 写进 abstract.tex，请控制在 250 词以内。"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read `method.tex` and `experiments.tex`
+  - Agent should write the content into `abstract.tex`
+  - The written abstract must contain the background, method, and results
+  - The abstract must mention the key metrics: 4x compression ratio, and <1% accuracy loss on LLaMA-70B
+  - Word count should be under 250 words

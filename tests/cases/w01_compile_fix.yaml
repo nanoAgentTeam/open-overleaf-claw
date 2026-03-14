@@ -1,0 +1,12 @@
+name: "W01 - Fix Compile Error"
+project_id: "E2E_Test_W01"
+overleaf_id: "699ec2f6fe5506fe5210c297"
+main_tex: "main.tex"
+query: "编译一下这个项目，如果发现有语法或格式错误，请帮我修复它，确保它能成功编译出 PDF。"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should correctly identify compilation errors
+  - Agent should use `str_replace` or `write_file` to fix the errors
+  - Agent should re-compile and confirm success
+  - Agent should NOT rewrite the entire file or erase unchanged sections

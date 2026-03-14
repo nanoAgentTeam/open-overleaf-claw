@@ -1,0 +1,17 @@
+name: "W20 - Full Paper Polish"
+project_id: "E2E_Test_W20"
+mode: "TASK"
+overleaf_id: "699ec387609aec5bb3f41793"
+main_tex: "main.tex"
+query: "请对全文做一遍整体润色，统一写作风格。具体要求：(1) Abstract 修正语法错误，用被动语态替代口语表达；(2) Introduction 去口语化，改为学术书面语；(3) Method 保持现有风格（已经比较规范）；(4) Experiments 统一时态为过去时，补充缺失的表格引用；(5) Conclusion 改为学术书面语。每个章节用 str_replace 修改对应 .tex 文件。"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read all content tex files to assess style consistency
+  - For `abstract.tex`: fix grammar errors (\"involve\" → \"involves\", \"lenght\" → \"length\"), replace informal phrasing with formal academic style
+  - For `introduction.tex`: remove colloquial language (\"So basically\", \"Like\", \"honestly\", \"stuff\"), rewrite in third-person academic style
+  - For `method.tex`: minimal changes, preserve existing formal style
+  - For `experiments.tex`: unify tense to past tense, add missing table cross-references (\ref{tab:...})
+  - For `conclusion.tex`: replace informal phrases with formal academic equivalents
+  - Agent should use `str_replace` for each file modification
+  - Agent should report a summary of changes made per section

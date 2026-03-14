@@ -1,0 +1,8 @@
+{
+  "role_type": "Worker",
+  "description": "SDD Reviewer（只读工具）",
+  "tools": [
+    "read_file",
+    "bash"
+  ]
+}

@@ -1,0 +1,13 @@
+name: "M01 - Memory Write and Read Chain"
+project_id: "E2E_Test_M01"
+overleaf_id: "69a417b3a1614e5e9bd8fffd"
+main_tex: "main.tex"
+query: "把这个研究发现记录到项目记忆里（kind=insight，scope=project，title=\"KV压缩精度分析\"）：我们的方法在4-bit量化下比baseline低0.8%，但在8-bit下反超1.2%，在更大参数量下优势扩大。存完后：① 用 memory_nav 看一下有哪些 scope；② 用 memory_list 列出 project scope 的记忆；③ 用 memory_get 读取刚存的那条全文，确认内容正确。"
+timeout_sec: 3600
+
+expected_outcome:
+  - Agent calls memory_write with kind=insight, scope=project, title containing KV or 压缩
+  - Agent sequentially calls memory_nav then memory_list(scope=project) then memory_get(<id>) in that order
+  - The memory_get return value matches the written entry and contains 0.8% and 1.2%
+  - File .project_memory/index.jsonl exists after the run and contains the new entry
+  - Agent confirms the content is correct by comparing written vs retrieved content

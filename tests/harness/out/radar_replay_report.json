@@ -1,0 +1,110 @@
+{
+  "project_id": "multi-agent-project",
+  "safe_cwd": true,
+  "commands": [
+    {
+      "command": "/radar status",
+      "args": "status",
+      "response": "Radar Status (multi-agent-project)\n- jobs: 9\n- job_states: 2\n- subscriptions: 0\n- recent_job_runs: 5\n- last_run: radar.autoplan [MEM-0017]",
+      "should_continue": false
+    },
+    {
+      "command": "/radar run radar.daily.scan",
+      "args": "run radar.daily.scan",
+      "response": "Job `radar.daily.scan` finished with status: success\nOutput: mock-execution-ok",
+      "should_continue": false
+    },
+    {
+      "command": "/radar autoplan run",
+      "args": "autoplan run",
+      "response": "Job `radar.autoplan` finished with status: success\nOutput: mock-execution-ok\nAutoplan applied: {'upserted': 0, 'disabled': 0, 'skipped': 0}",
+      "should_continue": false
+    }
+  ],
+  "pre": {
+    "index_count": 17,
+    "index_ids": [
+      "MEM-0001",
+      "MEM-0002",
+      "MEM-0003",
+      "MEM-0004",
+      "MEM-0005",
+      "MEM-0006",
+      "MEM-0007",
+      "MEM-0008",
+      "MEM-0009",
+      "MEM-0010",
+      "MEM-0011",
+      "MEM-0012",
+      "MEM-0013",
+      "MEM-0014",
+      "MEM-0015",
+      "MEM-0016",
+      "MEM-0017"
+    ],
+    "state_daily": {
+      "last_run_at": "2026-02-23T00:54:32.248463",
+      "last_status": "success",
+      "last_entry_id": "MEM-0016",
+      "run_count": 9,
+      "consecutive_failures": 0,
+      "job_id": "radar.daily.scan",
+      "updated_at": "2026-02-23T00:54:32.255691"
+    },
+    "state_autoplan": {
+      "last_run_at": "2026-02-23T00:54:32.267323",
+      "last_status": "success",
+      "last_entry_id": "MEM-0017",
+      "run_count": 8,
+      "consecutive_failures": 0,
+      "job_id": "radar.autoplan",
+      "updated_at": "2026-02-23T00:54:32.270679"
+    }
+  },
+  "post": {
+    "index_count": 19,
+    "index_ids": [
+      "MEM-0001",
+      "MEM-0002",
+      "MEM-0003",
+      "MEM-0004",
+      "MEM-0005",
+      "MEM-0006",
+      "MEM-0007",
+      "MEM-0008",
+      "MEM-0009",
+      "MEM-0010",
+      "MEM-0011",
+      "MEM-0012",
+      "MEM-0013",
+      "MEM-0014",
+      "MEM-0015",
+      "MEM-0016",
+      "MEM-0017",
+      "MEM-0018",
+      "MEM-0019"
+    ],
+    "state_daily": {
+      "last_run_at": "2026-02-23T00:55:38.639439",
+      "last_status": "success",
+      "last_entry_id": "MEM-0018",
+      "run_count": 10,
+      "consecutive_failures": 0,
+      "job_id": "radar.daily.scan",
+      "updated_at": "2026-02-23T00:55:38.664296"
+    },
+    "state_autoplan": {
+      "last_run_at": "2026-02-23T00:55:38.727977",
+      "last_status": "success",
+      "last_entry_id": "MEM-0019",
+      "run_count": 9,
+      "consecutive_failures": 0,
+      "job_id": "radar.autoplan",
+      "updated_at": "2026-02-23T00:55:38.740077"
+    }
+  },
+  "new_entry_ids": [
+    "MEM-0018",
+    "MEM-0019"
+  ]
+}

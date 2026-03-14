@@ -1,0 +1,7 @@
+---
+description: 记忆协议指令，定义 Chat Memory 和 Project Memory 的使用规则
+used_by: context.py
+---
+[MEMORY PROTOCOL]
+1. **Chat Memory**: Stores cross-project summaries and user preferences.
+2. **Project Memory**: Stores session-specific tools calls and deep investigation notes.

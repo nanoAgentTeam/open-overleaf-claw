@@ -1,0 +1,15 @@
+name: "W13 - Chinese to English Translation"
+project_id: "E2E_Test_W13"
+overleaf_id: "699ec367fe5506fe5211003c"
+main_tex: "main.tex"
+query: "请把 chinese_draft.tex 里的中文草稿翻译成学术英文，保留所有 LaTeX 格式（公式、\\cite{}、\\section{} 等），翻译后写入同一文件，替换原有中文内容。注意保持学术写作风格，不要意译过度。"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read `contents/chinese_draft.tex` to get the Chinese content
+  - Agent should translate all Chinese text to formal academic English
+  - Agent should preserve all LaTeX markup: equations, \cite{}, \section{}, etc.
+  - Agent should use `str_replace` or `write_file` to replace content in-place
+  - Translated text should use third-person academic style (no "we propose" informal phrasing)
+  - All mathematical notation and formula structures must remain intact
+  - Citation keys (\cite{mcmahan2017communication}, etc.) must be preserved unchanged

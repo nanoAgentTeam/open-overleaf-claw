@@ -1,0 +1,15 @@
+name: "W19 - CSV to LaTeX Table"
+project_id: "E2E_Test_W19"
+overleaf_id: "699ec3800532b7c911ac2a59"
+main_tex: "main.tex"
+query: "我有一份实验结果文件 results.csv，包含 5 个方法在 4 个数据集上的 3 个指标（Accuracy、F1、AUC）。请读取 CSV，生成一个格式规范的 LaTeX 表格（用 booktabs 宏包），方法作为行，数据集作为列组，用 \\multicolumn 分组。注意：对每个（数据集, 指标）的单独列，找到数值最大的方法并用 \\textbf{} 加粗，共 4×3=12 个加粗值。表格必须包裹在 \\begin{table}[htbp]...\\end{table} 环境中，并加上 \\caption{Main Results} 和 \\label{tab:main}。把完整的 table 环境用 str_replace 插入到 experiments.tex 的 TODO 注释位置。"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read `results.csv` to parse all 5×4×3 data entries
+  - Agent should generate a well-formatted LaTeX table using `booktabs` (`\toprule`, `\midrule`, `\bottomrule`)
+  - Table should use `\multicolumn` to group datasets under each metric header
+  - Best result in each column should be wrapped in `\textbf{}`
+  - Agent should read `contents/experiments.tex` to find the TODO insertion point
+  - Agent should use `str_replace` to replace the TODO comment with the generated table
+  - Table should include a `\caption{}` and `\label{tab:main}` for cross-referencing

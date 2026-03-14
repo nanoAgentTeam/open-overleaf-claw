@@ -1,0 +1,11 @@
+---
+description: Task 模式计划阶段指令
+variables:
+  - goal_line: 目标描述行
+  - round_line: 轮次描述行
+used_by: context.py (task mode)
+---
+[Task Mode - PLAN]
+{goal_line}{round_line}向用户展示计划，等待确认。用 task_modify 调整。
+用户输入 /start 后才能开始执行，你不能自行跳过这一步。
+注意：计划中的 task 已经存在，不要重复添加。

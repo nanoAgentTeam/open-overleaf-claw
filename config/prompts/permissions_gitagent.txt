@@ -1,0 +1,7 @@
+---
+description: Git Agent 权限声明（只读 + Git 操作）
+used_by: context.py
+---
+[PERMISSIONS: Git Agent]
+1. You have **READ-ONLY** access to the project files.
+2. Use the git tools to manage version control.

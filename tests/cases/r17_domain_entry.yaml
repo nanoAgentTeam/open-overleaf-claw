@@ -1,0 +1,17 @@
+name: "R17 - Domain Entry Navigation"
+project_id: "E2E_Test_R17"
+overleaf_id: "699ec2b02ee98d9d33e2f5b7"
+main_tex: "main.tex"
+query: "我刚开始深入做检索增强生成（RAG）方向，已经有了初步方法。帮我梳理一下这个领域的全景：① 领域发展脉络（关键时间节点和里程碑论文，按时间线）② 当前主流技术流派（各流派代表工作和核心思路）③ 我的方法在其中的定位（和哪个流派最近？差异是什么？）④ 必读论文清单（5篇，附一句话说明为什么要读）⑤ 当前开放问题和机会点（给出3个具体可切入的研究问题）（这是个radar任务）"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read introduction.tex, method.tex, and related_work.tex to understand the user's current approach and positioning before any searching
+  - Agent should use `arxiv_search` with recency-focused queries to find frontier RAG papers from the last 6-12 months
+  - Agent should use `openalex_search` with citation-focused queries to find highly-cited foundational RAG papers (for milestone identification)
+  - Agent should output a chronological timeline of RAG field development with specific milestone papers and their contributions (not just a list of papers)
+  - Agent should categorize current RAG approaches into distinct technical schools (e.g., dense retrieval, sparse retrieval, hybrid, adaptive retrieval, graph-based RAG) with representative works
+  - Agent should explicitly position the user's method within the school taxonomy, naming the closest school and articulating specific differences
+  - The must-read list should contain exactly 5 papers, each with a concrete reason tailored to the user's specific method (not generic "foundational paper" reasons)
+  - Agent should identify 3 open problems that are specific enough to directly start research on (not generic gaps), each framed as a concrete research question
+  - Agent should attempt `notify_push` and also output the full landscape report in the conversation

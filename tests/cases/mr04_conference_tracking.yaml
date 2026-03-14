@@ -1,0 +1,15 @@
+name: "MR04 - Conference Tracking: Analyze Results and Project Recommendations"
+project_id: "E2E_Test_MR04"
+overleaf_id: "69a41803a1614e5e9bd91c32"
+main_tex: "main.tex"
+query: "跟踪一下主流AI会议（ICLR、ICML、NeurIPS）的最新录用情况。先看memory里已经跟踪了哪些会议，再搜索哪些会议有了新的录用结果。如果有新的，去拉官方的全量录用论文列表，分析该会议整体的录用趋势和特点（热门方向、新兴话题、方法论偏好等）。然后结合我的项目，找出与我研究方向相关的录用论文，分析这些论文的共同特点，最后基于会议录用规律给我的项目提出具体的改进建议（目标是中稿）。（这是个radar任务）"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent calls memory_nav(domain=job) and finds 2 previous conference tracking records under job:radar.conference.track scope; reads them to determine which conferences were already analyzed (KDD 2025 analyzed 2025-08-20, NeurIPS 2025 analyzed 2026-02-01, ICLR 2026 not yet published as of last check)
+  - Agent searches for new conference results published after the last tracking date (2026-02-01), identifies ICLR 2026 as having newly available acceptance decisions (results published Jan 25, 2026)
+  - Agent fetches the official full paper list from the conference website (e.g., openreview.net or conference virtual site), not just keyword-filtered arxiv results
+  - Agent analyzes overall acceptance trends from the complete paper list (top research directions, emerging topics, methodology patterns)
+  - Agent filters the full list for papers relevant to the project's topic (KV cache compression, LLM inference efficiency, quantization) and analyzes what properties they share
+  - Agent provides specific, evidence-based improvement recommendations for the project based on the acceptance patterns
+  - Agent calls memory_write with kind=job_run, scope=job:radar.conference.track to record this execution (including which conferences were checked and what was new)

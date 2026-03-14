@@ -1,0 +1,124 @@
+{
+  "commands": [
+    {
+      "name": "/help",
+      "handler": "agent.services.commands.HelpHandler",
+      "description": "显示可用命令列表",
+      "aliases": ["/?"],
+      "requires_args": false
+    },
+    {
+      "name": "/reset",
+      "handler": "agent.services.commands.ResetHandler",
+      "description": "Reset the current session and clear history",
+      "requires_args": false
+    },
+    {
+      "name": "/stop",
+      "handler": "agent.services.commands.StopHandler",
+      "description": "Stop current operation",
+      "aliases": ["/quit"],
+      "requires_args": false
+    },
+    {
+      "name": "/summarize",
+      "handler": "agent.services.commands.SummarizeHandler",
+      "description": "Summarize current context into active memory",
+      "requires_args": false
+    },
+    {
+      "name": "/recommend",
+      "handler": "agent.services.commands.RecommendHandler",
+      "description": "Detect latest project and research SOTA",
+      "requires_args": false
+    },
+    {
+      "name": "/back",
+      "handler": "agent.services.commands.BackToDefaultHandler",
+      "description": "Return to Default project",
+      "requires_args": false,
+      "require_project": true
+    },
+    {
+      "name": "/compile",
+      "handler": "agent.services.commands.CompileHandler",
+      "description": "Compile LaTeX to PDF",
+      "aliases": ["/build"],
+      "requires_args": false,
+      "require_project": true
+    },
+    {
+      "name": "/sync",
+      "handler": "agent.services.commands.SyncHandler",
+      "description": "Overleaf sync (pull or push)",
+      "aliases": ["/overleaf"],
+      "requires_args": false,
+      "args_usage": "/sync [pull|push]",
+      "require_project": true
+    },
+    {
+      "name": "/git",
+      "handler": "agent.services.commands.GitHandler",
+      "description": "进入 Git 版本管理模式（多轮对话）",
+      "requires_args": false,
+      "require_project": true
+    },
+    {
+      "name": "/radar",
+      "handler": "agent.services.commands.RadarHandler",
+      "description": "管理研究雷达自动化任务（status/subscribe/jobs/bootstrap/run/autoplan）",
+      "requires_args": false,
+      "args_usage": "/radar [status|subscribe|jobs|bootstrap [replace]|run <job_id>|autoplan run]",
+      "require_project": true
+    },
+    {
+      "name": "/cleanup",
+      "handler": "agent.services.commands.CleanupHandler",
+      "description": "Clean up subagent working directories",
+      "requires_args": false,
+      "require_project": true
+    },
+    {
+      "name": "/pull-project",
+      "handler": "agent.services.commands.PullProjectHandler",
+      "description": "Sync project with Overleaf and Git commit (legacy, use /sync pull)",
+      "requires_args": false,
+      "require_project": true
+    },
+    {
+      "name": "/task",
+      "handler": "agent.services.commands.TaskHandler",
+      "description": "Launch interactive task session (use --auto for legacy background mode)",
+      "aliases": ["/deepresearch"],
+      "requires_args": false,
+      "args_usage": "/task [--auto] [--new] [goal]",
+      "tool_name": "task_planner",
+      "tool_arg_key": "request"
+    },
+    {
+      "name": "/start",
+      "handler": "agent.services.commands.TaskStartHandler",
+      "description": "Confirm task plan and begin execution (only in PLAN phase)",
+      "requires_args": false
+    },
+    {
+      "name": "/done",
+      "handler": "agent.services.commands.TaskDoneHandler",
+      "description": "Exit task mode or switch back to CHAT",
+      "requires_args": false
+    },
+    {
+      "name": "/exit",
+      "handler": "agent.services.commands.ExitHandler",
+      "description": "Exit current mode and return to CHAT",
+      "requires_args": false
+    },
+    {
+      "name": "/switch",
+      "handler": "",
+      "description": "Switch to a specific project (handled by project tool)",
+      "requires_args": true,
+      "args_usage": "/switch <project_name>"
+    }
+  ]
+}

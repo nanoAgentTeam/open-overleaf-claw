@@ -1,0 +1,15 @@
+name: "W18 - NeurIPS to AAAI Format Conversion"
+project_id: "E2E_Test_W18"
+overleaf_id: "699ec37524d1d984f6604f71"
+main_tex: "main.tex"
+query: "我需要把这篇论文从 NeurIPS 2024 格式转成 AAAI 2024 格式。请修改 main.tex 的文档类从 neurips_2024 改为 aaai24，同时根据 AAAI 格式要求调整：标题格式、作者信息区域、摘要环境名称（AAAI 用 abstract 但放在不同位置）。用 str_replace 修改 main.tex。"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read `main.tex` to understand current NeurIPS format structure
+  - Agent should change `\documentclass{neurips_2024}` to `\documentclass[letterpaper]{aaai24}`
+  - Agent should adjust title/author formatting to match AAAI requirements
+  - Agent should handle any AAAI-specific package requirements or macro differences
+  - Agent should use `str_replace` to apply changes to main.tex
+  - The resulting main.tex should be syntactically valid LaTeX
+  - Agent should explain what changes were made and why

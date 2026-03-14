@@ -1,0 +1,26 @@
+{
+  "directory_structure": {
+    "session_dirs": [".bot", "artifacts", "shared"],
+    "non_worker_dirs": ["subagents"],
+    "research_dirs": ["artifacts", "subagents", "tasks"]
+  },
+  "special_paths": {
+    "manuscript_root": "manuscript",
+    "shared_notes": "shared/SHARED_NOTES.md",
+    "todo_file": "shared/TODO.md",
+    "status_file": "shared/STATUS.json",
+    "inbox_shared": "shared/inbox",
+    "inbox_artifacts": "artifacts/inbox"
+  },
+  "workflow_contexts": [],
+  "memory_paths": {
+    "history_dir": "memory/history",
+    "trajectory_dir": "memory/trajectories",
+    "local_memory": "memory",
+    "key_memory": "memory/MEMORY.md",
+    "active_context": "memory/active_context.md",
+    "global_memory_dir": "memory/global",
+    "global_key_memory": "memory/global/GLOBAL_MEMORY.md",
+    "project_index": "memory/global/PROJECT_INDEX.md"
+  }
+}

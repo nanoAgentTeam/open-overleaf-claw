@@ -1,0 +1,9 @@
+---
+description: 接近迭代上限警告
+variables:
+  - iteration: 当前迭代数
+  - max_iterations: 最大迭代数
+used_by: engine
+---
+
+[SYSTEM STATS]: Iteration {iteration}/{max_iterations}. WARNING: Approaching limit. Wrap up now.

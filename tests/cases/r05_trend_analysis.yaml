@@ -1,0 +1,16 @@
+name: "R05 - Research Direction Trend Analysis"
+project_id: "E2E_Test_R05"
+overleaf_id: "69a2b5d6287924273cf5dfc5"
+main_tex: "main.tex"
+query: "帮我分析一下 MoE 路由这个研究方向最近半年的论文发展态势：发文量趋势是加速还是放缓？主流方法分哪几个流派？我的方向（自适应路由+负载均衡）在里面处于什么位置？还有没有差异化空间？如果有过度竞争风险，给出2-3个可以转向的细分角度。（这是个radar任务）"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read method.tex (and related .tex files) to extract the user's specific research positioning before searching
+  - Agent should perform multiple rounds of `arxiv_search` with time-segmented queries (e.g., last 3 months vs last 6 months) to detect publication volume trends
+  - Agent should categorize found papers into distinct methodological schools (e.g., load balancing, expert specialization, dynamic routing, token routing)
+  - Agent should explicitly place the user's method within the school taxonomy, not just say "related to MoE"
+  - Agent should assess saturation level of the user's specific sub-direction with evidence (paper count, publication frequency)
+  - If saturation risk is detected, Agent should provide 2-3 concrete pivot directions with specific research angles (not generic suggestions)
+  - Agent should distinguish between trends in the general MoE space vs the user's specific adaptive routing + load balancing niche
+  - Agent should attempt `notify_push` and also output the full trend report in the conversation

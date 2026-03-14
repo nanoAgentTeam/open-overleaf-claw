@@ -1,0 +1,16 @@
+{
+  "role_type": "Worker",
+  "description": "项目子 Agent（受限工具集）",
+  "tools": [
+    "arxiv_search",
+    "openalex_search",
+    "pubmed_search",
+    "web_fetch",
+    "web_search",
+    "read_file",
+    "write_file",
+    "str_replace",
+    "bash",
+    "latex_compile"
+  ]
+}

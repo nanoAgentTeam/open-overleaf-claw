@@ -1,0 +1,26 @@
+{
+  "role_types": {
+    "Assistant": {
+      "display_name": "Master Controller",
+      "is_privileged": true,
+      "permissions": {
+        "project_core_write": true,
+        "can_switch_mode": true,
+        "can_spawn_agents": true
+      }
+    },
+    "Worker": {
+      "display_name": "Isolated Executor",
+      "is_privileged": false,
+      "permissions": {
+        "project_core_write": false,
+        "can_switch_mode": false,
+        "can_spawn_agents": false
+      }
+    }
+  },
+  "privileged_roles": [
+    "Assistant", "Admin"
+  ],
+  "leader_roles": []
+}

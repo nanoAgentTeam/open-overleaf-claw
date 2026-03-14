@@ -1,0 +1,13 @@
+---
+description: 对话摘要生成指令，用于更新 Active Context
+variables:
+  - current_context: 当前 Active Context 内容
+  - history_text: 最近对话历史
+used_by: loop.py
+---
+Update the "Active Context" summary based on history.
+[Current Active Context]
+{current_context}
+[Recent History]
+{history_text}
+Output ONLY the new summary (bullet points).

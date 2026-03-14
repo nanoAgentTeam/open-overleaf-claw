@@ -1,0 +1,16 @@
+name: "W15 - Citation Integrity Check"
+project_id: "E2E_Test_W15"
+mode: "TASK"
+overleaf_id: "699ec36d48754e5a0cc7efd3"
+main_tex: "main.tex"
+query: "帮我检查一下引用完整性：读取所有 .tex 文件，找出其中用到的 \\cite{} key，然后对照 references.bib，看看哪些 key 在 bib 文件里找不到对应条目。对缺失的条目，帮我在 arXiv 或网上找到正确的 BibTeX 信息并补充进 references.bib。"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read all tex files to collect all \cite{} keys used
+  - Agent should read `references.bib` to get existing entries
+  - Agent should identify missing keys (specifically `khattab2021relevance` and `thorne2018fever`)
+  - Agent should use `web_search` or `arxiv_search` to find correct BibTeX entries for missing refs
+  - Agent should add the missing entries to `references.bib` using `str_replace` or `write_file`
+  - Final bib file should have complete entries for all 5 cited keys
+  - Agent should report a summary of what was found missing and what was added

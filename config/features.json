@@ -1,0 +1,28 @@
+{
+  "history": {
+    "enabled": true,
+    "maxRecentMessages": 5,
+    "summaryThreshold": 200000,
+    "summaryLimit": 5
+  },
+  "memory": {
+    "shortTermEnabled": false,
+    "longTermEnabled": false
+  },
+  "agent": {
+    "maxIterations": 100,
+    "autoSummarize": true,
+    "tokenLimitPadding": 15000,
+    "modelContextLimit": 256000,
+    "maxOutputLength": 32000,
+    "workerTaskTimeoutSeconds": 600
+  },
+  "vfs": {
+    "cleanupAgeHours": 24,
+    "gitAutoCommit": true
+  },
+  "tools": {
+    "searchMaxResults": 10,
+    "browserHeadless": true
+  }
+}

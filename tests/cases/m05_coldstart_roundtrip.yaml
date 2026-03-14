@@ -1,0 +1,14 @@
+name: "M05 - Cold Start Full Roundtrip"
+project_id: "E2E_Test_M05"
+overleaf_id: "69a417db67f9d593178fbb96"
+main_tex: "main.tex"
+query: "我刚创建了这个项目。请帮我做完整的冷启动准备：① 刷新研究画像，告诉我提取到的主题和关键词；② 用提取的关键词搜索 3 篇最相关的近期论文（arxiv_search，date_from 设为 3 个月前）；③ 把搜索到的论文列表和摘要存到项目记忆里（scope=project，kind=note，title=\"冷启动文献参考\"），方便下次检索时用。"
+timeout_sec: 7200
+
+expected_outcome:
+  - Agent calls profile_refresh or profile_read and correctly extracts FL/DP-related keywords
+  - Agent calls arxiv_search using keywords derived from the profile (not just user message words), with date_from set ~3 months ago
+  - Agent returns 3 relevant papers with titles and summaries
+  - Agent calls memory_write with kind=note, scope=project, title containing 冷启动 or 文献参考
+  - File .project_memory/index.jsonl contains the newly written entry after the run
+  - The stored memory content includes paper titles or arxiv IDs found in the search

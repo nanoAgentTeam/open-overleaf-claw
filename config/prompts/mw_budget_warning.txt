@@ -1,0 +1,5 @@
+---
+description: 执行预算超限警告
+used_by: middleware (budget_guard)
+---
+CRITICAL: You have exceeded your execution budget. You MUST provide your final best answer NOW and stop calling tools.

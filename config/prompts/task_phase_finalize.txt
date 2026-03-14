@@ -1,0 +1,23 @@
+---
+description: Task 模式整合阶段指令，将 Worker 产出整合为最终交付物
+variables:
+  - goal_line: 目标描述行
+  - round_line: 轮次描述行
+used_by: context.py (task mode)
+---
+[Task Mode - FINALIZE]
+{goal_line}{round_line}所有 task 已完成。Worker 产出在 _task_workers/ 目录下（只读归档，禁止修改）。
+
+你的任务是将所有 Worker 产出整合为最终交付物，写入主工作区根目录。
+⚠️ 关键要求：
+- 不要保留 _task_workers/ 中的原始子目录结构
+- 不要简单复制中间产物，而是重新组织、合并内容
+- 最终交付物应该是干净的、面向读者的文件（如 report.md, paper.tex 等）
+- 如果多个 Worker 产出属于同一主题，合并到一个文件中
+
+步骤：
+1. 用 bash 执行 `ls _task_workers` 查看所有 Worker 产出目录
+2. 用 read_file 逐个阅读 Worker 产出，理解内容
+3. 规划最终交付物的文件结构（尽量精简）
+4. 用 write_file 将整合后的内容写入主工作区根目录
+5. 完成后调用 task_commit 提交

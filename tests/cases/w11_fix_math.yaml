@@ -1,0 +1,13 @@
+name: "W11 - Fix Math Formatting"
+project_id: "E2E_Test_W11"
+overleaf_id: "699ec3612ee98d9d33e35446"
+main_tex: "main.tex"
+query: "检查一下 method.tex 里的公式排版。统一向量/矩阵粗体符号，全部改用 \\mathbf。把特别长的复杂公式（比如那个带有 sum 的 Loss function）从行内 ($...$) 改成行间公式 (\\begin{equation}...\\end{equation})，确保公式编号连续。"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read `method.tex`
+  - Agent should replace all instances of `\boldsymbol` with `\mathbf`
+  - Agent should extract the long loss function equation into an `equation` environment
+  - Agent should use `str_replace` or file rewrite to apply these changes correctly
+  - Agent must not change the mathematical meaning of the equations

@@ -1,0 +1,13 @@
+name: "R11 - Cold Start Profile"
+project_id: "E2E_Test_R11"
+overleaf_id: "699ec2dc076a48661cea5201"
+main_tex: "main.tex"
+query: "我刚创建了这个新项目，上传了一份只有 Abstract 和 Introduction 的论文草稿，主题是 federated learning with differential privacy。请帮我从现有内容中提取项目画像，生成关键词和初始检索 query 列表。（这是个radar任务）"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should use `read_file` to read available tex files (abstract, introduction)
+  - Agent should extract research topic, keywords, methodology, and research stage
+  - Agent should use `profile_read` or generate a project profile
+  - Agent should produce an initial list of search queries for literature tracking
+  - Agent should summarize the profile and ask user for confirmation/correction

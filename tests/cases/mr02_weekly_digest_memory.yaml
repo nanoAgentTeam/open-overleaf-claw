@@ -1,0 +1,13 @@
+name: "MR02 - Weekly Digest Aggregated from Daily Scan Records"
+project_id: "E2E_Test_MR02"
+overleaf_id: "69a417efcb7fb5d9abade7e2"
+main_tex: "main.tex"
+query: "生成本周研究雷达周报：汇总本周新论文、竞争预警情况、本周最值得关注的 1-2 篇。（这是个radar任务）"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent executes Phase 2.5 by calling memory_nav(domain=job) then memory_list(scope=job:radar.daily.scan) and finds 5 daily scan records (MEM-0001 to MEM-0005)
+  - Agent reads the memory records (via memory_list summaries or memory_get) and uses them as the primary data source for the weekly digest
+  - Output weekly digest includes papers and competition alerts sourced from the pre-embedded memory records, specifically arXiv:2502.66603 (AdaptiveDP, score 8.0) and arXiv:2502.66607 (DPFedAvg+, score 8.5) should appear as competition alerts
+  - DPFedAvg+ (arXiv:2502.66607, score 8.5) is identified as the highest threat in the competition alert section
+  - Agent calls memory_write with kind=job_run to record the weekly digest generation

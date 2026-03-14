@@ -1,0 +1,31 @@
+{
+  "role_type": "Assistant",
+  "description": "项目主控 Agent（完整工具集）",
+  "tools": [
+    "memory_get",
+    "memory_search",
+    "memory_nav",
+    "memory_list",
+    "memory_write",
+    "memory_brief",
+    "profile_read",
+    "profile_refresh",
+    "notify_push",
+    "send_file",
+    "arxiv_search",
+    "openalex_search",
+    "pubmed_search",
+    "web_fetch",
+    "web_search",
+    "read_file",
+    "write_file",
+    "str_replace",
+    "bash",
+    "latex_compile",
+    "create_subagent",
+    "assign_task",
+    "activate_skill",
+    "overleaf",
+    "project_manager"
+  ]
+}

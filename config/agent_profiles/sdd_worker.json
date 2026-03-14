@@ -1,0 +1,14 @@
+{
+  "role_type": "Worker",
+  "description": "SDD Worker（沙箱化文件工具）",
+  "tools": [
+    "read_file",
+    "write_file",
+    "str_replace",
+    "bash",
+    "web_fetch",
+    "web_search",
+    "arxiv_search",
+    "latex_compile"
+  ]
+}

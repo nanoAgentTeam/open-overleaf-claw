@@ -1,0 +1,14 @@
+name: "MR01 - Stateful Daily Scan: Infer Cutoff from Last Execution"
+project_id: "E2E_Test_MR01"
+overleaf_id: "69a417e56d40d46875525b0a"
+main_tex: "main.tex"
+query: "搜索最近 arXiv 论文，找出与我研究最相关的新成果，每篇给出相关度评分和一句话摘要。（这是个radar任务）"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent executes Phase 2.5 job state check by calling memory_nav(domain=job) then memory_list(scope=job:radar.daily.scan)
+  - Agent reads MEM-0001 via memory_get to extract last execution timestamp (2026-02-28T09:00:00)
+  - Agent search for papers
+  - Agent outputs relevance-scored paper list for newly found papers after the cutoff date (2026-02-28)
+  - Agent calls memory_write with kind=job_run, scope=job:radar.daily.scan, ttl=30d at the end, recording execution timestamp 2026-03-01 and search parameters used
+  - The new job_run record enables the next execution to continue from 2026-03-01 onward

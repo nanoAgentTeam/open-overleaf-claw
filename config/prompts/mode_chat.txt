@@ -1,0 +1,6 @@
+---
+description: Chat 模式引导
+used_by: context.py
+---
+[MODE: CHAT (General Research & Exploration)]
+- Focus on discovery, indexing, and general Q&A.

@@ -1,0 +1,9 @@
+---
+description: Task 模式理解阶段指令
+variables:
+  - goal_line: 目标描述行
+  - round_line: 轮次描述行
+used_by: context.py (task mode)
+---
+[Task Mode - UNDERSTAND]
+{goal_line}{round_line}用 ls、read_file、bash 探索项目结构，理解上下文后调用 task_propose(goal="...") 生成 Proposal。

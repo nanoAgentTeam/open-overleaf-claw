@@ -1,0 +1,14 @@
+name: "W09 - Figure Description"
+project_id: "E2E_Test_W09"
+overleaf_id: "699ec3592ee98d9d33e34d53"
+main_tex: "main.tex"
+query: "我在论文中插入了一张模型架构图 figure1.pdf，帮我写 Figure 的 caption，并在 method.tex 合适的位置加一段对这张图的描述，用 \\ref{fig:architecture} 引用。用 str_replace 修改。"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read `method.tex` to understand the model architecture
+  - Agent should generate a concise and accurate figure caption
+  - Agent should insert a descriptive paragraph referencing the figure
+  - The reference should use `\ref{fig:architecture}` or similar label
+  - Agent should use `str_replace` to insert content at an appropriate location
+  - Caption and description should be consistent with the method content

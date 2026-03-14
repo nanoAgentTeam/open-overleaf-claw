@@ -1,0 +1,15 @@
+name: "W21 - Humanize AI-Generated Text"
+project_id: "E2E_Test_W21"
+mode: "TASK"
+overleaf_id: ""
+main_tex: "main.tex"
+query: "请帮我检查并修改论文中具有 AI 写作特征的部分，让文字更自然、更像人类写作。重点关注：1) 过度修辞和夸张表达 2) 浮于表面 -ing 结尾的分析 3) 虚弱模糊的归因 4) 破折号滥用 5) 排比三段式 6) AI 常用词汇 7) 负面平行结构 8) 过度连接词。修改时要保持学术严谨性和原意。"
+timeout_sec: 7200
+
+expected_outcome:
+  - Agent should read the main content files (main.tex, intro.tex, related_work.tex, etc.)
+  - Agent should identify sections with AI writing patterns
+  - Agent should use `str_replace` to make targeted edits, not rewrite entire sections
+  - Agent should preserve technical accuracy and citations
+  - Agent should NOT change the core meaning or arguments
+  - The revised text should sound more natural and varied

@@ -1,0 +1,16 @@
+name: "W04 - Supplement Related Work"
+project_id: "E2E_Test_W04"
+mode: "TASK"
+overleaf_id: "699ec31c2ee98d9d33e32d32"
+main_tex: "main.tex"
+query: "我的 Related Work 缺少量化方法（Quantization Methods）的部分，帮我补充一个小节，覆盖 2023-2025 年的主要工作，按 PTQ、QAT、混合精度的逻辑组织，引用的论文加入 .bib。用 str_replace 插入到 related_work.tex 中。"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read `related_work.tex` to understand existing content and style
+  - Agent should use `arxiv_search` to find quantization papers from 2023-2025
+  - Agent should generate a new `\subsection{Quantization Methods}` section
+  - Content should be organized by PTQ, QAT, and mixed-precision categories
+  - Agent should use `str_replace` to insert the new subsection
+  - All cited papers should be added to the .bib file
+  - Writing style should be consistent with existing Related Work sections

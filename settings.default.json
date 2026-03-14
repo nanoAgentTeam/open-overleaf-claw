@@ -1,0 +1,64 @@
+{
+  "agents": {
+    "defaults": {
+      "workspace": "./workspace",
+      "model": ""
+    }
+  },
+  "gateway": {
+    "host": "0.0.0.0",
+    "port": 18790
+  },
+  "tools": {
+    "web": {
+      "search": {
+        "apiKey": "",
+        "maxResults": 5
+      }
+    },
+    "academic": {
+      "semanticscholarApiKey": ""
+    }
+  },
+  "features": {
+    "history": {
+      "enabled": true,
+      "maxRecentMessages": 20,
+      "summaryThreshold": 20,
+      "summaryLimit": 10
+    },
+    "memory": {
+      "shortTermEnabled": true,
+      "longTermEnabled": true
+    },
+    "agent": {
+      "maxIterations": 100,
+      "autoSummarize": true,
+      "tokenLimitPadding": 1000
+    },
+    "project": {
+      "cleanupAgeHours": 24,
+      "gitAutoCommit": true
+    },
+    "tools": {
+      "searchMaxResults": 10,
+      "browserHeadless": true
+    }
+  },
+  "provider": {
+    "activeId": "",
+    "instances": []
+  },
+  "channel": {
+    "accounts": []
+  },
+  "pushSubscriptions": {
+    "items": []
+  },
+  "smtp": {
+    "profiles": []
+  },
+  "userInfo": {
+    "language": "zh"
+  }
+}

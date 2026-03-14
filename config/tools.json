@@ -1,0 +1,250 @@
+[
+    {
+        "name": "save_memory",
+        "class": "agent.tools.memory.SaveMemoryTool",
+        "args": {
+            "metadata_root": "{{metadata_root}}"
+        },
+        "enabled": false
+    },
+    {
+        "name": "retrieve_memory",
+        "class": "agent.tools.memory.RetrieveMemoryTool",
+        "args": {
+            "metadata_root": "{{metadata_root}}"
+        },
+        "enabled": false
+    },
+    {
+        "name": "memory_get",
+        "class": "agent.tools.memory_tools.MemoryGetTool",
+        "args": {
+            "project": "{{project}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "memory_search",
+        "class": "agent.tools.memory_tools.MemorySearchTool",
+        "args": {
+            "project": "{{project}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "memory_nav",
+        "class": "agent.tools.memory_tools.MemoryNavTool",
+        "args": {
+            "project": "{{project}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "memory_list",
+        "class": "agent.tools.memory_tools.MemoryListTool",
+        "args": {
+            "project": "{{project}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "memory_write",
+        "class": "agent.tools.memory_tools.MemoryWriteTool",
+        "args": {
+            "project": "{{project}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "memory_brief",
+        "class": "agent.tools.memory_tools.MemoryBriefTool",
+        "args": {
+            "project": "{{project}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "profile_read",
+        "class": "agent.tools.memory_tools.ProfileReadTool",
+        "args": {
+            "project": "{{project}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "profile_write",
+        "class": "agent.tools.memory_tools.ProfileWriteTool",
+        "args": {
+            "project": "{{project}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "profile_refresh",
+        "class": "agent.tools.memory_tools.ProfileRefreshTool",
+        "args": {
+            "project": "{{project}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "notify_push",
+        "class": "agent.tools.notify.NotifyPushTool",
+        "args": {
+            "tool_context": "{{tool_context}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "send_file",
+        "class": "agent.tools.send_file.SendFileTool",
+        "args": {
+            "tool_context": "{{tool_context}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "arxiv_search",
+        "class": "agent.tools.arxiv_search.ArxivSearchTool",
+        "args": {},
+        "enabled": true
+    },
+    {
+        "name": "openalex_search",
+        "class": "agent.tools.openalex_search.OpenAlexSearchTool",
+        "args": {},
+        "enabled": true
+    },
+    {
+        "name": "pubmed_search",
+        "class": "agent.tools.pubmed_search.PubMedSearchTool",
+        "args": {},
+        "enabled": true
+    },
+    {
+        "name": "google_scholar_search",
+        "class": "agent.tools.google_scholar.GoogleScholarTool",
+        "args": {},
+        "enabled": false
+    },
+    {
+        "name": "semantic_scholar_search",
+        "class": "agent.tools.semantic_scholar.SemanticScholarTool",
+        "args": {},
+        "enabled": false
+    },
+    {
+        "name": "web_fetch",
+        "class": "agent.tools.web_reader.WebReaderTool",
+        "args": {
+            "session": "{{session}}",
+            "config": "{{config}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "web_search",
+        "class": "core.tools.web_search.SearchTool",
+        "enabled": true
+    },
+    {
+        "name": "overleaf",
+        "class": "agent.tools.overleaf.OverleafTool",
+        "args": {
+            "workspace": "{{workspace}}",
+            "work_dir": "{{work_dir}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "read_file",
+        "class": "agent.tools.files.ReadFileTool",
+        "args": {
+            "session": "{{session}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "write_file",
+        "class": "agent.tools.files.WriteFileTool",
+        "args": {
+            "session": "{{session}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "str_replace",
+        "class": "agent.tools.files.StrReplaceTool",
+        "args": {
+            "session": "{{session}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "bash",
+        "class": "agent.tools.bash.BashTool",
+        "args": {
+            "session": "{{session}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "latex_compile",
+        "class": "agent.tools.academic.latex_tool.LaTeXCompileTool",
+        "args": {
+            "workspace_root": "{{file_root}}",
+            "project": "{{project}}",
+            "session": "{{session}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "create_subagent",
+        "class": "agent.tools.swarm.CreateSubagentTool",
+        "args": {
+            "tool_context": "{{tool_context}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "assign_task",
+        "class": "agent.tools.swarm.TaskTool",
+        "args": {
+            "workspace": "{{workspace}}",
+            "provider": "{{provider}}",
+            "model": "{{model}}",
+            "tool_context": "{{tool_context}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "task_planner",
+        "class": "agent.tools.scheduler_tool.OpenTaskPlannerTool",
+        "args": {
+            "tool_context": "{{tool_context}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "browser_use",
+        "class": "agent.tools.browser.BrowserUseTool",
+        "args": {
+            "work_dir": "{{file_root}}",
+            "config": "{{config}}"
+        },
+        "enabled": false
+    },
+    {
+        "name": "project_manager",
+        "class": "agent.tools.project.ProjectTool",
+        "args": {
+            "tool_context": "{{tool_context}}"
+        },
+        "enabled": true
+    },
+    {
+        "name": "activate_skill",
+        "class": "core.tools.activate_skill.ActivateSkillTool",
+        "enabled": true
+    }
+]

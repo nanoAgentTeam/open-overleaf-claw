@@ -1,0 +1,10 @@
+---
+description: Task 模式执行阶段指令
+variables:
+  - goal_line: 目标描述行
+  - round_line: 轮次描述行
+used_by: context.py (task mode)
+---
+[Task Mode - EXECUTE]
+{goal_line}{round_line}调用 task_execute 执行所有任务（自动按 DAG 依赖顺序批量执行，内部处理重试）。
+所有 task 完成后自动进入 FINALIZE。

@@ -1,0 +1,14 @@
+name: "M02 - Profile Refresh Accuracy"
+project_id: "E2E_Test_M02"
+overleaf_id: "69a417bd39347a1bbc64292f"
+main_tex: "main.tex"
+query: "刷新我的研究画像，提取完后告诉我：研究主题是什么、关键词有哪些、论文处于哪个阶段。然后把这次提取的画像摘要也写一条记忆（kind=note，scope=project，title=\"研究画像 2026-03\"）存起来。"
+timeout_sec: 3600
+
+expected_outcome:
+  - Agent calls profile_refresh to extract the research profile from .tex files
+  - Extracted topic contains federated or differential privacy
+  - Extracted keywords include at least 3 of federated/privacy/differential/collaborative/noise/DP
+  - Research stage is identified (draft or mid-stage, based on abstract+intro only)
+  - Agent calls memory_write with kind=note, scope=project, title containing 研究画像
+  - File profiles/research_core.current.json is created in .project_memory/profiles/

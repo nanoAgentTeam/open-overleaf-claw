@@ -1,0 +1,14 @@
+name: "MR03 - Stateful Competitive Scan: No Re-processing of Already-Covered Range"
+project_id: "E2E_Test_MR03"
+overleaf_id: "69a417f9a1614e5e9bd9188b"
+main_tex: "main.tex"
+query: "扫描近期竞争工作，识别与本项目高度相似的论文，对相关度≥8的论文发出预警。（这是个radar任务）"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent executes Phase 2.5 by calling memory_nav(domain=job) then memory_list(scope=job:radar.competitive.scan) and finds prior execution record (MEM-0001, executed 2026-02-20)
+  - Agent reads MEM-0001 via memory_get and infers date cutoff as 2026-02-20
+  - Agent calls arxiv_search
+  - For any newly found papers after the cutoff date (2026-02-20) with relevance >= 8, agent performs competitive analysis and attempts notify_push
+  - Agent explicitly notes that previous execution (2026-02-20) already covered papers up to that date
+  - Agent calls memory_write with kind=job_run, scope=job:radar.competitive.scan, recording execution timestamp 2026-03-01, search range, and findings summary

@@ -1,0 +1,14 @@
+name: "R03 - Conference Matching"
+project_id: "E2E_Test_R03"
+overleaf_id: "699ec2c0076a48661cea4613"
+main_tex: "main.tex"
+query: "我这篇论文适合投哪些会议？推荐 3-5 个，列出截止日期、主题匹配理由、对实验完备性的要求，按推荐优先级排列。（这是个radar任务）"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read the project .tex files to understand the paper topic, method, and maturity level (NOT guess from user message)
+  - Agent should use `web_search` to find relevant conferences/journals (e.g., NeurIPS, ICLR, ICML, MLSys, ACL, EMNLP, TMLR) and their deadlines
+  - Agent should recommend 3-5 conferences/journals with topic match reasoning
+  - Recommendations should account for both topic fit and paper maturity (experiments, innovation level)
+  - Each recommendation should include deadline and match rationale
+  - Results should be sorted by recommendation priority

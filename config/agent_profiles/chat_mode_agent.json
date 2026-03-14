@@ -1,0 +1,18 @@
+{
+  "role_type": "Assistant",
+  "description": "Default 项目通用 Q&A Agent",
+  "tools": [
+    "web_search",
+    "web_fetch",
+    "arxiv_search",
+    "openalex_search",
+    "pubmed_search",
+    "read_file",
+    "write_file",
+    "str_replace",
+    "bash",
+    "send_file",
+    "project_manager",
+    "overleaf"
+  ]
+}

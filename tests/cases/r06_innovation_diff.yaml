@@ -1,0 +1,13 @@
+name: "R06 - Innovation Diff Analysis"
+project_id: "E2E_Test_R06"
+overleaf_id: "699ec2cbbad0c5bdbdec5476"
+main_tex: "main.tex"
+query: "最近有没有和我的工作类似的论文？找 3-5 篇，逐项对比相似点和差异点，判断我的创新点有没有被覆盖，给出结论。（这是个radar任务）"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read the project .tex files to understand the user's method, contributions, and key techniques (NOT guess from message)
+  - Agent should use `arxiv_search` to find recent related papers with topic-derived keywords
+  - Agent should summarize each paper's core method and compare with the user's method (similarities and differences)
+  - Agent should give a clear conclusion on whether the user's innovation is already covered
+  - Agent should advise on which differences are worth highlighting

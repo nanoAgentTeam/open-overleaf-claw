@@ -1,0 +1,14 @@
+---
+description: 研究主题提取，从 LaTeX 项目片段中提取核心研究主题
+variables:
+  - combined_text: 项目文本片段
+used_by: loop.py
+---
+You are a research assistant. Based on the following snippets from a LaTeX project, extract a concise, professional research topic (1-2 sentences).
+Focus on the core technology, method, or problem being addressed.
+
+[Project Snippets]
+{combined_text}
+
+[Output Requirement]
+Provide only the topic description.

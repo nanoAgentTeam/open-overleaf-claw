@@ -1,0 +1,16 @@
+name: "R10 - Multi-Conference Submission Strategy"
+project_id: "E2E_Test_R10"
+overleaf_id: "699ec2b02ee98d9d33e2f5b0"
+main_tex: "main.tex"
+query: "我在纠结把这篇论文投 EMNLP 2025 还是 ACL 2025。请帮我：① 分析两个会议在长文档理解方向近两年的录用偏好和风格 ② 对比我的论文与这两个会议近期录用论文的方法风格差异 ③ 结合我当前论文的完整度，判断哪个会议更合适，说明理由 ④ 如果选了你推荐的那个，我还需要做哪些具体补充（以列表形式给出，可直接执行）（这是个radar任务）"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read the complete paper (abstract → introduction → method → experiments → conclusion) to extract method characteristics and experimental completeness
+  - Agent should use `web_search` to find EMNLP 2025 and ACL 2025 CFPs, acceptance criteria, and scope descriptions
+  - Agent should use `arxiv_search` to find recent accepted papers from EMNLP and ACL in the long-document understanding domain for style comparison
+  - Agent should characterize each conference's preference profile for long-document work (e.g., EMNLP tends toward X, ACL tends toward Y) with evidence from found papers
+  - Agent should compare the user's paper style and method to each conference's recent accepted work, identifying alignment and gaps
+  - Agent should give a definitive single recommendation (not "both are fine") with clear reasoning grounded in the analysis
+  - Agent should produce a specific, actionable bullet-point list of what needs to be added/improved before submission to the recommended venue
+  - The supplement list items should be concrete enough to be directly executed (e.g., "Add ablation study for X", not "Improve experiments")

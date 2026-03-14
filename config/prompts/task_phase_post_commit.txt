@@ -1,0 +1,11 @@
+---
+description: Task 模式提交后阶段指令
+variables:
+  - goal_line: 目标描述行
+  - round_line: 轮次描述行
+used_by: context.py (task mode)
+---
+[Task Mode - POST-COMMIT]
+{goal_line}{round_line}上一轮已提交。你可以：
+- 描述新目标，继续 task_propose 开始新一轮
+- 输入 /done 退出 task 模式

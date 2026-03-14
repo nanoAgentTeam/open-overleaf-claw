@@ -1,0 +1,15 @@
+name: "W08 - Experiment Analysis"
+project_id: "E2E_Test_W08"
+overleaf_id: "699ec34e0532b7c911ac1291"
+main_tex: "main.tex"
+query: "我的实验结果表格在 experiments.tex 的 Table 1 里，帮我写实验分析段落，要逐个数据集分析表现，解释为什么我们的方法更好，用 str_replace 插入到表格后面。"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read `experiments.tex` to find and parse Table 1 data
+  - Agent should read `method.tex` to understand the proposed method
+  - Agent should generate analysis paragraphs covering each dataset
+  - Analysis should explain performance advantages with method-specific reasoning
+  - Agent should discuss any cases where the method underperforms (if applicable)
+  - Agent should use `str_replace` to insert analysis after the table
+  - Writing style should be objective and academic

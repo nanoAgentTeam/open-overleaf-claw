@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gateway Offline</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        (function bootstrapThemeEarly() {
+            function getSystemTheme() {
+                return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            var mode = localStorage.getItem('contextbot.ui.themeMode') || localStorage.getItem('contextbot.ui.theme') || 'auto';
+            if (['auto', 'light', 'dark'].indexOf(mode) < 0) mode = 'auto';
+            var lightTheme = localStorage.getItem('contextbot.ui.lightTheme') || 'slate';
+            if (['slate', 'warm', 'blue'].indexOf(lightTheme) < 0) lightTheme = 'slate';
+            var effective = mode === 'auto' ? getSystemTheme() : mode;
+            document.documentElement.setAttribute('data-theme', effective);
+            document.documentElement.setAttribute('data-light-theme', lightTheme);
+            document.documentElement.classList.toggle('dark', effective === 'dark');
+        })();
+    </script>
+    <style>
+        html[data-theme="light"] {
+            --lt-bg-900: #eef2f6;
+            --lt-bg-900-80: rgba(238, 242, 246, 0.9);
+            --lt-bg-900-70: rgba(238, 242, 246, 0.82);
+            --lt-bg-800: #f8fafc;
+            --lt-bg-800-70: rgba(248, 250, 252, 0.82);
+            --lt-bg-700: #e2e8f0;
+            --lt-bg-black: #d8e0ea;
+            --lt-text-100: #1f2a37;
+            --lt-text-200: #2b3848;
+            --lt-text-300: #3d4f63;
+            --lt-text-400: #5a6c81;
+            --lt-text-500: #76879b;
+            --lt-border-700: #c8d2de;
+            --lt-border-600: #9ca3af;
+            --lt-hover-700: #e2e8f0;
+            --lt-hover-text-white: #111827;
+        }
+
+        html[data-theme="light"][data-light-theme="warm"] {
+            --lt-bg-900: #f5f1e8;
+            --lt-bg-900-80: rgba(245, 241, 232, 0.9);
+            --lt-bg-900-70: rgba(245, 241, 232, 0.82);
+            --lt-bg-800: #fcfaf5;
+            --lt-bg-800-70: rgba(252, 250, 245, 0.82);
+            --lt-bg-700: #eee7d8;
+            --lt-bg-black: #e3dccf;
+            --lt-text-100: #2b2a28;
+            --lt-text-200: #3a3834;
+            --lt-text-300: #514d47;
+            --lt-text-400: #6d6961;
+            --lt-text-500: #8b867b;
+            --lt-border-700: #d6cebf;
+            --lt-border-600: #a49a89;
+            --lt-hover-700: #eee7d8;
+            --lt-hover-text-white: #2b2a28;
+        }
+
+        html[data-theme="light"][data-light-theme="blue"] {
+            --lt-bg-900: #eaf1f8;
+            --lt-bg-900-80: rgba(234, 241, 248, 0.9);
+            --lt-bg-900-70: rgba(234, 241, 248, 0.82);
+            --lt-bg-800: #f4f8fc;
+            --lt-bg-800-70: rgba(244, 248, 252, 0.82);
+            --lt-bg-700: #dbe7f3;
+            --lt-bg-black: #cfdeec;
+            --lt-text-100: #203247;
+            --lt-text-200: #2e435b;
+            --lt-text-300: #425b76;
+            --lt-text-400: #5c748f;
+            --lt-text-500: #778da6;
+            --lt-border-700: #c3d4e5;
+            --lt-border-600: #8ea7bf;
+            --lt-hover-700: #dbe7f3;
+            --lt-hover-text-white: #152637;
+        }
+
+        html[data-theme="light"] .bg-gray-900 { background-color: var(--lt-bg-900) !important; }
+        html[data-theme="light"] .bg-gray-900\/95 { background-color: var(--lt-bg-900-80) !important; }
+        html[data-theme="light"] .bg-gray-900\/80 { background-color: var(--lt-bg-900-80) !important; }
+        html[data-theme="light"] .bg-gray-900\/70 { background-color: var(--lt-bg-900-70) !important; }
+        html[data-theme="light"] .bg-gray-800 { background-color: var(--lt-bg-800) !important; }
+        html[data-theme="light"] .bg-gray-800\/70 { background-color: var(--lt-bg-800-70) !important; }
+        html[data-theme="light"] .bg-gray-700 { background-color: var(--lt-bg-700) !important; }
+        html[data-theme="light"] .bg-black { background-color: var(--lt-bg-black) !important; }
+
+        html[data-theme="light"] .text-gray-100 { color: var(--lt-text-100) !important; }
+        html[data-theme="light"] .text-gray-200 { color: var(--lt-text-200) !important; }
+        html[data-theme="light"] .text-gray-300 { color: var(--lt-text-300) !important; }
+        html[data-theme="light"] .text-gray-400 { color: var(--lt-text-400) !important; }
+        html[data-theme="light"] .text-gray-500 { color: var(--lt-text-500) !important; }
+
+        html[data-theme="light"] .border-gray-700 { border-color: var(--lt-border-700) !important; }
+        html[data-theme="light"] .border-gray-600 { border-color: var(--lt-border-600) !important; }
+
+        html[data-theme="light"] .hover\:bg-gray-700:hover { background-color: var(--lt-hover-700) !important; }
+        html[data-theme="light"] .hover\:text-white:hover { color: var(--lt-hover-text-white) !important; }
+
+        html[data-theme="light"] .bg-blue-600,
+        html[data-theme="light"] .hover\:bg-blue-700:hover,
+        html[data-theme="light"] .bg-red-600 {
+            color: #fff !important;
+        }
+
+        .offline-danger-text { color: #fecaca; }
+        .offline-accent-text { color: #7dd3fc; }
+        html[data-theme="light"] .offline-danger-text { color: #b91c1c !important; }
+        html[data-theme="light"] .offline-accent-text { color: #0c4a6e !important; }
+
+        body { font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen">
+    <div class="flex min-h-screen w-full">
+        <aside class="w-64 shrink-0 border-r border-gray-700 bg-gray-800/70 p-4">
+            <div class="flex items-center space-x-3 mb-10 px-2">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-robot text-white"></i>
+                </div>
+                <h1 class="text-xl font-bold tracking-wider text-gray-100">ContextBot</h1>
+            </div>
+            <div class="px-2">
+                <div class="text-xs tracking-widest uppercase text-gray-400 mb-2" id="gateway-nav">Gateway</div>
+                <div class="rounded-xl border border-red-400/40 bg-red-600/20 px-3 py-2 text-sm offline-danger-text" id="gateway-closed-badge">Gateway 已关闭</div>
+            </div>
+        </aside>
+
+        <main class="flex-1 p-6 md:p-10 flex items-center justify-center">
+            <div class="w-full max-w-3xl rounded-2xl border border-gray-700 bg-gray-800/70 shadow-2xl p-8 md:p-10">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-red-600/90 flex items-center justify-center">
+                        <i class="fas fa-power-off text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs tracking-widest text-gray-400 uppercase" id="gateway-offline">Gateway Offline</div>
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-100 mt-1" id="gateway-closed-title">Gateway 已关闭</h1>
+                    </div>
+                </div>
+
+                <p class="mt-6 text-gray-200 leading-relaxed" id="gateway-closed-desc">
+                    检测到网关不可用，功能列表与配置操作面板已暂停。
+                </p>
+                <p class="mt-2 text-gray-400 text-sm" id="gateway-closed-hint">
+                    重新启动 Gateway 后，页面会自动恢复。
+                </p>
+
+                <div class="mt-6 rounded-xl border border-gray-700 bg-gray-900/80 p-4">
+                    <div class="text-xs text-gray-400 mb-2" id="gateway-recovery-cmd-label">可在终端执行以下命令恢复：</div>
+                    <code class="block offline-accent-text text-sm">python cli/main.py gateway --port 18790</code>
+                </div>
+
+                <p class="mt-5 text-sm text-gray-400" id="status">Waiting for gateway...</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const I18N = {
+            zh: {
+                title: 'Gateway 已关闭',
+                gatewayNav: '网关',
+                gatewayClosedBadge: 'Gateway 已关闭',
+                gatewayOffline: '网关离线',
+                gatewayClosedTitle: 'Gateway 已关闭',
+                gatewayClosedDesc: '检测到网关不可用，功能列表与配置操作面板已暂停。',
+                gatewayClosedHint: '重新启动 Gateway 后，页面会自动恢复。',
+                gatewayRecoveryCmd: '可在终端执行以下命令恢复：',
+                waiting: '等待网关恢复中...',
+                recovered: '网关已恢复，正在跳转...'
+            },
+            en: {
+                title: 'Gateway is closed',
+                gatewayNav: 'Gateway',
+                gatewayClosedBadge: 'Gateway is closed',
+                gatewayOffline: 'Gateway Offline',
+                gatewayClosedTitle: 'Gateway is closed',
+                gatewayClosedDesc: 'Gateway is unavailable. Functional panels are paused.',
+                gatewayClosedHint: 'After restarting gateway, this page will recover automatically.',
+                gatewayRecoveryCmd: 'Run this command in terminal to recover:',
+                waiting: 'Waiting for gateway...',
+                recovered: 'Gateway recovered. Redirecting...'
+            }
+        };
+
+        function getLanguage() {
+            const saved = localStorage.getItem('contextbot.ui.language');
+            return saved === 'zh' ? 'zh' : 'en';
+        }
+
+        function getSystemTheme() {
+            return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        function getThemeMode() {
+            const saved = localStorage.getItem('contextbot.ui.themeMode') || localStorage.getItem('contextbot.ui.theme');
+            return ['auto', 'light', 'dark'].includes(saved) ? saved : 'auto';
+        }
+
+        function getLightTheme() {
+            const saved = localStorage.getItem('contextbot.ui.lightTheme');
+            return ['slate', 'warm', 'blue'].includes(saved) ? saved : 'slate';
+        }
+
+        function applyTheme() {
+            const mode = getThemeMode();
+            const effective = mode === 'auto' ? getSystemTheme() : mode;
+            const lightTheme = getLightTheme();
+            document.documentElement.setAttribute('data-theme', effective);
+            document.documentElement.setAttribute('data-light-theme', lightTheme);
+            document.documentElement.classList.toggle('dark', effective === 'dark');
+        }
+
+        function applyLanguage() {
+            const lang = getLanguage();
+            const t = I18N[lang] || I18N.en;
+            document.documentElement.lang = lang;
+            document.title = t.title;
+
+            document.getElementById('gateway-nav').textContent = t.gatewayNav;
+            document.getElementById('gateway-closed-badge').textContent = t.gatewayClosedBadge;
+            document.getElementById('gateway-offline').textContent = t.gatewayOffline;
+            document.getElementById('gateway-closed-title').textContent = t.gatewayClosedTitle;
+            document.getElementById('gateway-closed-desc').textContent = t.gatewayClosedDesc;
+            document.getElementById('gateway-closed-hint').textContent = t.gatewayClosedHint;
+            document.getElementById('gateway-recovery-cmd-label').textContent = t.gatewayRecoveryCmd;
+            const status = document.getElementById('status');
+            if (!status.dataset.state || status.dataset.state === 'waiting') status.textContent = t.waiting;
+        }
+
+        const CHECK_INTERVAL_MS = 1500;
+        const REQUEST_TIMEOUT_MS = 1000;
+
+        async function checkGateway() {
+            const status = document.getElementById('status');
+            const lang = getLanguage();
+            const t = I18N[lang] || I18N.en;
+            let timer = null;
+            try {
+                const controller = new AbortController();
+                timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+                const res = await fetch('/api/config', {
+                    method: 'GET',
+                    cache: 'no-store',
+                    headers: { 'Cache-Control': 'no-cache' },
+                    signal: controller.signal
+                });
+                clearTimeout(timer);
+                timer = null;
+                if (res.ok) {
+                    status.dataset.state = 'recovered';
+                    status.textContent = t.recovered;
+                    window.location.replace('/ui');
+                    return;
+                }
+            } catch (e) {
+                // keep waiting
+            } finally {
+                if (timer) clearTimeout(timer);
+            }
+            status.dataset.state = 'waiting';
+            status.textContent = t.waiting;
+        }
+
+        function init() {
+            applyTheme();
+            applyLanguage();
+
+            const media = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+            if (media) {
+                const handler = () => {
+                    if (getThemeMode() === 'auto') applyTheme();
+                };
+                if (typeof media.addEventListener === 'function') media.addEventListener('change', handler);
+                else if (typeof media.addListener === 'function') media.addListener(handler);
+            }
+
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'contextbot.ui.themeMode' || e.key === 'contextbot.ui.theme' || e.key === 'contextbot.ui.lightTheme') {
+                    applyTheme();
+                }
+                if (e.key === 'contextbot.ui.language') {
+                    applyLanguage();
+                }
+            });
+
+            setInterval(checkGateway, CHECK_INTERVAL_MS);
+        }
+
+        init();
+    </script>
+</body>
+</html>

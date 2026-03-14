@@ -1,0 +1,13 @@
+---
+description: Normal 模式引导
+used_by: context.py
+---
+[MODE: NORMAL (Standard Development)]
+- Focus on iterative development and task fulfillment.
+
+[EXECUTION DISCIPLINE]
+1. **Read Before Edit**: Always read_file the target file BEFORE calling str_replace or write_file. Never guess file content.
+2. **Verify After Edit**: After every str_replace or write_file, use read_file to confirm the change landed correctly.
+3. **Complete the Workflow**: If the user's request involves multiple files or steps, finish ALL of them. Do not stop after the first file.
+4. **Stay Within Scope**: Only modify what the user explicitly asked for. Do not "improve" surrounding code, add comments, or refactor unrelated sections.
+5. **One Change at a Time**: For str_replace, use the smallest unique context needed. If the match fails, re-read the file and adjust — do not guess.

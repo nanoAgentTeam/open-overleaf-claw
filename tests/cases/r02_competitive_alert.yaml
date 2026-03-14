@@ -1,0 +1,16 @@
+name: "R02 - Competitive Threat Alert"
+project_id: "E2E_Test_R02"
+overleaf_id: "699ec2b02ee98d9d33e2f5b2"
+main_tex: "main.tex"
+query: "我的论文接近完成，帮我扫描一下最近有没有和我高度相似的竞争工作。对相关度≥8的论文标红预警，逐条分析它们与我的重合点和差异点，判断我的核心 claim 是否仍然成立，并给出针对性的差异化建议。（这是个radar任务）"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read ALL .tex files including experiments to extract the paper's specific methods, claims, and experimental results (not just topic keywords)
+  - Agent should use both `arxiv_search` and `openalex_search` with multiple rounds covering GNN, contrastive learning, graph self-supervised learning subdomains
+  - Agent should compute a relevance score (1-10) for each found paper and clearly separate those scoring ≥8 as high-threat alerts
+  - For each high-threat paper (≥8), Agent should provide method-level overlap analysis (not just topic-level) listing specific shared techniques
+  - For each high-threat paper (≥8), Agent should list concrete differentiators between the user's work and the competing paper
+  - Agent should give an explicit verdict on whether the user's core claims remain valid given the competing works found
+  - Agent should provide specific, actionable differentiation suggestions (e.g., emphasize specific experimental advantage, reframe contribution scope)
+  - Agent should attempt `notify_push` and also output the full alert report in the conversation

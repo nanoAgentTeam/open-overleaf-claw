@@ -1,0 +1,14 @@
+name: "M04 - Research Direction Drift Analysis"
+project_id: "E2E_Test_M04"
+overleaf_id: "69a417d1247dfe5b7cb9a6a7"
+main_tex: "main.tex"
+query: "分析一下我过去几个月的研究方向有没有发生偏移。请读取我的研究画像历史，对比最初方向和现在的方向，告诉我：① 关键词怎么变化的；② 研究阶段怎么演进的；③ 方向漂移是否合理。把分析结果存到记忆里（kind=insight，scope=project，intent=research_direction）。"
+timeout_sec: 3600
+
+expected_outcome:
+  - Agent reads the research profile (current or history) via profile_read or by reading profile files
+  - Agent identifies the evolution from attention optimization to KV cache compression to KV cache with dynamic pruning
+  - Analysis mentions keyword changes (new terms like pruning/dynamic/importance, dropped terms like softmax/self-attention)
+  - Analysis mentions stage progression (writing then experiment then writing)
+  - Agent calls memory_write with kind=insight, scope=project, intent=research_direction to save the analysis
+  - Saved analysis references direction shift or research focus evolution

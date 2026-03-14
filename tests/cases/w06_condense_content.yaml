@@ -1,0 +1,16 @@
+name: "W06 - Condense Content"
+project_id: "E2E_Test_W06"
+mode: "TASK"
+overleaf_id: "699ec33224d1d984f6602cb3"
+main_tex: "main.tex"
+query: "Experiments 章节太长了，帮我精简到大约原来 75% 的篇幅。保留核心实验结果，次要的实验移到 appendix.tex，在正文中加上「详见 Appendix」的引用。用 str_replace 修改。"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read `experiments.tex` to analyze content
+  - Agent should identify core experiments vs secondary experiments
+  - Agent should condense the core experiment descriptions (remove redundancy)
+  - Agent should move secondary experiments to `appendix.tex`
+  - Agent should add cross-references to Appendix in the main text
+  - Agent should use `str_replace` for modifications
+  - The condensed version should maintain logical completeness

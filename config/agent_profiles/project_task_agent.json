@@ -1,0 +1,18 @@
+{
+  "role_type": "Assistant",
+  "description": "Task 模式主控（task 工具 + 基础文件操作）",
+  "tools": [
+    "read_file",
+    "write_file",
+    "str_replace",
+    "bash",
+    "web_fetch",
+    "web_search",
+    "arxiv_search",
+    "latex_compile",
+    "send_file",
+    "openalex_search",
+    "pubmed_search",
+    "activate_skill"
+  ]
+}

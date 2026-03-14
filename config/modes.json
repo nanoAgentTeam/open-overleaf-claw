@@ -1,0 +1,26 @@
+{
+  "modes": {
+    "CHAT": {
+      "label": "General Research & Exploration",
+      "guidance": "Focus on discovery, indexing, and general Q&A.",
+      "thinking_pattern": "Feel free to record thoughts and brainstorm. Your write operations here are for scratchpad purposes and do not affect project code.",
+      "default_project_id": "Default",
+      "default_session_id": "default",
+      "vfs_layers": ["session"]
+    },
+    "NORMAL": {
+      "label": "Standard Development",
+      "guidance": "Focus on iterative development and task fulfillment.",
+      "thinking_pattern": "Small steps, iterative progress. Provide immediate feedback.",
+      "requires_project_id": true,
+      "requires_session_id": true,
+      "vfs_layers": ["session"]
+    },
+    "TASK": {
+      "label": "Deep Research",
+      "guidance": "Focus on deep investigation and exhaustive output.",
+      "thinking_pattern": "Deep tracking. Record findings. Output comprehensive reports.",
+      "vfs_layers": ["session", "research"]
+    }
+  }
+}

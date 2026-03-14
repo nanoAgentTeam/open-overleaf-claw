@@ -1,0 +1,12 @@
+name: "W05 - Rewrite Paragraph"
+project_id: "E2E_Test_W05"
+overleaf_id: "699ec3270c6150fd0d0f72d2"
+main_tex: "main.tex"
+query: "把 method.tex 的第一段改得更 formal 一些，学术味重一点，但不要改变含义。使用 str_replace 替换。"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read `method.tex`
+  - Agent should rewrite the first paragraph to use formal academic English
+  - Agent must preserve the meaning (KV cache, 4-bit quantization, dropping least important tokens)
+  - Agent should use `str_replace` tool to modify the file without touching the second paragraph

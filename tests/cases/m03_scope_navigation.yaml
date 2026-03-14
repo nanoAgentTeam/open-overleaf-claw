@@ -1,0 +1,14 @@
+name: "M03 - Scope Isolation and Hierarchical Navigation"
+project_id: "E2E_Test_M03"
+overleaf_id: "69a417c66d40d46875524f23"
+main_tex: "main.tex"
+query: "用 memory_nav 看一下项目里有哪些不同类型的记忆（domain=all），然后分别：① 列出 project scope 的记忆详情；② 列出 radar job scope 的记忆详情。最后告诉我两个 scope 各有几条记录、内容是什么。"
+timeout_sec: 3600
+
+expected_outcome:
+  - Agent calls memory_nav(domain=all) first and gets back 2 scopes (project and job:radar.daily.scan)
+  - Agent calls memory_list(scope=project) and finds MEM-0001 (insight about convergence speed)
+  - Agent calls memory_list(scope=job:radar.daily.scan) and finds MEM-0002 (job_run scan record)
+  - Agent does NOT mix up content between the two scopes
+  - Agent correctly reports 1 entry in project scope (research insight) and 1 entry in job scope (scan record)
+  - Agent uses the nav→list path rather than relying solely on memory_search

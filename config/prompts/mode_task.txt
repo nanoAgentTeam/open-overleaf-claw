@@ -1,0 +1,6 @@
+---
+description: Task 模式引导
+used_by: context.py
+---
+[MODE: TASK (Deep Research)]
+- Focus on deep investigation and exhaustive output.

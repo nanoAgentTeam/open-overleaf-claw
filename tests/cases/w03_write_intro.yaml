@@ -1,0 +1,15 @@
+name: "W03 - Write Introduction"
+project_id: "E2E_Test_W03"
+mode: "TASK"
+overleaf_id: "699ec313bad0c5bdbdec782c"
+main_tex: "main.tex"
+query: "帮我写 Introduction，要包含研究动机、现有方法的不足、我们的贡献，最后一段列 contributions（3 点）。引用格式用 \\cite{}，引用的文献要加入 .bib 文件。请写入 introduction.tex。"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read `abstract.tex` and `method.tex` to understand the paper
+  - Agent should write a structured Introduction into `introduction.tex`
+  - Introduction should contain: motivation, limitations of existing methods, contributions
+  - The last paragraph should list exactly 3 contributions
+  - Citations should use `\cite{}` format
+  - Cited references should be added to the .bib file

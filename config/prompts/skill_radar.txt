@@ -1,0 +1,71 @@
+---
+description: Radar 任务通用 skill — 面对研究雷达类任务时强制执行的项目理解协议
+used_by: context.py (non-default project, always injected)
+---
+[SKILL: RADAR TASK PROTOCOL]
+When you encounter a **radar任务** (user message contains "radar任务" or "这是个radar任务"), you MUST execute the following four-phase sequence BEFORE taking any other action. Do not skip or abbreviate any step.
+
+**Phase 1 — Project Navigation (mandatory first step)**
+1. Run `bash ls -la` on the project root to discover all files and subdirectories.
+2. Run `read_file` on `main.tex`. Parse every `\input{...}` and `\include{...}` directive to build the complete file map. For a directive like `\input{contents/abstract}`, the actual file path is `contents/abstract.tex` (append `.tex` if missing).
+3. Read each referenced content file in priority order: abstract → introduction → method/approach → related work. Read as many as exist. If a file is not found at the expected path: (a) try the path as-is, (b) try with `.tex` appended, (c) run `bash ls <subdir>` to list actual filenames, then retry with the correct name.
+4. **Do NOT stop at the first File Not Found error.** Diagnose the path, adjust, and retry. Use `bash ls` on any subdirectory to discover actual filenames.
+
+**Phase 2 — Research Context Extraction**
+From the files read, extract and internally record:
+- **Research Topic**: 1–2 sentence precise description of what the paper is about.
+- **Core Method / Technical Contribution**: The specific technique, algorithm, or framework proposed.
+- **Keywords**: 5–10 technical terms taken directly from the paper text.
+- **Novelty Claims**: What the paper claims as new or better compared to prior work.
+- **Research Stage**: draft (abstract+intro only) / mid-stage (method written) / complete (experiments present).
+
+**Phase 2.5 — Job State Check (mandatory for recurring/scheduled tasks)**
+Before executing any search, check if this task has been run before:
+1. Call `memory_nav(domain='job')` — do NOT add any `intent` or `kind` filter here; list all job scopes without filtering.
+2. If a relevant job scope exists (matching the pattern `job:radar.<task-name>`, where `<task-name>` is inferred from the current task type),
+   call `memory_list(scope=<scope>, kind='job_run', limit=10)` to retrieve recent executions.
+3. Determine task mode **from the user's request** (not from the scope name found in memory):
+   - **Aggregation mode** — triggered when the user asks for: digest / summary / weekly report / 周报 / 汇总 / "this week's results". The `job:radar.daily.scan` records in memory ARE this week's paper data — each record is one day's already-processed results. Read the memory records first and treat them as your primary data source. The summaries in `memory_list` already contain arXiv IDs, scores, and alerts; these must be reflected in your final report.
+   - **Incremental mode** — triggered when the user asks to scan / search / find new papers. Call `memory_get` on the most recent entry to read its execution timestamp — treat it as the **data cutoff**. Set `date_from` in subsequent `arxiv_search` / `openalex_search` calls to that timestamp. **Critical**: if a search with `date_from=<cutoff>` returns 0 results, retry with different keywords but keep the SAME `date_from` — do NOT move the date earlier.
+4. If no prior execution record exists, proceed without a cutoff (first run).
+
+**Phase 3 — Execute the Task**
+Only after completing Phase 1, Phase 2, and Phase 2.5, proceed with the requested radar task. All search queries, relevance judgments, and comparisons MUST be grounded in the extracted project content — never in user message keywords alone.
+
+**Phase 4 — Report Delivery**
+After composing the complete report:
+1. **Always** output the full report inline in the conversation.
+2. **Call `notify_push`** if EITHER of the following is true:
+   - The user's message explicitly requests a push (e.g., "推送给我", "发给我", "push", "send me");
+   - You judge the content to be high-value enough for proactive notification (e.g., a competitive threat ≥8, an imminent deadline, a major new finding).
+   If neither condition applies, skip `notify_push` and output inline only.
+   > If `notify_push` returns an error or "no channels configured", that is fine — the attempt itself satisfies the requirement.
+
+**Phase 5 — State Persistence (MANDATORY, do not skip)**
+This phase is required for every radar task execution, regardless of outcome. After the report is delivered:
+- Call `memory_write` to record this execution as a job state entry:
+  - `kind`: `"job_run"`
+  - `scope`: `"job:radar.<task_type>"` — infer `<task_type>` from the current task (e.g. for a daily scan task use `daily.scan`, for a weekly digest use `weekly.digest`, for a competitive scan use `competitive.scan`)
+  - `intent`: `"job_progress"`
+  - `ttl`: `"30d"`
+  - Content must include: execution timestamp, search parameters used (date range, keywords), brief summary of findings (paper count, highest relevance score, whether alert was sent).
+- Do NOT skip this step even if the task produced no results or encountered errors. The record enables the next execution to infer the correct data cutoff.
+
+**Skill Activation (domain-specific tasks)**
+Before starting any search or analysis, check [AVAILABLE SKILLS] in your system context.
+If a skill's description matches your current task, call `activate_skill` with that skill name first.
+For example: tasks involving specific academic venues (ACL, EMNLP, NeurIPS, ICML, ICLR, MLSys, etc.),
+conference acceptance preferences, or CFP requirements are covered by a dedicated skill.
+
+**Universal Radar Output Rules (apply to every radar task)**
+1. **Multi-source search**: Use at least two search tools (e.g. `arxiv_search` + `openalex_search`, or either + `web_search`) to reduce single-source blind spots. Do not rely on a single tool alone.
+2. **Notify + inline**: See **Phase 4** above — always output inline; call `notify_push` only when the user explicitly requests it or when you identify proactively push-worthy content.
+3. **Search failure handling**: If a search returns no results, adjust the query (simplify keywords, remove field filters) and retry. **Do NOT relax `date_from`** if it was derived from a job state cutoff — the cutoff is a correctness constraint, not a hint. After two consecutive failed attempts on the same tool, switch to a different search tool rather than retrying the same one.
+4. **Read full PDFs when depth matters**: Abstracts are sufficient for broad surveys. For tasks that require method-level detail — e.g., competitive analysis, claim comparison, technical positioning — use `web_fetch` on the `PDF` URL provided by the search tool to read the full paper. Prioritize the top 2–3 most relevant papers for full-text reading rather than reading all results.
+5. **Verify PDF fetch success**: After calling `web_fetch` on a PDF URL, confirm the response contains real paper content (title, abstract, section headers). If the response is an error message, access-denied page, or short HTML snippet, the fetch failed — do NOT treat it as paper content. Fall back to the abstract from the search result and note the paper could not be fully accessed.
+6. **Multi-round, diversified search (MANDATORY for survey/landscape tasks)**:
+   - **Round 1 — Relevance**: `arxiv_search` with `sort_by=relevance` to surface the highest-relevance classic and recent papers.
+   - **Round 2 — Recency**: `arxiv_search` with `sort_by=date` and `date_from` set to ≈12 months ago to capture recent advances missed by relevance ranking.
+   - **Round 3 — Citation depth**: `openalex_search` with the topic's core keyword to find high-citation foundational works that may not appear in keyword searches.
+   - **Query diversification**: Each round MUST use a conceptually different query angle (e.g., method name → application domain → evaluation benchmark). Do NOT repeat near-identical queries (e.g., "RAG survey" then "RAG review") — vary the conceptual focus each time.
+   - **Minimum coverage**: At least 3 distinct queries across at least 2 search tools before writing the report. "I already know the key papers" is not a substitute for actual search.

@@ -1,0 +1,17 @@
+name: "R09 - Weekly Research Radar Digest"
+project_id: "E2E_Test_R09"
+overleaf_id: "699ec2b02ee98d9d33e2f5b9"
+main_tex: "main.tex"
+query: "帮我出一份本周研究雷达周报，包含以下四个版块：① 【新论文】最近7天最相关的Top3论文（标题、相关度评分、一句话摘要）② 【竞争预警】有没有相关度≥8的高威胁论文，若有请标红并说明威胁点 ③ 【截稿提醒】NeurIPS / ICML / ICLR / MLSys 近期截稿时间（若已过则写下一轮）④ 【完成度评估】对照我现有的论文章节，评估论文完成度（哪些章节有了、哪些还缺），给出本周最优先要补的事项 最后汇总成一份，调用 notify_push 推送给我。（这是个radar任务）"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read ALL available .tex files (including experiments) to assess paper completeness (which sections exist vs missing) before generating the digest
+  - Agent should use `arxiv_search` with date-filtered queries to find papers from the last 7 days, sorted by recency
+  - Agent should use `openalex_search` to supplement coverage beyond arxiv
+  - Agent should use `web_search` to find current or upcoming deadlines for NeurIPS, ICML, ICLR, and MLSys (if past, find next cycle deadline)
+  - Agent should output a clearly structured report with all four sections: 【新论文】【竞争预警】【截稿提醒】【完成度评估】
+  - The 【新论文】section should list exactly Top 3 with title, relevance score (1-10), and one-sentence summary for each
+  - The 【竞争预警】section should explicitly flag any paper scoring ≥8 with specific threat points, or state "no high-threat papers found"
+  - The 【完成度评估】section should list present sections, missing sections, and give ONE specific priority task for the week
+  - Agent should attempt `notify_push` with the full digest and also output it in the conversation

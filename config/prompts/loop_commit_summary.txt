@@ -1,0 +1,8 @@
+---
+description: 自动提交摘要生成
+variables:
+  - file_list: 变更文件列表
+used_by: loop.py
+---
+Summarize these file changes in one sentence for a git commit message (no prefix, English):
+Files changed: {file_list}

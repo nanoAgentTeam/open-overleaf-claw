@@ -1,0 +1,20 @@
+name: "W22 - Reference Existence Audit"
+project_id: "E2E_Test_W22"
+mode: "TASK"
+overleaf_id: ""
+main_tex: "main.tex"
+query: "请做一次“参考文献真实存在性”审计（重点不是 BibTeX 格式）：读取所有 .tex 文件中实际被 \\cite{} 引用的 key，仅检查这些 key 在 references.bib 中对应的条目。对每条文献验证其是否真实存在：优先用 DOI（Crossref/OpenAlex），其次用 arXiv ID 或 PMID，再核对标题/作者/年份是否一致。请把每条结果标记为 Verified / Suspicious / Not Found，并附上核验来源链接。对 Not Found（疑似虚假文献）不要编造条目；只输出待人工处理清单，并给出建议替代检索词。"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read all relevant `.tex` files and extract actually cited `\cite{}` keys
+  - Agent should read `references.bib` and map cited keys to BibTeX entries
+  - Agent should verify each cited entry exists in real databases via at least one of `openalex_search`, `arxiv_search`, `pubmed_search`, or `web_search`
+  - Agent should validate existence using authoritative identifiers first (DOI/arXiv/PMID), then metadata consistency (title/author/year)
+  - Agent should confirm `vaswani2017attention`, `devlin2019bert`, and `lewis2020retrieval` as authentic references
+  - Agent should flag `zhang2024qrag`, `li2025holographickv`, and `gupta2024crossdomainmemory` as likely fabricated or `Not Found`
+  - Agent should flag `miller2023adaptiveevidence` as `Suspicious` because its metadata conflicts with the DOI target
+  - Agent should classify each checked reference as `Verified`, `Suspicious`, or `Not Found`, with evidence links
+  - Agent should explicitly identify possible hallucinated/fabricated references when entries cannot be found in trusted sources
+  - Agent should NOT fabricate replacement metadata for `Not Found` entries; unresolved items must be listed for manual review
+  - Agent should focus on authenticity/existence checks rather than BibTeX formatting polish

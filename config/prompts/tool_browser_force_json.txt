@@ -1,0 +1,26 @@
+---
+description: 浏览器工具 JSON 格式强制指令
+used_by: browser tool
+---
+
+### ‼️ 强制响应格式 ‼️
+你必须**仅**输出一个符合以下结构的 JSON 对象。
+**严禁**使用 `<tool_call>` 或 `<function>` 等 XML 标签。
+**严禁**在 JSON 之外添加任何解释性文字。
+
+响应模板示例：
+{{
+  "current_state": {{
+    "evaluation_previous_goal": "对上一步的评价",
+    "memory": "目前的记忆和进度",
+    "next_goal": "下一步的目标"
+  }},
+  "thought": "你的思考过程",
+  "action": [
+    {{
+      "search": {{
+        "query": "搜索关键词"
+      }}
+    }}
+  ]
+}}

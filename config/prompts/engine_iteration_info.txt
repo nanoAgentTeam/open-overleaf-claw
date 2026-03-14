@@ -1,0 +1,9 @@
+---
+description: 迭代计数信息，显示当前/最大迭代数
+variables:
+  - iteration: 当前迭代数
+  - max_iterations: 最大迭代数
+used_by: engine
+---
+
+[SYSTEM STATS]: Iteration {iteration}/{max_iterations}.

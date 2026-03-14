@@ -1,0 +1,13 @@
+name: "R01 - arXiv Daily Tracking"
+project_id: "E2E_Test_R01"
+overleaf_id: "699ec2b02ee98d9d33e2f5bf"
+main_tex: "main.tex"
+query: "帮我追踪一下我研究方向最近的 arXiv 新论文。筛选最相关的 3-5 篇，每篇给出相关度评分（1-10）和关联分析，然后推送给我。（这是个radar任务）"
+timeout_sec: 10800
+
+expected_outcome:
+  - Agent should read the project .tex files to infer the research topic and keywords (NOT rely solely on user message)
+  - Agent should use `arxiv_search` with topic-derived keywords to find recent relevant papers
+  - Agent should return top 3-5 most relevant papers with relevance scores (1-10) and relation analysis
+  - Agent should attempt `notify_push` and also output the complete results list in the conversation
+  - Each paper entry should include title, link, relevance score, and connection to the project's research
