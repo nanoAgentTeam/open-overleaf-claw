@@ -58,7 +58,7 @@ Bot: ✅ Pushed 3 files to Overleaf.
 - `/task` mode decomposes complex goals into a DAG and executes in parallel
 
 **Literature Search**
-- arXiv, PubMed, OpenAlex, Semantic Scholar integration
+- arXiv, PubMed, OpenAlex integration
 - Full-text PDF reading for in-depth analysis
 
 **Research Radar & Automation**
@@ -338,7 +338,7 @@ Bot: ✅ 已推送 3 个文件到 Overleaf。
 - `/task` 模式将复杂目标分解为 DAG 并行执行
 
 **文献检索**
-- 集成 arXiv、PubMed、OpenAlex、Semantic Scholar
+- 集成 arXiv、PubMed、OpenAlex
 - 支持 PDF 全文阅读和深度分析
 
 **研究雷达与自动化**
