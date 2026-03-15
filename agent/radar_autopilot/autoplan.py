@@ -99,7 +99,7 @@ class RadarAutoplanService:
 【始终开启】
   T1. radar.daily.scan        每日 arXiv 增量扫描，检索新论文，评估相关度
   T2. radar.weekly.digest     每周一汇总日扫记录，生成可执行建议的周报
-  T3. radar.urgent.alert      每4小时检测高优先级事件（竞争论文/外部冲击），达阈值推送
+  T3. radar.urgent.alert      每日检测高优先级事件（竞争论文/外部冲击），达阈值推送
   T4. radar.direction.drift   每日检测研究方向漂移，提出任务调整建议
   T5. radar.profile.refresh   每日检测论文内容变化，自动刷新研究画像和关键词
 
