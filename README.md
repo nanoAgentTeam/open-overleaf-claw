@@ -13,7 +13,7 @@ A self-hosted AI assistant for academic research — manages your papers, search
 
 <!-- TODO: 在此放置产品演示 GIF 或视频 -->
 
-https://github.com/user-attachments/assets/83ae8365-66a2-493c-ac19-5a962bb5ad09
+https://github.com/user-attachments/assets/fccb837c-cfc5-4063-b803-2ae900fb4a20
 
 
 
