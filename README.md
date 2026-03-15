@@ -110,7 +110,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Configure (via Web UI)
+### Step 1 — Project Configuration
 
 ```bash
 # Start the gateway — this launches the Web UI
@@ -131,25 +131,29 @@ Open **http://localhost:18790/ui** in your browser:
 
 <!-- ![Config UI](docs/assets/config-ui.png) -->
 
+### Step 2 — Overleaf Authorization *(optional)*
+
+Overleaf sync is one of the core features of Open Overleaf Claw — it enables bidirectional sync between your local LaTeX project and Overleaf, so every AI edit can be pushed to Overleaf and every collaborator's edit can be pulled back. You can skip this step and add it later, but we highly recommend setting it up.
+
+```bash
+pip install overleaf-sync
+ols login          # opens browser login, generates .olauth cookie file
+```
+
+Once `.olauth` is created, the system will automatically detect it. You can then use `/sync pull` and `/sync push` inside any project.
+
 ### Use
 
-**Option A — CLI** (interactive terminal):
+**Option A — CLI** — interact with the assistant directly in your terminal:
 
 ```bash
 python cli/main.py agent
 ```
 
-**Option B — Gateway** (Web UI + IM bots):
+**Option B — Gateway** — starts the Web UI and connects to your configured IM channels (Feishu, Telegram, QQ, DingTalk), so you can chat with the assistant from anywhere:
 
 ```bash
 python cli/main.py gateway --port 18790
-```
-
-**Option C — Overleaf sync** *(optional)*:
-
-```bash
-pip install overleaf-sync
-ols login          # generates .olauth cookie file
 ```
 
 ## How It Works
@@ -420,14 +424,14 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 配置（通过 Web UI）
+### 第一步 — 项目配置
 
 ```bash
 # 启动 Gateway — 包含 Web UI
 python cli/main.py gateway --port 18790
 ```
 
-打开浏览器访问  http://localhost:18790/ui ：
+打开浏览器访问 http://localhost:18790/ui ：
 
 1. **模型管理** — 添加 LLM 提供商（API Key、模型名、Base URL）。支持任何 OpenAI 兼容 API（GPT、DeepSeek、通义千问、Claude 等）
 2. **通讯账号** — *（可选）* 添加 IM 机器人凭证（飞书 / Telegram / QQ / 钉钉）
@@ -439,25 +443,29 @@ python cli/main.py gateway --port 18790
 
 <!-- ![Config UI](docs/assets/config-ui.png) -->
 
+### 第二步 — Overleaf 授权（可选）
+
+Overleaf 同步是 Open Overleaf Claw 的核心功能之一 — 它实现了本地 LaTeX 项目与 Overleaf 的双向同步，AI 的每一次编辑都可以推送到 Overleaf，协作者的修改也能随时拉取回来。你可以跳过此步骤稍后再配置，但我们强烈建议尽早设置。
+
+```bash
+pip install overleaf-sync
+ols login          # 打开浏览器登录，生成 .olauth 认证文件
+```
+
+`.olauth` 创建后系统会自动检测。之后即可在任何项目中使用 `/sync pull` 和 `/sync push`。
+
 ### 使用
 
-**方式 A — CLI**（交互式终端）：
+**方式 A — CLI** — 在终端中直接与助手交互：
 
 ```bash
 python cli/main.py agent
 ```
 
-**方式 B — Gateway**（Web UI + IM 机器人）：
+**方式 B — Gateway** — 启动 Web UI 并连接已配置的 IM 渠道（飞书、Telegram、QQ、钉钉），随时随地通过聊天工具与助手对话：
 
 ```bash
 python cli/main.py gateway --port 18790
-```
-
-**方式 C — Overleaf 同步**（可选）：
-
-```bash
-pip install overleaf-sync
-ols login          # 生成 .olauth 认证文件
 ```
 
 ## 工作原理
