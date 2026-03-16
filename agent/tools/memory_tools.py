@@ -27,9 +27,8 @@ class _KnowledgeTool(BaseTool):
     def _store(self) -> Any | None:
         if not self.project:
             return None
-        if self._is_automation_context():
-            return ProjectMemoryStore(self.project)
-        return ProjectKnowledgeStore(self.project)
+        from core.memory import ProjectMemoryStore
+        return ProjectMemoryStore(self.project)
 
 
 class MemoryGetTool(_KnowledgeTool):

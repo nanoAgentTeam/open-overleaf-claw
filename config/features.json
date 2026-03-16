@@ -16,7 +16,7 @@
     "modelContextLimit": 256000,
     "maxOutputLength": 32000,
     "workerTaskTimeoutSeconds": 600,
-    "maxWorkerIterations": 80
+    "maxWorkerIterations": 60
   },
   "vfs": {
     "cleanupAgeHours": 24,

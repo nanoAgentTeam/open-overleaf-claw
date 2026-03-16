@@ -120,9 +120,18 @@ class OverleafTool(BaseTool):
             elif action == "sync":
                 # Delegate to Project.sync_to_overleaf() — the canonical push path
                 if not self._project:
-                    return "[ERROR] No active project. Switch to a project first, then use /sync push."
+                    return (
+                        "[ERROR] Cannot sync: no active project in current session. "
+                        "You are in Default mode. To sync, you MUST first call "
+                        "project_manager(action='switch', project_name='...') to enter the project, "
+                        "then retry overleaf(action='sync'). "
+                        "Do NOT attempt to sync via bash or read .overleaf.json as a workaround."
+                    )
                 if self._project.is_default:
-                    return "[ERROR] Cannot sync Default project. Switch to a specific project first."
+                    return (
+                        "[ERROR] Cannot sync Default project. "
+                        "Use project_manager(action='switch', project_name='...') to enter a specific project first."
+                    )
                 result = self._project.sync_to_overleaf()
                 if not result.success:
                     errors = ', '.join(result.errors) if result.errors else 'unknown'
@@ -416,6 +425,20 @@ class OverleafTool(BaseTool):
         project_id = metadata.get("project_id")
         if not project_id:
             return "[ERROR] Metadata corrupted (no project_id)."
+
+        # Pre-check: verify remote project still exists
+        try:
+            remote_projects = api.get_projects()
+            if not any(getattr(p, 'id', None) == project_id for p in remote_projects):
+                return (
+                    "[ERROR] Overleaf project '%s' (ID: %s) not found on remote. "
+                    "It may have been deleted from Overleaf. "
+                    "Use overleaf(action='list') to verify, "
+                    "or overleaf(action='create_project') to create a new one."
+                    % (metadata.get('project_name', ''), project_id)
+                )
+        except Exception as e:
+            logger.warning("Failed to verify remote project existence: %s", e)
 
         # 1. Detect Changes
         changed_files = self._get_changed_files(project_folder, metadata)

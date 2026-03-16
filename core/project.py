@@ -422,6 +422,23 @@ class OverleafSync:
         except RuntimeError as e:
             return SyncResult(success=False, errors=[str(e)])
 
+        # Pre-check: verify remote project still exists
+        try:
+            remote_projects = api.get_projects()
+            if not any(getattr(p, 'id', None) == self.config.project_id for p in remote_projects):
+                return SyncResult(
+                    success=False,
+                    errors=[
+                        "Overleaf project '%s' not found on remote. "
+                        "It may have been deleted. "
+                        "Use overleaf(action='list') to check, "
+                        "or overleaf(action='create_project') to create a new one."
+                        % self.config.project_id
+                    ],
+                )
+        except Exception as e:
+            logger.warning("Failed to verify remote project existence: %s", e)
+
         metadata = self._load_metadata()
 
         try:

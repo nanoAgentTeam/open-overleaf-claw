@@ -262,7 +262,7 @@ class SDDExecutor:
         try:
             current_iter = 0
             # Per-task budget > config default > 80, clamped to minimum 80
-            _MIN_WORKER_ITERS = 80
+            _MIN_WORKER_ITERS = 60
             try:
                 from config.loader import load_config
                 _cfg = load_config()

@@ -10,4 +10,14 @@ used_by: context.py
 - Read profile: `profile_read('research_core')` — get project research direction, keywords, stage.
 - Browse: `memory_nav(domain='all')` → `memory_list(scope='...')` → `memory_get(id='MEM-xxxx')`.
 - Search: `memory_search(query='keyword')`.
-- Save: `memory_write(title, content, scope='project', intent='research_direction')` — use when the user explicitly shares research preferences or important decisions that should persist across sessions.
+- Save: `memory_write(title, content, scope='project', intent='...')`.
+
+[AUTO-SAVE GUIDANCE]
+Proactively call memory_write when you encounter the following during conversation — no explicit user request needed:
+- **User preferences**: writing style, language, formatting, target venue, etc. → intent='user_preference'
+- **Research decisions**: direction changes, method choices, experiment plans → intent='research_direction'
+- **Key findings**: important insights, literature discoveries, comparative conclusions → intent='insight'
+- **Cross-session agreements**: requirements or conventions the user wants remembered → intent='user_preference'
+
+Use a short descriptive title, include context in content, set scope='project'.
+Do NOT save trivial information (e.g., one-off debug commands, temporary instructions).

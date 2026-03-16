@@ -29,7 +29,7 @@ class ProjectTool(BaseTool):
             "正确流程：create → switch。必须在 switch 之前完成所有配置。\n"
             "- list: 列出工作区中的所有项目。\n"
             "- create: 创建新项目。传 create_on_overleaf=true 可同时在 Overleaf 上创建并自动关联（推荐）。\n"
-            "- link_overleaf: 关联已有的 Overleaf 项目并拉取文件。不传 overleaf_id 时列出可选的 Overleaf 项目。\n"
+            "- link_overleaf: 关联 Overleaf 项目。本地有内容时自动 push 到 Overleaf，本地为空时从 Overleaf pull。不传 overleaf_id 时列出可选项目。\n"
             "- info: 查看指定项目的配置和状态（git、overleaf、main_tex 等）。\n"
             "- switch: 切换到指定项目，进入工作模式。切换后此工具将不可用。"
         )
@@ -325,27 +325,43 @@ class ProjectTool(BaseTool):
         except Exception as e:
             return f"[ERROR] Failed to save config: {e}"
 
+        # Decide sync direction: if local core has .tex files, push to Overleaf;
+        # otherwise pull from Overleaf (e.g. linking an existing Overleaf project).
+        local_has_content = any(proj.core.glob("*.tex"))
+
         try:
-            result = proj.sync_from_overleaf()
-            if result.success:
-                pulled = len(result.pulled) if result.pulled else 0
-                bootstrap = ensure_project_automation_jobs(proj)
-                created = int((bootstrap.get("radar_applied") or {}).get("created", 0))
-                created_autoplan = bool(bootstrap.get("created_autoplan"))
-                msg = f"Linked Overleaf (ID: {overleaf_id}) and pulled {pulled} files."
-                if result.conflicts:
-                    msg += f"\nConflicts: {', '.join(result.conflicts)}"
-                if created_autoplan or created > 0:
-                    msg += f"\nInitialized default radar jobs (autoplan={created_autoplan}, created={created})."
-                autoplan_line = await self._run_initial_autoplan(proj)
-                if autoplan_line:
-                    msg += f"\n{autoplan_line}"
-                return msg
+            if local_has_content:
+                result = proj.sync_to_overleaf()
+                if result.success:
+                    pushed = len(result.pushed) if result.pushed else 0
+                    sync_msg = f"Linked Overleaf (ID: {overleaf_id}) and pushed {pushed} local files to Overleaf."
+                    if result.errors:
+                        sync_msg += f"\nPartial errors: {'; '.join(result.errors[:5])}"
+                else:
+                    errors = ', '.join(result.errors) if result.errors else 'unknown'
+                    sync_msg = f"Linked Overleaf to '{project_name}', but push failed: {errors}\nRetry with /sync push after switching."
             else:
-                errors = ', '.join(result.errors) if result.errors else 'unknown'
-                return f"Linked Overleaf to '{project_name}', but pull failed: {errors}\nRetry with /sync pull after switching."
+                result = proj.sync_from_overleaf()
+                if result.success:
+                    pulled = len(result.pulled) if result.pulled else 0
+                    sync_msg = f"Linked Overleaf (ID: {overleaf_id}) and pulled {pulled} files from Overleaf."
+                    if result.conflicts:
+                        sync_msg += f"\nConflicts: {', '.join(result.conflicts)}"
+                else:
+                    errors = ', '.join(result.errors) if result.errors else 'unknown'
+                    sync_msg = f"Linked Overleaf to '{project_name}', but pull failed: {errors}\nRetry with /sync pull after switching."
+
+            bootstrap = ensure_project_automation_jobs(proj)
+            created = int((bootstrap.get("radar_applied") or {}).get("created", 0))
+            created_autoplan = bool(bootstrap.get("created_autoplan"))
+            if created_autoplan or created > 0:
+                sync_msg += f"\nInitialized default radar jobs (autoplan={created_autoplan}, created={created})."
+            autoplan_line = await self._run_initial_autoplan(proj)
+            if autoplan_line:
+                sync_msg += f"\n{autoplan_line}"
+            return sync_msg
         except Exception as e:
-            return f"Linked Overleaf to '{project_name}' (config saved), but pull failed: {e}\nRetry with /sync pull after switching."
+            return f"Linked Overleaf to '{project_name}' (config saved), but sync failed: {e}\nRetry with /sync push or /sync pull after switching."
 
     async def _run_initial_autoplan(self, project: Any) -> str:
         provider = getattr(self.ctx, "provider", None)

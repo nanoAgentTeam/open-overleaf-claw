@@ -199,10 +199,10 @@ async def startup_event():
         logger.warning(f"AutomationRuntime startup failed, continue without scheduler: {e}")
 
     # Register bus hooks for unified history logging
-    _history_logger = agent_loop.history_logger
-    bus.add_inbound_hook(_history_logger.log_inbound)
+    # Use lambda to always resolve the current history_logger (it changes on project switch)
+    bus.add_inbound_hook(lambda msg: agent_loop.history_logger.log_inbound(msg))
     bus.add_inbound_hook(_record_chat_contact)
-    bus.add_outbound_hook(_history_logger.log_outbound)
+    bus.add_outbound_hook(lambda msg: agent_loop.history_logger.log_outbound(msg))
 
     # Start IM channels and Agent loop in background
     asyncio.create_task(im_runtime.start_all())
