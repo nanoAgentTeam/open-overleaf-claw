@@ -698,8 +698,27 @@ def gateway(
     port: int = typer.Option(18790, "--port", "-p", help="Gateway port"),
 ):
     """Start the gateway server and UI."""
+    import shutil
     from loguru import logger
     import sys
+
+    # Ensure settings.json exists in project root (copy from default if missing)
+    project_root = Path(__file__).resolve().parent.parent
+    settings_path = project_root / "settings.json"
+    if not settings_path.exists():
+        default_path = project_root / "settings.default.json"
+        if default_path.exists():
+            shutil.copy2(default_path, settings_path)
+            console.print("[green]Created settings.json from settings.default.json[/green]")
+        else:
+            # Write minimal default config
+            import json
+            settings_path.write_text(json.dumps({
+                "provider": {"activeId": "", "instances": []},
+                "channel": {"accounts": []},
+                "userInfo": {"language": "zh", "llmLanguage": "auto"}
+            }, ensure_ascii=False, indent=2), encoding="utf-8")
+            console.print("[green]Created default settings.json[/green]")
 
     # Configure gateway logging: stderr + rotating log file
     logger.remove()
