@@ -809,7 +809,11 @@ class TaskExecuteTool(BaseTool):
         if self._session.auto_mode:
             lines.append("[INSTRUCTION] Auto mode — use read_file to review each worker output, "
                          "then write_file/str_replace to merge content into the core project files, "
-                         "then immediately call task_commit() to finalize.")
+                         "then immediately call task_commit() to finalize.\n"
+                         "[TIP] If worker outputs contain TikZ figure .tex files, "
+                         "try compiling them to PDF via bash and use "
+                         "\\includegraphics{figures/xxx.pdf} instead of \\input{figures/xxx.tex} in main.tex. "
+                         "This is more portable and avoids package conflicts with the main document.")
         else:
             lines.append(t("task.finalize_instructions"))
 
@@ -892,6 +896,12 @@ class TaskCommitTool(BaseTool):
                 os.chmod(f, 0o755 if f.is_dir() else 0o644)
             os.chmod(tw_root, 0o755)
 
+        # Rescue missing referenced files from worker outputs before LLM fix
+        self._rescue_missing_references(project, on_token=on_token)
+
+        # Holistic LaTeX fix: compile → LLM self-review → fix → repeat
+        await self._holistic_latex_fix(project, on_token=on_token)
+
         # Generate commit message via LLM
         message = await self._generate_commit_summary(on_token=on_token)
 
@@ -914,10 +924,142 @@ class TaskCommitTool(BaseTool):
             state_path = self._ctx.session.metadata / "task_state.json"
             self._session.save(state_path)
 
+        # Build actual core file listing so the main agent has ground truth
+        core_listing = self._list_core_files(project)
+
         return (
             t("task.committed", commit_info=commit_info)
+            + core_listing
             + "<task_done/>"
         )
+
+    @staticmethod
+    def _rescue_missing_references(project, on_token=None) -> None:
+        """Find files referenced in main.tex that are missing from core
+        but exist in _task_workers/. Copy them to core automatically."""
+        import re as _re
+        import shutil
+
+        core = project.core
+        main_tex = project.config.main_tex if hasattr(project.config, 'main_tex') else "main.tex"
+        tex_path = core / main_tex
+        if not tex_path.exists():
+            return
+
+        tw_root = core / "_task_workers"
+        if not tw_root.exists():
+            return
+
+        tex_content = tex_path.read_text(encoding="utf-8", errors="replace")
+
+        # Collect all referenced file paths from main.tex
+        ref_patterns = [
+            _re.compile(r'\\input\{([^}]+)\}'),
+            _re.compile(r'\\include\{([^}]+)\}'),
+            _re.compile(r'\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}'),
+        ]
+        missing_refs = []
+        for pattern in ref_patterns:
+            for match in pattern.finditer(tex_content):
+                ref = match.group(1)
+                candidates = [core / ref]
+                if not ref.endswith('.tex'):
+                    candidates.append(core / (ref + '.tex'))
+                if not any(c.exists() for c in candidates):
+                    missing_refs.append(ref)
+
+        if not missing_refs:
+            return
+
+        # Search _task_workers/ for each missing file
+        rescued = []
+        for ref in missing_refs:
+            # Normalize: "figures/foo.tex" → search for any file ending with this relative path
+            ref_path = Path(ref)
+            found = None
+            for f in tw_root.rglob(ref_path.name):
+                if not f.is_file():
+                    continue
+                # Check the relative structure matches (e.g. figures/foo.tex)
+                try:
+                    rel = f.relative_to(f.parents[len(ref_path.parts) - 1])
+                    if str(rel) == ref or str(rel) == ref + '.tex':
+                        found = f
+                        break
+                except (ValueError, IndexError):
+                    pass
+            # Fallback: just match by filename
+            if not found:
+                for f in tw_root.rglob(ref_path.name):
+                    if f.is_file():
+                        found = f
+                        break
+                # Also try with .tex extension
+                if not found and not ref.endswith('.tex'):
+                    for f in tw_root.rglob(ref_path.name + '.tex'):
+                        if f.is_file():
+                            found = f
+                            break
+
+            if found:
+                target = core / ref
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(str(found), str(target))
+                rescued.append(f"{ref} ← {found.relative_to(tw_root)}")
+                logger.info(f"Rescued missing file: {ref} from {found}")
+
+        if rescued and on_token:
+            on_token("\n📦 Rescued missing files from worker outputs:\n"
+                     + "\n".join(f"  - {r}" for r in rescued) + "\n")
+
+    @staticmethod
+    def _list_core_files(project) -> str:
+        """List actual files in project core for ground-truth context."""
+        core = project.core
+        if not core.exists():
+            return ""
+        skip_ext = {'.log', '.aux', '.blg', '.out', '.bbl', '.toc',
+                    '.lof', '.lot', '.fls', '.fdb_latexmk', '.synctex.gz'}
+        skip_dirs = {'.git', '_task_workers', '__pycache__', '.bot'}
+        files = []
+        for f in sorted(core.rglob("*")):
+            if not f.is_file():
+                continue
+            rel_parts = f.relative_to(core).parts
+            if any(p in skip_dirs for p in rel_parts):
+                continue
+            if f.suffix in skip_ext:
+                continue
+            rel = str(f.relative_to(core))
+            size = f.stat().st_size
+            size_str = f"{size / 1024:.1f}KB" if size >= 1024 else f"{size}B"
+            files.append(f"  {rel} ({size_str})")
+        if not files:
+            return ""
+        return "\n\n[Core files (ground truth)]\n" + "\n".join(files)
+
+    async def _holistic_latex_fix(self, project, on_token: Any = None) -> None:
+        """Run holistic LaTeX review/fix on the merged core before commit."""
+        main_tex = project.config.main_tex if hasattr(project.config, 'main_tex') else "main.tex"
+        tex_path = project.core / main_tex
+        if not tex_path.exists():
+            return
+
+        provider, model = _get_planner_provider_and_model(self._ctx)
+        if not provider:
+            return
+
+        try:
+            from agent.tools.academic.latex_tool import LaTeXCompileTool
+            tool = LaTeXCompileTool(
+                project=project,
+                provider=provider,
+                model=model,
+            )
+            result = await tool.holistic_fix(main_file=main_tex, on_token=on_token)
+            logger.info(f"Holistic LaTeX fix result: {result[:200]}")
+        except Exception as e:
+            logger.warning(f"Holistic LaTeX fix failed (non-blocking): {e}")
 
     async def _generate_commit_summary(self, on_token: Any = None) -> str:
         """Use LLM to generate a concise commit message from task context."""

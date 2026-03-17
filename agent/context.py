@@ -269,7 +269,8 @@ class ContextManager:
                 "[image: /path/to/file], [file: /path/to/file], or [attachment: /path/to/file].\n"
                 "- These are user-uploaded files already downloaded to the local disk.\n"
                 "- Use the read_file tool with the full path to read the file content.\n"
-                "- Use the send_file tool to send files back to the user.\n\n"
+                "- To send files to the user, you MUST call the send_file tool. "
+                "Do not write file paths in your text response — the user cannot access local paths.\n\n"
                 "[REPLY / QUOTE MESSAGES]\n"
                 "When users reply to (quote) a previous message, their message will start with:\n"
                 '  [Replying to: "quoted text here..."]\n'

@@ -566,3 +566,255 @@ class LaTeXCompileTool(BaseTool):
             return "No specific error patterns matched. Last 10 lines:\n" + "\n".join(lines[-10:])
         unique = list(dict.fromkeys(errors))
         return "\n".join(unique[:20])
+
+    # ------------------------------------------------------------------
+    # Holistic fix: unified LLM-driven self-loop (for task_commit, etc.)
+    # ------------------------------------------------------------------
+
+    _HOLISTIC_SYSTEM_PROMPT = """\
+You are a LaTeX quality reviewer and fixer. You receive the full compilation log \
+(errors AND warnings) and an integrity report showing broken file references.
+
+Your job:
+1. **Broken references**: If the report shows \\input/\\includegraphics pointing to \
+missing files, comment out or remove those lines so the document is self-consistent.
+2. **Compilation issues**: Fix errors, warnings, package conflicts, undefined commands, etc.
+3. Ignore harmless noise (font substitution, overfull hbox).
+4. After fixing, call `compile` to recompile and check the new log.
+5. Repeat until satisfied, then call `done`.
+
+Rules:
+- Read files BEFORE editing. Never guess file contents.
+- Apply minimal, targeted fixes via str_replace. Do NOT rewrite or restructure content.
+- Fix as many issues as possible per turn. Use parallel tool calls.
+- Common fixes: package conflicts (duplicate hyperref, cite vs natbib), undefined \
+commands (\\citet without natbib), missing \\pgfplotsset{compat}, bad \\ref/\\cite keys.
+- For missing files: comment out the referencing line, do NOT fabricate content.
+"""
+
+    _HOLISTIC_COMPILE_SCHEMA = {
+        "type": "function",
+        "function": {
+            "name": "compile",
+            "description": "Recompile the LaTeX project and return the new compilation log (errors + warnings).",
+            "parameters": {"type": "object", "properties": {}},
+        },
+    }
+
+    _HOLISTIC_DONE_SCHEMA = {
+        "type": "function",
+        "function": {
+            "name": "done",
+            "description": (
+                "Signal that you are finished reviewing. "
+                "verdict='PASS' means the document is acceptable. "
+                "Call this when all fixable issues have been addressed."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "verdict": {
+                        "type": "string",
+                        "enum": ["PASS"],
+                        "description": "Always PASS. Call this when done.",
+                    },
+                    "reason": {
+                        "type": "string",
+                        "description": "Brief summary of what was fixed and what remains (if anything).",
+                    },
+                },
+                "required": ["verdict", "reason"],
+            },
+        },
+    }
+
+    MAX_HOLISTIC_TURNS = 15
+
+    async def holistic_fix(self, main_file: str = None, on_token=None) -> str:
+        """Unified LLM-driven compile-review-fix loop.
+
+        Unlike _auto_fix_errors/_auto_fix_warnings, this hands full control
+        to the LLM: it sees the complete log, decides what to fix, recompiles
+        when it wants, and calls ``done`` when satisfied.
+
+        Returns a human-readable summary string.
+        """
+        if not self.project:
+            return "[skip] No project context."
+        if not self.provider:
+            return "[skip] No LLM provider for holistic fix."
+
+        # Check main tex file exists
+        tex_name = main_file or self.project.config.main_tex
+        tex_path = self.project.core / tex_name
+        if not tex_path.exists():
+            return "[skip] No main tex file found."
+
+        # Check for broken file references in main.tex
+        integrity_report = self._check_deliverables_integrity(tex_name)
+
+        # Initial compile
+        result = self._do_compile(main_file)
+        compile_summary = self._format_compile_log(result)
+
+        # Skip only if compilation is perfectly clean AND no integrity issues
+        if (result.success and not result.errors and not result.warnings
+                and not integrity_report):
+            return "Compilation clean — no issues found."
+
+        if on_token:
+            on_token("\n🔍 Holistic LaTeX review starting...\n")
+
+        tools = [
+            _READ_FILE_SCHEMA,
+            _STR_REPLACE_SCHEMA,
+            _LIST_FILES_SCHEMA,
+            self._HOLISTIC_COMPILE_SCHEMA,
+            self._HOLISTIC_DONE_SCHEMA,
+        ]
+
+        # Build initial context
+        user_parts = [
+            "The LaTeX project has been compiled. Here is the full result:\n",
+            compile_summary,
+        ]
+        if integrity_report:
+            user_parts.append(
+                "\n\n--- Deliverables Integrity Report ---\n" + integrity_report
+            )
+        user_parts.append(
+            "\n\nPlease review, fix what you can, and call `done` when satisfied."
+        )
+
+        messages = [
+            {"role": "system", "content": self._HOLISTIC_SYSTEM_PROMPT},
+            {"role": "user", "content": "\n".join(user_parts)},
+        ]
+
+        fix_log = []
+        for turn_i in range(self.MAX_HOLISTIC_TURNS):
+            if on_token:
+                on_token(f"  [turn {turn_i + 1}] thinking...\n")
+
+            try:
+                response = await self.provider.chat(
+                    messages=messages,
+                    tools=tools,
+                    model=self.model,
+                    max_tokens=4096,
+                    temperature=0.0,
+                )
+            except Exception as e:
+                err_str = str(e).lower()
+                if "context_length" in err_str or "too long" in err_str:
+                    fix_log.append("Context too long, ending early.")
+                    break
+                logger.error(f"Holistic fix LLM error: {e}")
+                fix_log.append(f"LLM error: {e}")
+                break
+
+            # No tool calls → agent is done talking
+            if not response.has_tool_calls:
+                if response.content:
+                    fix_log.append(response.content)
+                break
+
+            if response.content:
+                fix_log.append(response.content)
+
+            # Append assistant message
+            messages.append({
+                "role": "assistant",
+                "content": response.content,
+                "tool_calls": [
+                    {
+                        "id": tc.id, "type": "function",
+                        "function": {"name": tc.name, "arguments": json.dumps(tc.arguments, ensure_ascii=False)},
+                    }
+                    for tc in response.tool_calls
+                ],
+            })
+
+            # Execute tool calls
+            done_called = False
+            for tc in response.tool_calls:
+                if tc.name == "done":
+                    reason = tc.arguments.get("reason", "")
+                    fix_log.append(f"Done: {reason}")
+                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": f"OK. {reason}"})
+                    done_called = True
+                elif tc.name == "compile":
+                    result = self._do_compile(main_file)
+                    compile_summary = self._format_compile_log(result)
+                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": compile_summary})
+                    if on_token:
+                        e_cnt = len(result.errors) if result.errors else 0
+                        w_cnt = len(result.warnings) if result.warnings else 0
+                        on_token(f"  [compile] {e_cnt} errors, {w_cnt} warnings\n")
+                else:
+                    tool_result = self._execute_fix_tool(tc.name, tc.arguments)
+                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": tool_result})
+                    if on_token:
+                        on_token(f"  [{tc.name}] done\n")
+
+            if done_called:
+                break
+
+        summary = "Holistic fix log:\n" + "\n".join(f"  - {entry[:200]}" for entry in fix_log) if fix_log else "No fixes applied."
+        if on_token:
+            on_token(f"\n✅ Holistic review complete.\n")
+        return summary
+
+    @staticmethod
+    def _format_compile_log(result) -> str:
+        """Format a CompileResult into a full log for the holistic agent."""
+        parts = []
+        if result.success:
+            parts.append("Compilation: SUCCESS (PDF generated)")
+        else:
+            parts.append("Compilation: FAILED (no PDF or errors)")
+        if result.errors:
+            parts.append(f"\nErrors ({len(result.errors)}):")
+            for e in result.errors[:30]:
+                parts.append(f"  {e}")
+        if result.warnings:
+            parts.append(f"\nWarnings ({len(result.warnings)}):")
+            for w in result.warnings[:30]:
+                parts.append(f"  {w}")
+        if result.log_excerpt:
+            parts.append(f"\nLog tail:\n{result.log_excerpt[-2000:]}")
+        return "\n".join(parts)
+
+    def _check_deliverables_integrity(self, main_file: str) -> str:
+        """Check that all \\input/\\includegraphics in main.tex point to real files.
+
+        Returns a report string, or empty string if everything is fine.
+        """
+        if not self.project:
+            return ""
+
+        core = self.project.core
+        tex_path = core / main_file
+        if not tex_path.exists():
+            return ""
+
+        issues = []
+        tex_content = tex_path.read_text(encoding="utf-8", errors="replace")
+
+        ref_patterns = [
+            (r'\\input\{([^}]+)\}', "\\input"),
+            (r'\\include\{([^}]+)\}', "\\include"),
+            (r'\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}', "\\includegraphics"),
+        ]
+        for pattern, cmd_name in ref_patterns:
+            for match in re.finditer(pattern, tex_content):
+                ref_path = match.group(1)
+                candidates = [core / ref_path]
+                if not ref_path.endswith('.tex') and cmd_name in ('\\input', '\\include'):
+                    candidates.append(core / (ref_path + '.tex'))
+                if not any(c.exists() for c in candidates):
+                    issues.append(f"MISSING: {cmd_name}{{{ref_path}}} — file not found in core")
+
+        if not issues:
+            return ""
+        return "\n".join(issues)

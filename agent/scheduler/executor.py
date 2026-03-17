@@ -335,8 +335,14 @@ class SDDExecutor:
                         token_buffer = ""
                     
                     if log_msg:
-                        if asyncio.iscoroutinefunction(on_log): await on_log(log_msg)
-                        else: on_log(log_msg)
+                        # Strip emojis so condensed_log won't pass verbose
+                        # content through its emoji whitelist filter.
+                        # Real progress messages from _emit() keep their emojis.
+                        _clean = log_msg
+                        for _e in ('✅', '🛠️', '💡', '🔄', '📌', '⚠️', '🔧'):
+                            _clean = _clean.replace(_e, '')
+                        if asyncio.iscoroutinefunction(on_log): await on_log(_clean)
+                        else: on_log(_clean)
 
                 if event.type == "error":
                     logger.error(f"Worker Error: {event.data}")
