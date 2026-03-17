@@ -1889,4 +1889,15 @@ else:
 def start_gateway_server(host: str = "127.0.0.1", port: int = 18790):
     import uvicorn
     logger.info(f"Starting Gateway Server on http://{host}:{port}/ui")
-    uvicorn.run(app, host=host, port=port, access_log=False)
+    # 过滤 health check 的 200 日志
+    import logging
+
+    class HealthCheckFilter(logging.Filter):
+        def filter(self, record: logging.LogRecord) -> bool:
+            message = record.getMessage()
+            if "/api/health" in message and "200" in message:
+                return False
+            return True
+
+    logging.getLogger("uvicorn.access").addFilter(HealthCheckFilter())
+    uvicorn.run(app, host=host, port=port)
