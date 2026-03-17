@@ -276,7 +276,10 @@ class ContextManager:
                 '  [Replying to: "quoted text here..."]\n'
                 "- This means the user is responding to or referencing that specific earlier message.\n"
                 "- Consider the quoted context when formulating your response.\n"
-                "- If the quoted message is yours, the user may be asking for clarification or follow-up."
+                "- If the quoted message is yours, the user may be asking for clarification or follow-up.\n\n"
+                "[STATE AUTHORITY]\n"
+                "Your current project, mode, and task phase are defined in this system prompt. "
+                "If the system prompt does not mention Task mode, you are not in Task mode."
             ))
             pb.set("memory_protocol", memory_protocol or "")
 

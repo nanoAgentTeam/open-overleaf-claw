@@ -785,23 +785,6 @@ class TaskExecuteTool(BaseTool):
                 on_token("    .\n")
                 _last_log_time[0] = time.time()
 
-        # ── Heartbeat: periodic progress during long silences ──
-        _hb_running = [True]
-
-        async def _heartbeat():
-            while _hb_running[0]:
-                await asyncio.sleep(20)
-                if not _hb_running[0]:
-                    break
-                elapsed = time.time() - exec_start
-                completed = sum(1 for _tk in graph.tasks.values() if _tk.status == TaskStatus.COMPLETED)
-                running = sum(1 for _tk in graph.tasks.values() if _tk.status == TaskStatus.RUNNING)
-                _hb_msg = t("task.execute_progress", completed=completed, total_tasks=total_tasks, running=running, elapsed=elapsed)
-                emit(_hb_msg)
-                notify_im(_hb_msg)
-
-        heartbeat_task = asyncio.ensure_future(_heartbeat())
-
         # Run all batches until completion
         total_run = []
         total_failed = []
@@ -861,8 +844,7 @@ class TaskExecuteTool(BaseTool):
                     notify_im(_stuck_msg)
                     break
         finally:
-            _hb_running[0] = False
-            heartbeat_task.cancel()
+            pass
 
         # Transition to FINALIZE
         self._session.phase = TaskPhase.FINALIZE
