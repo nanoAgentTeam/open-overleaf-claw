@@ -40,3 +40,4 @@ class OutboundMessage:
     stream_id: str | None = None # Identifier for parallel streams (e.g. subagent name)
     edit_message_id: str | None = None  # ID of message to edit (if known)
     new_message: bool = False # Force a new message bubble instead of editing previous
+    is_notification: bool = False  # Bypass IM buffer, send directly as standalone message

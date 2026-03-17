@@ -49,28 +49,60 @@ _PHASE_DONE_KEY = {
 }
 
 
-async def _notify_phase_enter(on_token: Any, phase: TaskPhase) -> None:
-    """Push a phase-enter notification to the user via on_token callback."""
+async def _notify_phase_enter(on_token: Any, phase: TaskPhase,
+                              bus=None, message_context: dict = None) -> None:
+    """Push a phase-enter notification to the user.
+
+    IM channels receive a standalone notification message (bypasses buffer).
+    CLI receives the hint via on_token callback.
+    """
     key = _PHASE_ENTER_KEY.get(phase)
-    if not key or not on_token:
+    if not key:
         return
     hint = t(key)
-    if asyncio.iscoroutinefunction(on_token):
-        await on_token(hint)
-    else:
-        on_token(hint)
+    # IM notification
+    if bus and message_context:
+        from bus.events import OutboundMessage
+        await bus.publish_outbound(OutboundMessage(
+            channel=message_context.get("channel", ""),
+            chat_id=message_context.get("chat_id", ""),
+            content=hint,
+            is_notification=True,
+        ))
+    # CLI fallback
+    if on_token:
+        if asyncio.iscoroutinefunction(on_token):
+            await on_token(hint)
+        else:
+            on_token(hint)
 
 
-async def _notify_phase_done(on_token: Any, phase: TaskPhase) -> None:
-    """Push a phase-done notification to the user via on_token callback."""
+async def _notify_phase_done(on_token: Any, phase: TaskPhase,
+                             bus=None, message_context: dict = None) -> None:
+    """Push a phase-done notification to the user.
+
+    IM channels receive a standalone notification message (bypasses buffer).
+    CLI receives the hint via on_token callback.
+    """
     key = _PHASE_DONE_KEY.get(phase)
-    if not key or not on_token:
+    if not key:
         return
     hint = t(key)
-    if asyncio.iscoroutinefunction(on_token):
-        await on_token(hint)
-    else:
-        on_token(hint)
+    # IM notification
+    if bus and message_context:
+        from bus.events import OutboundMessage
+        await bus.publish_outbound(OutboundMessage(
+            channel=message_context.get("channel", ""),
+            chat_id=message_context.get("chat_id", ""),
+            content=hint,
+            is_notification=True,
+        ))
+    # CLI fallback
+    if on_token:
+        if asyncio.iscoroutinefunction(on_token):
+            await on_token(hint)
+        else:
+            on_token(hint)
 
 
 # ---------------------------------------------------------------------------
@@ -117,7 +149,7 @@ class TaskProposeTool(BaseTool):
             "required": ["goal"],
         }
 
-    async def execute(self, goal: str = "", revision_notes: str = "", _agent_messages: list = None, on_token: Any = None, **kwargs) -> str:
+    async def execute(self, goal: str = "", revision_notes: str = "", _agent_messages: list = None, on_token: Any = None, message_context: dict = None, **kwargs) -> str:
         # Phase gate: allowed in UNDERSTAND and PROPOSE (for revisions)
         if self._session.phase not in (TaskPhase.UNDERSTAND, TaskPhase.PROPOSE):
             return t("task.propose_blocked", phase=self._session.phase.value)
@@ -180,7 +212,8 @@ class TaskProposeTool(BaseTool):
                                         goal=goal, context_block=context_block,
                                         previous_proposal_block=previous_proposal_block)
 
-        await _notify_phase_enter(on_token, TaskPhase.PROPOSE)
+        await _notify_phase_enter(on_token, TaskPhase.PROPOSE,
+                                  bus=self._ctx.bus, message_context=message_context)
 
         planner_provider, planner_model = _get_planner_provider_and_model(self._ctx)
         max_attempts = 3
@@ -212,7 +245,8 @@ class TaskProposeTool(BaseTool):
                 return t("task.propose_failed", error=e)
 
         self._session.phase = TaskPhase.PROPOSE
-        await _notify_phase_done(on_token, TaskPhase.PROPOSE)
+        await _notify_phase_done(on_token, TaskPhase.PROPOSE,
+                                 bus=self._ctx.bus, message_context=message_context)
 
         if self._session.auto_mode:
             # Simulate a conservative, affirmative user review
@@ -351,7 +385,7 @@ class TaskBuildTool(BaseTool):
             "properties": {},
         }
 
-    async def execute(self, _agent_messages: list = None, on_token: Any = None, **kwargs) -> str:
+    async def execute(self, _agent_messages: list = None, on_token: Any = None, message_context: dict = None, **kwargs) -> str:
         # Phase gate
         if self._session.phase != TaskPhase.PROPOSE:
             return t("task.build_blocked", phase=self._session.phase.value)
@@ -400,7 +434,8 @@ class TaskBuildTool(BaseTool):
                                      context_block=context_block,
                                      project_id=project.id)
 
-        await _notify_phase_enter(on_token, TaskPhase.PLAN)
+        await _notify_phase_enter(on_token, TaskPhase.PLAN,
+                                  bus=self._ctx.bus, message_context=message_context)
 
         planner_provider, planner_model = _get_planner_provider_and_model(self._ctx)
         max_retries = 3
@@ -447,8 +482,10 @@ class TaskBuildTool(BaseTool):
 
                     # Skip PLAN phase — go straight to EXECUTE
                     self._session.phase = TaskPhase.EXECUTE
-                    await _notify_phase_done(on_token, TaskPhase.PLAN)
-                    await _notify_phase_enter(on_token, TaskPhase.EXECUTE)
+                    await _notify_phase_done(on_token, TaskPhase.PLAN,
+                                             bus=self._ctx.bus, message_context=message_context)
+                    await _notify_phase_enter(on_token, TaskPhase.EXECUTE,
+                                              bus=self._ctx.bus, message_context=message_context)
                     return (
                         f"{display}\n\n"
                         f"[Virtual User Confirmation]: {virtual_confirm}\n\n"
@@ -457,7 +494,8 @@ class TaskBuildTool(BaseTool):
                     )
 
                 self._session.phase = TaskPhase.PLAN
-                await _notify_phase_done(on_token, TaskPhase.PLAN)
+                await _notify_phase_done(on_token, TaskPhase.PLAN,
+                                         bus=self._ctx.bus, message_context=message_context)
                 return (
                     f"{display}\n\n"
                     f"[INSTRUCTION] The plan above is already formatted. "
@@ -632,7 +670,7 @@ class TaskExecuteTool(BaseTool):
             "properties": {},
         }
 
-    async def execute(self, on_token: Any = None, **kwargs) -> str:
+    async def execute(self, on_token: Any = None, message_context: dict = None, **kwargs) -> str:
         # Phase gate
         if not self._session.task_graph:
             return t("task.execute_no_plan")
@@ -641,7 +679,8 @@ class TaskExecuteTool(BaseTool):
         if self._session.phase != TaskPhase.EXECUTE:
             return t("task.execute_blocked", phase=self._session.phase.value)
 
-        await _notify_phase_enter(on_token, TaskPhase.EXECUTE)
+        await _notify_phase_enter(on_token, TaskPhase.EXECUTE,
+                                  bus=self._ctx.bus, message_context=message_context)
 
         # Restore _task_workers/ permissions from previous round's FINALIZE chmod
         project_core = self._ctx.session.project.core if self._ctx.session else None
@@ -673,10 +712,23 @@ class TaskExecuteTool(BaseTool):
         graph = self._session.task_graph
         total_tasks = len(graph.tasks)
 
-        # Helper: emit a progress line to terminal
+        # Helper: emit a progress line to terminal and IM
         def emit(msg: str):
             if on_token:
                 on_token(msg + "\n")
+            # IM notification
+            if self._ctx.bus and message_context:
+                try:
+                    from bus.events import OutboundMessage
+                    loop = asyncio.get_running_loop()
+                    loop.create_task(self._ctx.bus.publish_outbound(OutboundMessage(
+                        channel=message_context.get("channel", ""),
+                        chat_id=message_context.get("chat_id", ""),
+                        content=msg,
+                        is_notification=True,
+                    )))
+                except RuntimeError:
+                    pass
 
         # ── Execution header ──
         emit(f"\n{'='*50}")
@@ -791,8 +843,10 @@ class TaskExecuteTool(BaseTool):
 
         # Transition to FINALIZE
         self._session.phase = TaskPhase.FINALIZE
-        await _notify_phase_done(on_token, TaskPhase.EXECUTE)
-        await _notify_phase_enter(on_token, TaskPhase.FINALIZE)
+        await _notify_phase_done(on_token, TaskPhase.EXECUTE,
+                                 bus=self._ctx.bus, message_context=message_context)
+        await _notify_phase_enter(on_token, TaskPhase.FINALIZE,
+                                  bus=self._ctx.bus, message_context=message_context)
 
         # Build result summary
         graph = self._session.task_graph

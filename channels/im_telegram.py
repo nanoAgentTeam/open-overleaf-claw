@@ -116,6 +116,15 @@ class ImTelegramChannel(BaseChannel):
         chat_id = msg.chat_id
 
         try:
+            # Notification messages bypass the buffer and are sent directly
+            if getattr(msg, "is_notification", False):
+                from channels.im_api.telegram.telegram.api import TelegramBotAPI
+                bot_instance = self._bot.api.bot if self._bot and self._bot.api else None
+                api = TelegramBotAPI(token=self._bot.token, bot=bot_instance)
+                await api.send_message(chat_id=chat_id, content=msg.content)
+                logger.info(f"Telegram notification sent to {chat_id}: {msg.content[:100]}...")
+                return
+
             if msg.is_chunk:
                 self._message_buffers[chat_id] = self._message_buffers.get(chat_id, "") + msg.content
                 return

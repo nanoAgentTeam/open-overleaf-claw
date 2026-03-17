@@ -112,6 +112,20 @@ class ImQQChannel(BaseChannel):
         chat_id = msg.chat_id
 
         try:
+            # Notification messages bypass the buffer and are sent directly
+            if getattr(msg, "is_notification", False):
+                from channels.im_api.qq.qq.api import QQBotAPI
+                api = QQBotAPI(app_id=self._bot.app_id, client_secret=self._bot.client_secret)
+                cached_ctx = self._chat_context.get(chat_id, {})
+                message_id = cached_ctx.get("msg_id")
+                is_private = bool(cached_ctx.get("is_private", True))
+                if is_private:
+                    await api.send_c2c_message(chat_id, msg.content, message_id)
+                else:
+                    await api.send_group_message(chat_id, msg.content, message_id)
+                logger.info(f"QQ notification sent to {chat_id}: {msg.content[:100]}...")
+                return
+
             # Handle streaming chunks - accumulate them
             if msg.is_chunk:
                 if chat_id not in self._message_buffers:

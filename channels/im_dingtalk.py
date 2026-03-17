@@ -90,6 +90,18 @@ class ImDingTalkChannel(BaseChannel):
         chat_id = msg.chat_id
 
         try:
+            # Notification messages bypass the buffer and are sent directly
+            if getattr(msg, "is_notification", False):
+                cached_ctx = self._chat_context.get(chat_id, {})
+                session_webhook = cached_ctx.get("session_webhook")
+                api = self._bot.api
+                if session_webhook:
+                    await api.send_by_session(session_webhook, msg.content)
+                else:
+                    await api.send_proactive_text(chat_id, msg.content)
+                logger.info(f"DingTalk notification sent to {chat_id}: {msg.content[:100]}...")
+                return
+
             if msg.is_chunk:
                 self._message_buffers[chat_id] = self._message_buffers.get(chat_id, "") + msg.content
                 return

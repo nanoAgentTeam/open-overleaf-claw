@@ -136,6 +136,12 @@ class FeishuChannel(BaseChannel):
             return
 
         try:
+            # Notification messages bypass the buffer and are sent directly
+            if getattr(msg, "is_notification", False):
+                await self._send_initial_message(msg.chat_id, content_text=msg.content)
+                logger.info(f"Feishu notification sent to {msg.chat_id}: {msg.content[:100]}...")
+                return
+
             # Send media files first
             for media_path in (msg.media or []):
                 try:
