@@ -747,16 +747,16 @@
     "ar": "📖 الأوامر المتاحة:\n\nعام:\n  /help        — عرض رسالة المساعدة هذه\n  /reset       — إعادة تعيين الجلسة ومسح السجل\n  /stop        — إيقاف العملية الحالية\n  /exit        — الخروج من الوضع الحالي، العودة إلى المحادثة\n\nالمشروع:\n  /switch <name> — التبديل إلى مشروع\n  /back          — العودة إلى المشروع الافتراضي\n  /compile       — تجميع LaTeX (ادخل مشروعًا أولاً)\n  /sync [pull|push] — مزامنة Overleaf (ادخل مشروعًا أولاً)\n  /git           — التحكم بالإصدارات Git (ادخل مشروعًا أولاً)\n\nالبحث:\n  /task <goal>  — بدء جلسة مهام تفاعلية\n  /recommend    — اكتشاف المشروع والبحث عن أحدث التطورات\n  /radar        — إدارة مهام أتمتة رادار البحث\n\n💡 يمكنك أيضًا الدردشة بلغة طبيعية — سأستخدم الأدوات المناسبة تلقائيًا."
   },
   "greeting.text": {
-    "zh": "👋 你好！我是 Open Research Claw，你的 AI 科研助手。\n\n我可以帮你：\n- 检索文献、追踪学术前沿与研究动态\n- 撰写和编辑 LaTeX 论文，编译 PDF 并同步 Overleaf\n- 自动监控领域进展、截稿日期与热点趋势（研究雷达）\n- 管理项目版本与多 Agent 协作\n\n输入 /help 查看所有可用命令，或者直接用自然语言告诉我你想做什么。",
-    "en": "👋 Hi! I'm Open Research Claw, your AI research assistant.\n\nI can help you:\n- Search literature, track academic frontiers and research trends\n- Write and edit LaTeX papers, compile PDF and sync with Overleaf\n- Automatically monitor field developments, deadlines and trending topics (Research Radar)\n- Manage project versions and multi-agent collaboration\n\nType /help to see all available commands, or just tell me what you'd like to do.",
-    "ja": "👋 こんにちは！私は Open Research Claw、あなたの AI 研究アシスタントです。\n\nお手伝いできること：\n- 文献検索、学術フロンティアと研究動向の追跡\n- LaTeX 論文の執筆・編集、PDF コンパイルと Overleaf 同期\n- 分野の進展・締切・トレンドの自動監視（リサーチレーダー）\n- プロジェクトのバージョン管理とマルチエージェント協業\n\n/help と入力して利用可能なコマンド一覧を確認するか、やりたいことを教えてください。",
-    "ko": "👋 안녕하세요! 저는 Open Research Claw, 당신의 AI 연구 어시스턴트입니다.\n\n도움 드릴 수 있는 것들:\n- 문헌 검색, 학술 프론티어 및 연구 동향 추적\n- LaTeX 논문 작성·편집, PDF 컴파일 및 Overleaf 동기화\n- 분야 진전·마감일·트렌드 자동 모니터링 (리서치 레이더)\n- 프로젝트 버전 관리 및 멀티 에이전트 협업\n\n/help를 입력하여 사용 가능한 명령어를 확인하거나, 원하시는 작업을 말씀해 주세요.",
-    "fr": "👋 Bonjour ! Je suis Open Research Claw, votre assistant de recherche IA.\n\nJe peux vous aider à :\n- Rechercher la littérature, suivre les frontières académiques et les tendances\n- Rédiger et éditer des articles LaTeX, compiler des PDF et synchroniser avec Overleaf\n- Surveiller automatiquement les avancées, les deadlines et les sujets tendance (Radar de Recherche)\n- Gérer les versions de projet et la collaboration multi-agents\n\nTapez /help pour voir toutes les commandes disponibles, ou dites-moi simplement ce que vous souhaitez faire.",
-    "de": "👋 Hallo! Ich bin Open Research Claw, Ihr KI-Forschungsassistent.\n\nIch kann Ihnen helfen bei:\n- Literaturrecherche, Verfolgung akademischer Frontlinien und Forschungstrends\n- Verfassen und Bearbeiten von LaTeX-Arbeiten, PDF kompilieren und mit Overleaf synchronisieren\n- Automatische Überwachung von Fortschritten, Deadlines und Trendthemen (Forschungsradar)\n- Projektversionierung und Multi-Agenten-Zusammenarbeit\n\nGeben Sie /help ein, um alle verfügbaren Befehle zu sehen, oder sagen Sie mir einfach, was Sie tun möchten.",
-    "es": "👋 ¡Hola! Soy Open Research Claw, tu asistente de investigación IA.\n\nPuedo ayudarte a:\n- Buscar literatura, rastrear fronteras académicas y tendencias de investigación\n- Escribir y editar artículos en LaTeX, compilar PDF y sincronizar con Overleaf\n- Monitorear automáticamente avances, plazos y temas en tendencia (Radar de Investigación)\n- Gestionar versiones de proyecto y colaboración multi-agente\n\nEscribe /help para ver todos los comandos disponibles, o simplemente dime qué te gustaría hacer.",
-    "ru": "👋 Привет! Я Open Research Claw, ваш ИИ-помощник для научных исследований.\n\nЯ могу помочь вам:\n- Искать литературу, отслеживать научные фронтиры и тренды исследований\n- Писать и редактировать статьи в LaTeX, компилировать PDF и синхронизировать с Overleaf\n- Автоматически мониторить прогресс в области, дедлайны и актуальные темы (Исследовательский радар)\n- Управлять версиями проекта и многоагентной совместной работой\n\nВведите /help, чтобы увидеть все доступные команды, или просто скажите, что вы хотите сделать.",
-    "pt": "👋 Olá! Sou o Open Research Claw, seu assistente de pesquisa IA.\n\nPosso ajudar você a:\n- Buscar literatura, acompanhar fronteiras acadêmicas e tendências de pesquisa\n- Escrever e editar artigos em LaTeX, compilar PDF e sincronizar com o Overleaf\n- Monitorar automaticamente avanços, prazos e tópicos em alta (Radar de Pesquisa)\n- Gerenciar versões do projeto e colaboração multi-agente\n\nDigite /help para ver todos os comandos disponíveis, ou simplesmente me diga o que gostaria de fazer.",
-    "ar": "👋 مرحبًا! أنا Open Research Claw، مساعدك البحثي بالذكاء الاصطناعي.\n\nيمكنني مساعدتك في:\n- البحث في الأدبيات، تتبع الحدود الأكاديمية واتجاهات البحث\n- كتابة وتحرير أوراق LaTeX، تجميع PDF والمزامنة مع Overleaf\n- مراقبة التطورات والمواعيد النهائية والمواضيع الرائجة تلقائيًا (رادار البحث)\n- إدارة إصدارات المشروع والتعاون متعدد الوكلاء\n\nاكتب /help لرؤية جميع الأوامر المتاحة، أو أخبرني بما تريد القيام به."
+    "zh": "👋 你好！我是 Research Claw，你的 AI 科研助手。\n\n我可以帮你：\n- 检索文献、追踪学术前沿与研究动态\n- 撰写和编辑 LaTeX 论文，编译 PDF 并同步 Overleaf\n- 自动监控领域进展、截稿日期与热点趋势（研究雷达）\n- 管理项目版本与多 Agent 协作\n\n输入 /help 查看所有可用命令，或者直接用自然语言告诉我你想做什么。",
+    "en": "👋 Hi! I'm Research Claw, your AI research assistant.\n\nI can help you:\n- Search literature, track academic frontiers and research trends\n- Write and edit LaTeX papers, compile PDF and sync with Overleaf\n- Automatically monitor field developments, deadlines and trending topics (Research Radar)\n- Manage project versions and multi-agent collaboration\n\nType /help to see all available commands, or just tell me what you'd like to do.",
+    "ja": "👋 こんにちは！私は Research Claw、あなたの AI 研究アシスタントです。\n\nお手伝いできること：\n- 文献検索、学術フロンティアと研究動向の追跡\n- LaTeX 論文の執筆・編集、PDF コンパイルと Overleaf 同期\n- 分野の進展・締切・トレンドの自動監視（リサーチレーダー）\n- プロジェクトのバージョン管理とマルチエージェント協業\n\n/help と入力して利用可能なコマンド一覧を確認するか、やりたいことを教えてください。",
+    "ko": "👋 안녕하세요! 저는 Research Claw, 당신의 AI 연구 어시스턴트입니다.\n\n도움 드릴 수 있는 것들:\n- 문헌 검색, 학술 프론티어 및 연구 동향 추적\n- LaTeX 논문 작성·편집, PDF 컴파일 및 Overleaf 동기화\n- 분야 진전·마감일·트렌드 자동 모니터링 (리서치 레이더)\n- 프로젝트 버전 관리 및 멀티 에이전트 협업\n\n/help를 입력하여 사용 가능한 명령어를 확인하거나, 원하시는 작업을 말씀해 주세요.",
+    "fr": "👋 Bonjour ! Je suis Research Claw, votre assistant de recherche IA.\n\nJe peux vous aider à :\n- Rechercher la littérature, suivre les frontières académiques et les tendances\n- Rédiger et éditer des articles LaTeX, compiler des PDF et synchroniser avec Overleaf\n- Surveiller automatiquement les avancées, les deadlines et les sujets tendance (Radar de Recherche)\n- Gérer les versions de projet et la collaboration multi-agents\n\nTapez /help pour voir toutes les commandes disponibles, ou dites-moi simplement ce que vous souhaitez faire.",
+    "de": "👋 Hallo! Ich bin Research Claw, Ihr KI-Forschungsassistent.\n\nIch kann Ihnen helfen bei:\n- Literaturrecherche, Verfolgung akademischer Frontlinien und Forschungstrends\n- Verfassen und Bearbeiten von LaTeX-Arbeiten, PDF kompilieren und mit Overleaf synchronisieren\n- Automatische Überwachung von Fortschritten, Deadlines und Trendthemen (Forschungsradar)\n- Projektversionierung und Multi-Agenten-Zusammenarbeit\n\nGeben Sie /help ein, um alle verfügbaren Befehle zu sehen, oder sagen Sie mir einfach, was Sie tun möchten.",
+    "es": "👋 ¡Hola! Soy Research Claw, tu asistente de investigación IA.\n\nPuedo ayudarte a:\n- Buscar literatura, rastrear fronteras académicas y tendencias de investigación\n- Escribir y editar artículos en LaTeX, compilar PDF y sincronizar con Overleaf\n- Monitorear automáticamente avances, plazos y temas en tendencia (Radar de Investigación)\n- Gestionar versiones de proyecto y colaboración multi-agente\n\nEscribe /help para ver todos los comandos disponibles, o simplemente dime qué te gustaría hacer.",
+    "ru": "👋 Привет! Я Research Claw, ваш ИИ-помощник для научных исследований.\n\nЯ могу помочь вам:\n- Искать литературу, отслеживать научные фронтиры и тренды исследований\n- Писать и редактировать статьи в LaTeX, компилировать PDF и синхронизировать с Overleaf\n- Автоматически мониторить прогресс в области, дедлайны и актуальные темы (Исследовательский радар)\n- Управлять версиями проекта и многоагентной совместной работой\n\nВведите /help, чтобы увидеть все доступные команды, или просто скажите, что вы хотите сделать.",
+    "pt": "👋 Olá! Sou o Research Claw, seu assistente de pesquisa IA.\n\nPosso ajudar você a:\n- Buscar literatura, acompanhar fronteiras acadêmicas e tendências de pesquisa\n- Escrever e editar artigos em LaTeX, compilar PDF e sincronizar com o Overleaf\n- Monitorar automaticamente avanços, prazos e tópicos em alta (Radar de Pesquisa)\n- Gerenciar versões do projeto e colaboração multi-agente\n\nDigite /help para ver todos os comandos disponíveis, ou simplesmente me diga o que gostaria de fazer.",
+    "ar": "👋 مرحبًا! أنا Research Claw، مساعدك البحثي بالذكاء الاصطناعي.\n\nيمكنني مساعدتك في:\n- البحث في الأدبيات، تتبع الحدود الأكاديمية واتجاهات البحث\n- كتابة وتحرير أوراق LaTeX، تجميع PDF والمزامنة مع Overleaf\n- مراقبة التطورات والمواعيد النهائية والمواضيع الرائجة تلقائيًا (رادار البحث)\n- إدارة إصدارات المشروع والتعاون متعدد الوكلاء\n\nاكتب /help لرؤية جميع الأوامر المتاحة، أو أخبرني بما تريد القيام به."
   },
   "tool.latex_compile": {
     "zh": "⏳ 正在编译 PDF，请稍候...",
@@ -1694,6 +1694,26 @@
     "pt": "\n\n📖 Comandos rápidos:\n  /compile — Compilar PDF\n  /sync pull — Baixar do Overleaf\n  /sync push — Enviar para o Overleaf\n  /git — Controle de versão Git\n  /task <objetivo> — Iniciar sessão de tarefa\n  /help — Ver todos os comandos",
     "ar": "\n\n📖 أوامر سريعة:\n  /compile — تجميع PDF\n  /sync pull — سحب من Overleaf\n  /sync push — دفع إلى Overleaf\n  /git — التحكم بالإصدارات Git\n  /task <هدف> — بدء جلسة مهام\n  /help — عرض جميع الأوامر"
   },
+  "project.not_in_default": {
+    "zh": "[ERROR] project_manager 仅在 Default 工作区可用。请先用 /exit 返回。",
+    "en": "[ERROR] project_manager is only available in Default workspace. Use /exit to return first."
+  },
+  "project.delete_not_found": {
+    "zh": "[ERROR] 项目 '{project_name}' 不存在。",
+    "en": "[ERROR] Project '{project_name}' does not exist."
+  },
+  "project.delete_confirm": {
+    "zh": "即将删除项目 '{project_name}'（{size_mb} MB）。{overleaf_note}\n请确认是否删除。",
+    "en": "About to delete project '{project_name}' ({size_mb} MB).{overleaf_note}\nPlease confirm to proceed."
+  },
+  "project.delete_overleaf_note": {
+    "zh": "\n⚠️ 该项目已关联 Overleaf，仅删除本地副本，Overleaf 端不受影响。",
+    "en": "\nNote: This project is linked to Overleaf. Only the local copy will be deleted; the Overleaf project will NOT be affected."
+  },
+  "project.deleted": {
+    "zh": "项目 '{project_name}' 已删除。",
+    "en": "Project '{project_name}' has been deleted."
+  },
   "scheduler.task_running": {
     "zh": "[错误] 已有任务在运行中，请等待完成后再启动新任务。",
     "en": "[ERROR] A task is already running. Wait for it to complete before launching another.",
@@ -1803,16 +1823,16 @@
     "ar": "[خطأ] المحتوى فارغ."
   },
   "notify.default_title": {
-    "zh": "Open Research Claw 通知",
-    "en": "Open Research Claw Notification",
-    "ja": "Open Research Claw 通知",
-    "ko": "Open Research Claw 알림",
-    "fr": "Notification Open Research Claw",
-    "de": "Open Research Claw-Benachrichtigung",
-    "es": "Notificación de Open Research Claw",
-    "ru": "Уведомление Open Research Claw",
-    "pt": "Notificação Open Research Claw",
-    "ar": "إشعار Open Research Claw"
+    "zh": "Research Claw 通知",
+    "en": "Research Claw Notification",
+    "ja": "Research Claw 通知",
+    "ko": "Research Claw 알림",
+    "fr": "Notification Research Claw",
+    "de": "Research Claw-Benachrichtigung",
+    "es": "Notificación de Research Claw",
+    "ru": "Уведомление Research Claw",
+    "pt": "Notificação Research Claw",
+    "ar": "إشعار Research Claw"
   },
   "notify.no_channels": {
     "zh": "[提醒] notify_push：未配置推送渠道。请在 settings.json 中设置 Telegram 或飞书 (channels.telegram.enabled / channels.feishu.enabled) 以启用推送通知。请直接在对话中传达结果。",

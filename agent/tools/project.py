@@ -32,7 +32,8 @@ class ProjectTool(BaseTool):
             "- create: 创建新项目。传 create_on_overleaf=true 可同时在 Overleaf 上创建并自动关联（推荐）。\n"
             "- link_overleaf: 关联 Overleaf 项目。本地有内容时自动 push 到 Overleaf，本地为空时从 Overleaf pull。不传 overleaf_id 时列出可选项目。\n"
             "- info: 查看指定项目的配置和状态（git、overleaf、main_tex 等）。\n"
-            "- switch: 切换到指定项目，进入工作模式。切换后此工具将不可用。"
+            "- switch: 切换到指定项目，进入工作模式。切换后此工具将不可用。\n"
+            "- delete: 删除本地项目（仅删除 workspace 中的目录，不影响 Overleaf 端）。需要 confirm=true 确认。"
         )
 
     @property
@@ -42,7 +43,7 @@ class ProjectTool(BaseTool):
             "properties": {
                 "action": {
                     "type": "string",
-                    "enum": ["list", "create", "switch", "info", "link_overleaf"],
+                    "enum": ["list", "create", "switch", "info", "link_overleaf", "delete"],
                     "description": "执行的动作。"
                 },
                 "project_name": {
@@ -61,6 +62,10 @@ class ProjectTool(BaseTool):
                     "type": "boolean",
                     "description": "create 时是否同时在 Overleaf 上创建项目并自动关联。默认 false。"
                 },
+                "confirm": {
+                    "type": "boolean",
+                    "description": "delete 时需要传 true 以确认删除。"
+                },
             },
             "required": ["action"],
         }
@@ -70,8 +75,12 @@ class ProjectTool(BaseTool):
 
     async def execute(self, action: str, project_name: Optional[str] = None,
                       session_name: Optional[str] = None, overleaf_id: Optional[str] = None,
-                      create_on_overleaf: bool = False,
+                      create_on_overleaf: bool = False, confirm: bool = False,
                       **kwargs) -> str:
+        # Mode check: this tool is only available in Default workspace (CHAT mode)
+        if self.ctx.project_id != "Default":
+            return t("project.not_in_default")
+
         if action == "list":
             return self._list()
         elif action == "create":
@@ -91,6 +100,10 @@ class ProjectTool(BaseTool):
             if not project_name:
                 return "[ERROR] 'project_name' is required."
             return await self._link_overleaf(project_name, overleaf_id)
+        elif action == "delete":
+            if not project_name:
+                return "[ERROR] 'project_name' is required."
+            return self._delete(project_name, confirm)
         else:
             return f"[ERROR] Unknown action '{action}'"
 
@@ -123,6 +136,34 @@ class ProjectTool(BaseTool):
             return t("project.no_projects")
         header = t("project.list_header", current=current)
         return header + "\n" + "\n".join(projects)
+
+    # ------------------------------------------------------------------
+    # delete
+    # ------------------------------------------------------------------
+
+    def _delete(self, project_name: str, confirm: bool = False) -> str:
+        project_path = self._get_project_path(project_name)
+        if not project_path.exists():
+            return t("project.delete_not_found", project_name=project_name)
+        if not confirm:
+            size = sum(f.stat().st_size for f in project_path.rglob("*") if f.is_file())
+            size_mb = f"{size / (1024 * 1024):.1f}"
+            overleaf_note = ""
+            config_path = project_path / "project.yaml"
+            if config_path.exists():
+                try:
+                    import yaml
+                    cfg = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
+                    if cfg.get("overleaf", {}).get("project_id"):
+                        overleaf_note = t("project.delete_overleaf_note")
+                except Exception:
+                    pass
+            return t("project.delete_confirm", project_name=project_name,
+                     size_mb=size_mb, overleaf_note=overleaf_note)
+        import shutil
+        shutil.rmtree(project_path)
+        logger.info(f"Deleted local project: {project_name}")
+        return t("project.deleted", project_name=project_name)
 
     # ------------------------------------------------------------------
     # create

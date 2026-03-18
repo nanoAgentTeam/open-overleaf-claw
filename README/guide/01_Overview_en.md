@@ -1,8 +1,8 @@
-# Open Research Claw Project Overview
+# Research Claw Project Overview
 
 ## What Is This
 
-Open Research Claw is an AI Agent system designed for academic paper writing. It enables researchers to manage and write academic papers through natural language conversations.
+Research Claw is an AI Agent system designed for academic paper writing. It enables researchers to manage and write academic papers through natural language conversations.
 
 ## What It Can Do
 

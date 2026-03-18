@@ -1,1 +1,1 @@
-"""Channels package for Open Research Claw."""
+"""Channels package for Research Claw."""

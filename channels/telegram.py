@@ -199,7 +199,7 @@ class TelegramChannel(BaseChannel):
         
         user = update.effective_user
         await update.message.reply_text(
-            f"👋 Hi {user.first_name}! I'm Open Research Claw.\n\n"
+            f"👋 Hi {user.first_name}! I'm Research Claw.\n\n"
             "Send me a message and I'll respond!"
         )
     
