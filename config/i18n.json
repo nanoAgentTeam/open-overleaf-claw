@@ -1694,6 +1694,26 @@
     "pt": "\n\n📖 Comandos rápidos:\n  /compile — Compilar PDF\n  /sync pull — Baixar do Overleaf\n  /sync push — Enviar para o Overleaf\n  /git — Controle de versão Git\n  /task <objetivo> — Iniciar sessão de tarefa\n  /help — Ver todos os comandos",
     "ar": "\n\n📖 أوامر سريعة:\n  /compile — تجميع PDF\n  /sync pull — سحب من Overleaf\n  /sync push — دفع إلى Overleaf\n  /git — التحكم بالإصدارات Git\n  /task <هدف> — بدء جلسة مهام\n  /help — عرض جميع الأوامر"
   },
+  "project.not_in_default": {
+    "zh": "[ERROR] project_manager 仅在 Default 工作区可用。请先用 /exit 返回。",
+    "en": "[ERROR] project_manager is only available in Default workspace. Use /exit to return first."
+  },
+  "project.delete_not_found": {
+    "zh": "[ERROR] 项目 '{project_name}' 不存在。",
+    "en": "[ERROR] Project '{project_name}' does not exist."
+  },
+  "project.delete_confirm": {
+    "zh": "即将删除项目 '{project_name}'（{size_mb} MB）。{overleaf_note}\n请确认是否删除。",
+    "en": "About to delete project '{project_name}' ({size_mb} MB).{overleaf_note}\nPlease confirm to proceed."
+  },
+  "project.delete_overleaf_note": {
+    "zh": "\n⚠️ 该项目已关联 Overleaf，仅删除本地副本，Overleaf 端不受影响。",
+    "en": "\nNote: This project is linked to Overleaf. Only the local copy will be deleted; the Overleaf project will NOT be affected."
+  },
+  "project.deleted": {
+    "zh": "项目 '{project_name}' 已删除。",
+    "en": "Project '{project_name}' has been deleted."
+  },
   "scheduler.task_running": {
     "zh": "[错误] 已有任务在运行中，请等待完成后再启动新任务。",
     "en": "[ERROR] A task is already running. Wait for it to complete before launching another.",
