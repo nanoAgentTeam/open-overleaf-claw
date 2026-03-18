@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Open Research Claw Console</title>
+    <title>Research Claw Console</title>
     <script src="/ui/vendor/tailwindcss.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="/ui/vendor/fontawesome/css/all.min.css">
@@ -266,7 +266,7 @@
                     <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                         <i class="fas fa-robot text-white"></i>
                     </div>
-                    <h1 class="text-xl font-bold tracking-wider text-gray-100">Open Research Claw</h1>
+                    <h1 class="text-xl font-bold tracking-wider text-gray-100">Research Claw</h1>
                 </div>
                 <div class="px-2">
                     <div class="text-xs tracking-widest uppercase text-gray-400 mb-2" x-text="t('ui.gatewayNav', 'Gateway')"></div>
@@ -313,7 +313,7 @@
             <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <i class="fas fa-robot text-white"></i>
             </div>
-            <h1 class="text-xl font-bold tracking-wider">Open Research Claw</h1>
+            <h1 class="text-xl font-bold tracking-wider">Research Claw</h1>
         </div>
 
         <nav class="space-y-2">
@@ -2021,7 +2021,7 @@
                 lightTheme: 'slate',
                 i18n: {
                     zh: {
-                        title: { console: 'Open Research Claw 控制台' },
+                        title: { console: 'Research Claw 控制台' },
                         ui: {
                             gatewayStatus: 'Gateway 状态',
                             gatewayNav: '网关',
@@ -2064,7 +2064,7 @@
                         }
                     },
                     en: {
-                        title: { console: 'Open Research Claw Console' },
+                        title: { console: 'Research Claw Console' },
                         ui: {
                             gatewayStatus: 'Gateway Status',
                             gatewayNav: 'Gateway',
@@ -2859,7 +2859,7 @@
 
                 applyLanguageMeta() {
                     document.documentElement.lang = this.language;
-                    document.title = this.t('title.console', 'Open Research Claw Console');
+                    document.title = this.t('title.console', 'Research Claw Console');
                     this.queueDomTranslation();
                 },
 
@@ -4036,7 +4036,7 @@
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                                 recipient: String(recipient || '').trim(),
-                                title: 'Open Research Claw SMTP 测试',
+                                title: 'Research Claw SMTP 测试',
                                 body: '这是一封测试邮件，表示 SMTP 配置可用。'
                             }),
                         });
@@ -4223,7 +4223,7 @@
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
-                                title: 'Open Research Claw 订阅测试',
+                                title: 'Research Claw 订阅测试',
                                 body: '这是一条订阅测试消息，请确认目标端是否收到。',
                             }),
                         });
@@ -4241,7 +4241,7 @@
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
-                                title: 'Open Research Claw 批量订阅测试',
+                                title: 'Research Claw 批量订阅测试',
                                 body: '这是一条批量测试消息，用于验证全部启用订阅。',
                             }),
                         });

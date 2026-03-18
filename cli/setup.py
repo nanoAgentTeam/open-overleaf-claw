@@ -1,4 +1,4 @@
-"""Setup configuration for Open Research Claw."""
+"""Setup configuration for Research Claw."""
 
 import json
 from pathlib import Path
@@ -11,8 +11,8 @@ console = Console()
 
 @app.command()
 def main():
-    """Interactive setup for Open Research Claw."""
-    console.print("[bold blue]Open Research Claw Setup[/bold blue]\n")
+    """Interactive setup for Research Claw."""
+    console.print("[bold blue]Research Claw Setup[/bold blue]\n")
 
     config_dir = Path.home() / ".open_research_claw"
     config_path = config_dir / "config.json"
@@ -90,7 +90,7 @@ def main():
     # Save
     config_path.write_text(json.dumps(new_config, indent=2))
     console.print(f"\n[bold green]✓ Configuration saved to {config_path}[/bold green]")
-    console.print("\nYou can now run Open Research Claw with:")
+    console.print("\nYou can now run Research Claw with:")
     console.print("[cyan]python3 -m open_research_claw.cli.main agent -m 'Hello Qwen!'[/cyan]")
 
 if __name__ == "__main__":

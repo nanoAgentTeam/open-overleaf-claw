@@ -1,4 +1,4 @@
-"""CLI commands for Open Research Claw."""
+"""CLI commands for Research Claw."""
 
 import asyncio
 import os
@@ -25,7 +25,7 @@ from rich.console import Console
 
 app = typer.Typer(
     name="open_research_claw",
-    help="Open Research Claw - Research Assistant with LifeContext",
+    help="Research Claw - AI Research Assistant",
     no_args_is_help=True,
 )
 
@@ -172,7 +172,7 @@ def _stop_pid(pid: int, wait_seconds: float = 5.0) -> tuple[bool, str]:
 
 @app.callback()
 def main():
-    """Open Research Claw - Personal AI Research Assistant."""
+    """Research Claw - AI Research Assistant."""
     pass
 
 def _do_overleaf_login() -> Path:
@@ -839,7 +839,7 @@ def legacy_gateway(
     from channels.im_dingtalk import ImDingTalkChannel
     from core.automation.runtime import AutomationRuntime
     
-    console.print(f"Starting Open Research Claw gateway...")
+    console.print(f"Starting Research Claw gateway...")
 
     config = load_config()
     bus = MessageBus()

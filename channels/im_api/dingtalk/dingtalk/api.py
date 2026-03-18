@@ -59,7 +59,7 @@ class DingTalkAPI:
             "title": title,
             "use_markdown": use_markdown,
         }
-        markdown, resolved_title = detect_markdown_and_extract_title(text, options, "Open Research Claw")
+        markdown, resolved_title = detect_markdown_and_extract_title(text, options, "Research Claw")
 
         if markdown:
             body: dict[str, Any] = {
@@ -108,7 +108,7 @@ class DingTalkAPI:
         markdown, resolved_title = detect_markdown_and_extract_title(
             text,
             {"title": title, "use_markdown": use_markdown},
-            "Open Research Claw",
+            "Research Claw",
         )
 
         payload: dict[str, Any] = {
