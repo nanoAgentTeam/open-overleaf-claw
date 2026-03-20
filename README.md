@@ -8,6 +8,7 @@ A self-hosted AI assistant for academic research — manages your papers, search
 
 你自己的 AI 学术研究助手 — 管理论文、检索文献、追踪截稿日期，在你常用的渠道随时响应。
 
+[![OS: Linux | macOS](https://img.shields.io/badge/OS-Linux%20%7C%20macOS-lightgrey.svg)](#getting-started)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -101,11 +102,6 @@ https://github.com/user-attachments/assets/fccb837c-cfc5-4063-b803-2ae900fb4a20
 ---
 
 ## Getting Started
-
-### Supported platforms
-
-- Linux
-- macOS
 
 ### Install
 
@@ -454,11 +450,6 @@ Bot: ⏳ 编译中，请稍候......
 https://github.com/user-attachments/assets/fccb837c-cfc5-4063-b803-2ae900fb4a20
 
 ## 快速开始
-
-### 支持系统
-
-- Linux
-- macOS
 
 ### 安装
 
