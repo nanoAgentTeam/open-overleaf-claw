@@ -5,7 +5,7 @@ from loguru import logger
 from providers.base import LLMProvider, LLMResponse
 from config.loader import get_config_service
 from providers.openai_provider import OpenAIProvider
-# Import other providers as needed
+
 
 class DynamicProviderProxy(LLMProvider):
     """
@@ -34,29 +34,19 @@ class DynamicProviderProxy(LLMProvider):
         if active_llm.id != self._current_instance_id:
             logger.info(f"Switching active LLM provider: {self._current_instance_id} -> {active_llm.id} ({active_llm.model_name})")
 
-            # Simple factory for now, can be expanded
-            if active_llm.provider in ["openai", "deepseek", "qwen", "step", "openrouter"]:
-                self._current_provider = OpenAIProvider(
-                    api_key=active_llm.api_key,
-                    api_base=active_llm.api_base,
-                    default_model=active_llm.model_name
-                )
-            elif active_llm.provider == "anthropic":
-                # Assuming LiteLLM or similar for Anthropic if not using a specific provider class
-                # For now, fallback to OpenAI if compatible or add AnthropicProvider if it exists
-                # Looking at Glob results, we have litellm_provider.py
+            if active_llm.provider == "anthropic":
                 try:
                     from providers.litellm_provider import LiteLLMProvider
                     self._current_provider = LiteLLMProvider(
                         api_key=active_llm.api_key,
                         api_base=active_llm.api_base,
-                        default_model=active_llm.model_name
+                        default_model=active_llm.model_name,
                     )
                 except ImportError:
-                    logger.error("LiteLLMProvider not found, cannot switch to Anthropic.")
+                    logger.error("LiteLLMProvider not found, cannot use Anthropic protocol.")
                     return
             else:
-                # Default to OpenAI compatible for unknown providers (common for local LLMs)
+                # All other providers use OpenAI-compatible protocol
                 self._current_provider = OpenAIProvider(
                     api_key=active_llm.api_key,
                     api_base=active_llm.api_base,
