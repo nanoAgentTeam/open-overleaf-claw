@@ -400,6 +400,10 @@ config/.skills/
 - 提交 [Pull Request](https://github.com/nanoAgentTeam/research-claw/pulls) 改进代码
 - 完善文档或添加新的会议模板 Skill
 
+## 许可证
+
+[MIT License](LICENSE) — 可自由用于学术和商业用途。
+
 ## Star History
 
 <p align="center">
@@ -412,6 +416,4 @@ config/.skills/
   </a>
 </p>
 
-## 许可证
 
-[MIT License](LICENSE) — 可自由用于学术和商业用途。
