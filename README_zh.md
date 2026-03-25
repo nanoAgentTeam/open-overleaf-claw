@@ -12,7 +12,7 @@
 
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![OS: Linux | macOS](https://img.shields.io/badge/OS-Linux%20%7C%20macOS-lightgrey.svg)](#快速开始)
+[![OS: Linux | macOS](https://img.shields.io/badge/OS-Linux%20%7C%20macOS-blue)](#快速开始)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/nanoAgentTeam/research-claw/pulls)
 
 **[English](README.md)** &nbsp;|&nbsp; **[中文](README_zh.md)**
@@ -399,6 +399,18 @@ config/.skills/
 - 提交 [Issue](https://github.com/nanoAgentTeam/research-claw/issues) 报告 Bug 或提出新功能
 - 提交 [Pull Request](https://github.com/nanoAgentTeam/research-claw/pulls) 改进代码
 - 完善文档或添加新的会议模板 Skill
+
+## Star History
+
+<p align="center">
+  <a href="https://star-history.com/#nanoAgentTeam/research-claw&Date">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nanoAgentTeam/research-claw&type=Date&theme=dark">
+      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nanoAgentTeam/research-claw&type=Date">
+      <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=nanoAgentTeam/research-claw&type=Date" width="600">
+    </picture>
+  </a>
+</p>
 
 ## 许可证
 

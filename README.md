@@ -12,7 +12,7 @@
 
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![OS: Linux | macOS](https://img.shields.io/badge/OS-Linux%20%7C%20macOS-lightgrey.svg)](#getting-started)
+[![OS: Linux | macOS](https://img.shields.io/badge/OS-Linux%20%7C%20macOS-blue)](#getting-started)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/nanoAgentTeam/research-claw/pulls)
 
 **[English](README.md)** &nbsp;|&nbsp; **[中文](README_zh.md)**
@@ -281,12 +281,12 @@ For multi-step goals, `/task` decomposes work into a 5-phase multi-agent pipelin
 <details>
 <summary><strong>Phase details</strong></summary>
 
-| Phase                | What the bot does                                        | What you do                                        |
-| -------------------- | -------------------------------------------------------- | -------------------------------------------------- |
-| **UNDERSTAND** | Reads project files to understand context                | Nothing — automatic                               |
-| **PROPOSE**    | Generates a proposal via `task_propose`                | Review and reply with feedback, or confirm         |
+| Phase                | What the bot does                                        | What you do                                              |
+| -------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
+| **UNDERSTAND** | Reads project files to understand context                | Nothing — automatic                                     |
+| **PROPOSE**    | Generates a proposal via `task_propose`                | Review and reply with feedback, or confirm               |
 | **PLAN**       | Builds a task DAG via `task_build`                     | Review, optionally adjust, then type **`/start`** |
-| **EXECUTE**    | Runs sub-agents in parallel batches via `task_execute` | Wait — progress is streamed to you                |
+| **EXECUTE**    | Runs sub-agents in parallel batches via `task_execute` | Wait — progress is streamed to you                      |
 | **FINALIZE**   | Merges outputs and commits via `task_commit`           | Type **`/done`** to exit task mode                |
 
 </details>
@@ -376,17 +376,17 @@ The system auto-discovers all skill folders at startup — no registration neede
 
 ## Documentation
 
-| Guide | |
-| --- | --- |
-| [Project Overview](README/guide/01_项目概览.md) | [English](README/guide/01_Overview_en.md) |
-| [Workspace & Sessions](README/guide/02_工作空间与Session.md) | [English](README/guide/02_Workspace_and_Session_en.md) |
-| [Agent Collaboration](README/guide/03_Agent协作.md) | [English](README/guide/03_Agent_Collaboration_en.md) |
-| [Isolation & Security](README/guide/04_项目隔离与安全.md) | [English](README/guide/04_Isolation_and_Security_en.md) |
-| [Git Version Control](README/guide/05_Git版本管理.md) | [English](README/guide/05_Git_Version_Control_en.md) |
-| [Overleaf Sync](README/guide/06_Overleaf同步.md) | [English](README/guide/06_Overleaf_Sync_en.md) |
-| [Usage Guide](README/guide/07_使用指南.md) | [English](README/guide/07_Usage_Guide_en.md) |
-| [Configuration & Quick Start](README/guide/08_配置与快速开始.md) | [English](README/guide/08_Configuration_and_Quick_Start_en.md) |
-| [Web UI Guide](README/guide/webui操作手册.md) | [English](README/guide/webui_guide_en.md) |
+| Guide                                                             |                                                             |
+| ----------------------------------------------------------------- | ----------------------------------------------------------- |
+| [Project Overview](README/guide/01_项目概览.md)                      | [English](README/guide/01_Overview_en.md)                      |
+| [Workspace &amp; Sessions](README/guide/02_工作空间与Session.md)     | [English](README/guide/02_Workspace_and_Session_en.md)         |
+| [Agent Collaboration](README/guide/03_Agent协作.md)                  | [English](README/guide/03_Agent_Collaboration_en.md)           |
+| [Isolation &amp; Security](README/guide/04_项目隔离与安全.md)        | [English](README/guide/04_Isolation_and_Security_en.md)        |
+| [Git Version Control](README/guide/05_Git版本管理.md)                | [English](README/guide/05_Git_Version_Control_en.md)           |
+| [Overleaf Sync](README/guide/06_Overleaf同步.md)                     | [English](README/guide/06_Overleaf_Sync_en.md)                 |
+| [Usage Guide](README/guide/07_使用指南.md)                           | [English](README/guide/07_Usage_Guide_en.md)                   |
+| [Configuration &amp; Quick Start](README/guide/08_配置与快速开始.md) | [English](README/guide/08_Configuration_and_Quick_Start_en.md) |
+| [Web UI Guide](README/guide/webui操作手册.md)                        | [English](README/guide/webui_guide_en.md)                      |
 
 **IM Setup:** [Feishu](README/im_config/Feishu_EN.md) · [Telegram](README/im_config/Telegram_EN.md) · [QQ](README/im_config/QQBot_EN.md) · [DingTalk](README/im_config/DingTalk_EN.md)
 
@@ -403,3 +403,15 @@ Contributions are welcome! Feel free to:
 ## License
 
 [MIT License](LICENSE) — free for academic and commercial use.
+
+## Star History
+
+<p align="center">
+  <a href="https://star-history.com/#nanoAgentTeam/research-claw&Date">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nanoAgentTeam/research-claw&type=Date&theme=dark">
+      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nanoAgentTeam/research-claw&type=Date">
+      <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=nanoAgentTeam/research-claw&type=Date" width="600">
+    </picture>
+  </a>
+</p>
