@@ -68,10 +68,15 @@ For each paper found:
 - Use `write_file` tool with CSV content
 - Use proper CSV escaping: double-quote fields containing commas or newlines
 
-### 5. Send to IM
+### 5. Send to IM (MANDATORY — do NOT skip)
 
-- Call `send_file` with the CSV file path and a brief caption summarizing the survey (e.g. "文献调研: {topic}, 共 {N} 篇, {H} 篇高相关").
-- If `send_file` fails, inform the user the file is saved locally and provide the path.
+- **You MUST actually call the `send_file` tool.** Do NOT just say "已发送" or "file sent" in text — that is a lie if you did not invoke the tool. The user can only receive the file through an actual `send_file` tool call.
+- Call `send_file` immediately after `write_file` completes. Example:
+  ```
+  send_file(file_path="survey_rag_20260326.csv", caption="文献调研: RAG, 共 15 篇, 6 篇高相关")
+  ```
+- If `send_file` fails, retry once. If still failing, tell the user honestly that sending failed and provide the local file path.
+- **Do NOT proceed to Step 6 (Report) until `send_file` has been actually called and returned a result.**
 
 ### 6. Report
 
