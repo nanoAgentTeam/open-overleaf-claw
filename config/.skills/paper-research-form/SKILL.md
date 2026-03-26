@@ -1,6 +1,10 @@
 ---
 name: paper-research-form
-description: "Generate structured CSV literature survey tables. Activate when user requests literature review, related work survey, paper collection, or asks to find/list/compare papers on a topic. Keywords: '调研', '文献', 'survey', 'related work', 'literature review', '找论文', '相关论文', 'paper list'."
+description: |
+  Generate structured CSV literature survey tables. MUST activate this skill (instead of plain-text replies) when the user requests a literature review, paper collection, related work survey, or comparison of papers on a topic.
+  生成结构化 CSV 文献调研表格。当用户要求调研论文、收集文献、整理相关工作、对比论文时，必须激活此 skill 生成 CSV 输出，而非纯文字回复。
+  Triggers: survey, related work, literature review, paper list, find papers, collect papers, compare papers, 调研, 文献, 找论文, 相关论文, 收集论文, 整理文献, 论文列表, 帮我找论文.
+  Output: multi-source search → metadata extraction → 8-column CSV (title, abstract, summary, relevance, authors, year, venue, link) → send to IM.
 allowed-tools:
   - web_search
   - web_fetch
