@@ -40,7 +40,11 @@ After composing the complete report:
    - You judge the content to be high-value enough for proactive notification (e.g., a competitive threat ≥8, an imminent deadline, a major new finding).
    If neither condition applies, skip `notify_push` and output inline only.
    > If `notify_push` returns an error or "no channels configured", that is fine — the attempt itself satisfies the requirement.
-3. **Push content MUST be the full report** — when calling `notify_push`, pass the **complete report** (including every paper's title, arXiv ID, authors, abstract summary, relevance analysis, and actionable insights) as the `content` parameter. Do NOT send an abbreviated summary or a few bullet points. For automated/scheduled tasks, the push notification is the user's **only** way to see the results — the inline conversation output is not visible to them.
+3. **`notify_push` content rule**:
+   The `content` parameter passed to `notify_push` must match the inline report in detail level — pass the **same content** you output inline, following the job prompt's推送格式要求.
+   - **FORBIDDEN**: sending a teaser or redirect like "详情见对话框" / "see details in conversation" / "详见对话". The user CANNOT see the conversation — for automated/scheduled tasks, push is their **only** channel.
+   - If the job prompt specifies a detailed push format (e.g., each paper with title, ID, summary), follow that format in the push content.
+   - Do not shorten or abbreviate the push content below what the job prompt requires. Let the messaging platform handle splitting if the content is long.
 
 **Phase 5 — State Persistence (MANDATORY, do not skip)**
 This phase is required for every radar task execution, regardless of outcome. After the report is delivered:
