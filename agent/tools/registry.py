@@ -77,9 +77,13 @@ class ToolRegistry:
                 return await tool.validate_and_execute(**params)
 
             import inspect
-            result = tool.execute(**params)
-            if inspect.isawaitable(result):
-                result = await result
+            import asyncio
+            # 同步 execute() 会阻塞事件循环，导致健康检查等无法响应
+            # 使用 asyncio.to_thread() 将同步调用卸载到线程池
+            if inspect.iscoroutinefunction(tool.execute):
+                result = await tool.execute(**params)
+            else:
+                result = await asyncio.to_thread(tool.execute, **params)
             return result, ""
         except Exception as e:
             logger.error(f"Error executing tool {name}: {e}")

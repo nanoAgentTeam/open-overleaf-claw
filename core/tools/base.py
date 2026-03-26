@@ -109,11 +109,13 @@ class BaseTool(ABC):
 
         # 3. 执行工具
         try:
+            import asyncio
+
             # 获取实际 execute 的签名，仅传入它能接受的参数
             # (处理某些自定义工具可能没写 **kwargs 的情况)
             sig = inspect.signature(self.execute)
             has_kwargs = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in sig.parameters.values())
-            
+
             call_args = {}
             if has_kwargs:
                 call_args = final_args
@@ -121,10 +123,13 @@ class BaseTool(ABC):
                 for k, v in final_args.items():
                     if k in sig.parameters:
                         call_args[k] = v
-            
-            res = self.execute(**call_args)
-            if inspect.isawaitable(res):
-                res = await res
+
+            # 同步 execute() 会阻塞事件循环，导致健康检查等无法响应
+            # 使用 asyncio.to_thread() 将同步调用卸载到线程池
+            if inspect.iscoroutinefunction(self.execute):
+                res = await self.execute(**call_args)
+            else:
+                res = await asyncio.to_thread(self.execute, **call_args)
             return res, warning
         except Exception as e:
             return f"Error executing {self.name}: {str(e)}", warning
