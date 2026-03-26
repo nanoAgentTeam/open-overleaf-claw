@@ -215,7 +215,32 @@ class OpenAIProvider(LLMProvider):
                             if attempt == 0 and not tool_calls_data:
                                 logger.debug("Received first tool call chunk")
                             for tc_chunk in delta.tool_calls:
-                                index = tc_chunk.index if tc_chunk.index is not None else 0
+                                if tc_chunk.index is not None:
+                                    index = tc_chunk.index
+                                else:
+                                    # Some providers (DashScope/Qwen, DeepSeek, etc.) don't set
+                                    # tc_chunk.index for parallel tool calls. Detect new tool calls
+                                    # by checking for a new id or a new function name to avoid
+                                    # concatenating multiple calls into the same slot.
+                                    is_new_call = False
+                                    if tc_chunk.id and tool_calls_data:
+                                        # A new tool call id means a new tool call
+                                        existing_ids = {tc["id"] for tc in tool_calls_data if tc["id"]}
+                                        if tc_chunk.id not in existing_ids:
+                                            is_new_call = True
+                                    if not is_new_call and tc_chunk.function and tc_chunk.function.name and tool_calls_data:
+                                        # A new function name appearing while the last slot already
+                                        # has a name means this is a different tool call
+                                        last = tool_calls_data[-1]
+                                        if last["function"]["name"] and last["function"]["name"] != tc_chunk.function.name:
+                                            is_new_call = True
+
+                                    if is_new_call:
+                                        index = len(tool_calls_data)
+                                    elif tool_calls_data:
+                                        index = len(tool_calls_data) - 1
+                                    else:
+                                        index = 0
 
                                 # Extend list if needed
                                 while len(tool_calls_data) <= index:
