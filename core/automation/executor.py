@@ -113,10 +113,14 @@ class AutomationExecutor:
                     "- 输出尽量面向行动，不必拘泥固定字段。\n"
                     "- 推送规则（严格执行）：\n"
                     "  - 了解情况型任务（daily.scan/weekly.digest/conference.track/profile.refresh）：\n"
-                    "    只要本次执行发现了与项目相关的新内容，必须调用 notify_push 推送摘要。\n"
+                    "    只要本次执行发现了与项目相关的新内容，必须调用 notify_push 推送完整报告。\n"
                     "  - 预警型任务（urgent.alert/direction.drift）：\n"
                     "    仅在检测到真实威胁（竞争论文、截稿临近、方向漂移）时推送。\n"
                     "  - 若 notify_push 返回 'no channels configured'，不影响任务，继续执行。\n"
+                    "  - ⚠️ 重要：notify_push 的 content 必须是完整报告，不是摘要。\n"
+                    "    用户无法看到对话内容，推送是唯一渠道。\n"
+                    "    禁止在推送中写「详情见对话框」「更多详情见对话」等引导语。\n"
+                    "    所有论文的完整信息都必须包含在 notify_push 的 content 中。\n"
                     "- 如需长期记录，显式调用 memory_write 并填写 intent/scope。"
                 )
         except Exception as e:

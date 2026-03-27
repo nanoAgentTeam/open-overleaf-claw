@@ -42,7 +42,8 @@ After composing the complete report:
    > If `notify_push` returns an error or "no channels configured", that is fine — the attempt itself satisfies the requirement.
 3. **`notify_push` content rule**:
    The `content` parameter passed to `notify_push` must match the inline report in detail level — pass the **same content** you output inline, following the job prompt's推送格式要求.
-   - **FORBIDDEN**: sending a teaser or redirect like "详情见对话框" / "see details in conversation" / "详见对话". The user CANNOT see the conversation — for automated/scheduled tasks, push is their **only** channel.
+   - **FORBIDDEN**: sending a teaser or redirect like "详情见对话框" / "see details in conversation" / "详见对话" / "更多详情见对话框" / "更多详情见对话". The user CANNOT see the conversation — for automated/scheduled tasks, push is their **only** channel.
+   - **MANDATORY**: The `content` parameter of `notify_push` must contain the COMPLETE report with ALL papers' full details. If the inline report covers 5 papers, the push must also cover all 5 papers — never truncate, summarize, or omit any paper from the push content.
    - If the job prompt specifies a detailed push format (e.g., each paper with title, ID, summary), follow that format in the push content.
    - Do not shorten or abbreviate the push content below what the job prompt requires. Let the messaging platform handle splitting if the content is long.
 
