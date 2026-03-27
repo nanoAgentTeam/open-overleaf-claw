@@ -12,7 +12,7 @@
 
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![OS: Linux | macOS](https://img.shields.io/badge/OS-Linux%20%7C%20macOS-blue)](#快速开始)
+[![OS: Linux | macOS | Windows (WSL)](https://img.shields.io/badge/OS-Linux%20%7C%20macOS%20%7C%20Windows%20(WSL)-blue)](#快速开始)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/nanoAgentTeam/research-claw/pulls)
 
 **[English](README.md)** &nbsp;|&nbsp; **[中文](README_zh.md)**
@@ -139,6 +139,8 @@ https://github.com/user-attachments/assets/fccb837c-cfc5-4063-b803-2ae900fb4a20
 
 ### 1. 安装
 
+**Linux / macOS：**
+
 ```bash
 git clone https://github.com/nanoAgentTeam/research-claw.git
 cd research-claw
@@ -147,6 +149,57 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
+
+<details>
+<summary><strong>Windows 用户（通过 WSL）</strong></summary>
+
+Research Claw 依赖 POSIX 特性（信号处理、进程管理等），不支持在原生 Windows 上直接运行。推荐通过 **WSL2**（Windows Subsystem for Linux）来运行 — WSL2 内置真正的 Linux 内核，网络、文件系统、进程管理均为原生 Linux 行为，无需修改任何代码。
+
+**第一步：安装 WSL2**
+
+在 PowerShell（管理员）中运行：
+
+```powershell
+wsl --install -d Ubuntu-24.04
+```
+
+安装完成后重启电脑，首次启动会提示设置用户名和密码。
+
+**第二步：安装 Python 3.11**
+
+```bash
+sudo apt update && sudo apt install -y python3.11 python3.11-venv python3-pip git
+```
+
+**第三步：克隆并安装**
+
+```bash
+# 推荐将代码放在 Linux 文件系统下（性能更好，避免跨文件系统 IO 瓶颈）
+git clone https://github.com/nanoAgentTeam/research-claw.git ~/research-claw
+cd ~/research-claw
+
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+> **性能提示：** 不要在 `/mnt/c/` 路径下运行项目。WSL 访问 Windows 文件系统的 IO 性能较差（约慢 3-5 倍），将代码放在 `~/` 下可获得接近原生 Linux 的性能。
+
+**网络与端口：** WSL2 的网络请求（API 调用、网页搜索、学术检索）开箱即用。Gateway 模式启动后，Windows 浏览器可直接通过 `http://localhost:18790` 访问 Web UI，端口会自动转发。
+
+**浏览器自动化（可选）：** 如需使用 `browser_use` 工具，需额外安装 Chromium：
+
+```bash
+# 方式一：直接安装
+sudo apt install -y chromium-browser
+
+# 方式二：通过 playwright
+pip install playwright && playwright install --with-deps chromium
+```
+
+Windows 11 自带 WSLg 图形支持；Windows 10 下 headless 模式即可正常工作。
+
+</details>
 
 ### 2. 配置
 

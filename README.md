@@ -12,7 +12,7 @@
 
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![OS: Linux | macOS](https://img.shields.io/badge/OS-Linux%20%7C%20macOS-blue)](#getting-started)
+[![OS: Linux | macOS | Windows (WSL)](https://img.shields.io/badge/OS-Linux%20%7C%20macOS%20%7C%20Windows%20(WSL)-blue)](#getting-started)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/nanoAgentTeam/research-claw/pulls)
 
 **[English](README.md)** &nbsp;|&nbsp; **[中文](README_zh.md)**
@@ -139,6 +139,8 @@ https://github.com/user-attachments/assets/fccb837c-cfc5-4063-b803-2ae900fb4a20
 
 ### 1. Install
 
+**Linux / macOS:**
+
 ```bash
 git clone https://github.com/nanoAgentTeam/research-claw.git
 cd research-claw
@@ -147,6 +149,57 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
+
+<details>
+<summary><strong>Windows Users (via WSL)</strong></summary>
+
+Research Claw relies on POSIX features (signal handling, process management, etc.) and does not run natively on Windows. The recommended approach is **WSL2** (Windows Subsystem for Linux) — it runs a real Linux kernel, so networking, filesystem, and process management all behave natively. No code changes needed.
+
+**Step 1: Install WSL2**
+
+Run in PowerShell (Administrator):
+
+```powershell
+wsl --install -d Ubuntu-24.04
+```
+
+Reboot after installation. On first launch you'll be asked to create a username and password.
+
+**Step 2: Install Python 3.11**
+
+```bash
+sudo apt update && sudo apt install -y python3.11 python3.11-venv python3-pip git
+```
+
+**Step 3: Clone and install**
+
+```bash
+# Recommended: keep code on the Linux filesystem for better performance
+git clone https://github.com/nanoAgentTeam/research-claw.git ~/research-claw
+cd ~/research-claw
+
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+> **Performance tip:** Do not run the project under `/mnt/c/`. Cross-filesystem IO between WSL and Windows is ~3-5x slower. Keep code under `~/` for near-native Linux performance.
+
+**Networking & ports:** WSL2 networking (API calls, web search, academic search) works out of the box. When running in Gateway mode, Windows browsers can access the Web UI at `http://localhost:18790` — ports are forwarded automatically.
+
+**Browser automation (optional):** If you need the `browser_use` tool, install Chromium:
+
+```bash
+# Option A: install directly
+sudo apt install -y chromium-browser
+
+# Option B: via playwright
+pip install playwright && playwright install --with-deps chromium
+```
+
+Windows 11 includes WSLg for GUI support; on Windows 10 headless mode works fine.
+
+</details>
 
 ### 2. Configure
 
