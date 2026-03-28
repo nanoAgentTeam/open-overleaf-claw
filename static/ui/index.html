@@ -1989,6 +1989,111 @@
             </div>
         </div>
 
+        <!-- Chat Tab -->
+        <div x-show="tab === 'chat'" x-cloak class="h-[calc(100vh-10rem)] flex flex-col">
+            <!-- Toolbar -->
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-2.5 h-2.5 rounded-full" :class="chatConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'"></div>
+                    <span class="text-sm text-gray-400" x-text="chatConnected ? (language === 'en' ? 'Connected' : 'WebSocket 已连接') : (language === 'en' ? 'Disconnected' : 'WebSocket 未连接')"></span>
+                    <span x-show="chatBusy" class="text-xs text-amber-400 flex items-center gap-1.5"><i class="fas fa-spinner fa-spin"></i> <span x-text="language === 'en' ? 'Agent thinking...' : 'Agent 思考中...'"></span></span>
+                </div>
+                <button @click="chatReset()"
+                        class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+                    <i class="fas fa-rotate-right"></i>
+                    <span x-text="language === 'en' ? 'New Conversation' : '新建对话'"></span>
+                </button>
+            </div>
+
+            <!-- Messages -->
+            <div x-ref="chatScroll" class="flex-1 overflow-y-auto space-y-4 pr-2 pb-4" style="scroll-behavior:smooth">
+                <template x-if="chatMessages.length === 0">
+                    <div class="flex items-center justify-center h-full">
+                        <div class="text-center text-gray-500">
+                            <i class="fas fa-comment-dots text-4xl mb-3 opacity-30"></i>
+                            <p x-text="language === 'en' ? 'Send a message to start chatting' : '发送消息开始对话'"></p>
+                        </div>
+                    </div>
+                </template>
+                <template x-for="(msg, idx) in chatMessages" :key="idx">
+                    <div :class="msg.role === 'user' ? 'flex justify-end' : 'flex justify-start'">
+                        <div :class="msg.role === 'user'
+                            ? 'bg-blue-600 text-white rounded-2xl rounded-br-md px-4 py-2.5 max-w-[75%]'
+                            : 'bg-gray-800 border border-gray-700 text-gray-200 rounded-2xl rounded-bl-md px-4 py-2.5 max-w-[85%]'">
+                            <pre class="whitespace-pre-wrap break-words text-sm font-sans leading-relaxed m-0" x-text="msg.content"></pre>
+                            <template x-if="msg.media && msg.media.length">
+                                <div class="mt-2 space-y-1">
+                                    <template x-for="f in msg.media" :key="f">
+                                        <a :href="'/api/chat/file?path=' + encodeURIComponent(f)"
+                                           target="_blank"
+                                           class="inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 bg-black/20 rounded-lg px-2.5 py-1.5">
+                                            <i class="fas fa-file-download"></i>
+                                            <span x-text="f.split('/').pop()"></span>
+                                        </a>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Input -->
+            <div class="mt-2 relative">
+                <!-- Command autocomplete popup -->
+                <div x-ref="chatCmdPanel" x-show="chatCmdShow && chatCmdFiltered.length > 0" x-cloak
+                     class="absolute bottom-full mb-1 left-0 right-0 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl overflow-hidden z-30 max-h-64 overflow-y-auto">
+                    <template x-for="(cmd, i) in chatCmdFiltered" :key="cmd.name">
+                        <button @click="chatCmdSelect(cmd)" @mouseenter="chatCmdIdx = i"
+                                :data-cmd-idx="i"
+                                class="w-full px-4 py-2.5 flex items-start gap-3 text-left transition-colors"
+                                :class="i === chatCmdIdx ? 'bg-blue-600/30 text-white' : 'text-gray-300 hover:bg-gray-800'">
+                            <span class="font-mono text-blue-400 text-sm flex-shrink-0 whitespace-nowrap" x-text="cmd.name"></span>
+                            <div class="min-w-0">
+                                <div class="text-xs text-gray-300 leading-relaxed" x-text="cmd.description"></div>
+                                <div x-show="cmd.args_usage" class="text-xs text-gray-500 font-mono mt-0.5 whitespace-pre-line" x-text="cmd.args_usage"></div>
+                            </div>
+                        </button>
+                    </template>
+                </div>
+                <div class="bg-gray-800 border border-gray-700 rounded-2xl p-3">
+                <div x-show="chatPendingFiles.length" class="flex flex-wrap gap-2 mb-2">
+                    <template x-for="(f, i) in chatPendingFiles" :key="f.path">
+                        <span class="inline-flex items-center gap-1.5 text-xs bg-gray-700 text-gray-300 rounded-lg px-2.5 py-1.5">
+                            <i class="fas fa-paperclip text-gray-500"></i>
+                            <span x-text="f.name"></span>
+                            <button @click="chatPendingFiles.splice(i, 1)" class="text-gray-500 hover:text-red-400 ml-0.5">&times;</button>
+                        </span>
+                    </template>
+                </div>
+                <div class="flex items-end gap-3">
+                <textarea x-ref="chatInput" x-model="chatInput"
+                    @keydown.enter="if(!$event.shiftKey && !$event.isComposing){ $event.preventDefault(); chatCmdShow ? chatCmdSelect(chatCmdFiltered[chatCmdIdx]) : chatSend() }"
+                    @keydown.arrow-up.prevent="if(chatCmdShow){ chatCmdIdx = Math.max(0, chatCmdIdx - 1); chatCmdScrollTo() }"
+                    @keydown.arrow-down.prevent="if(chatCmdShow){ chatCmdIdx = Math.min(chatCmdFiltered.length - 1, chatCmdIdx + 1); chatCmdScrollTo() }"
+                    @keydown.tab.prevent="chatCmdShow && chatCmdFiltered.length ? chatCmdSelect(chatCmdFiltered[chatCmdIdx]) : null"
+                    @keydown.escape="chatCmdShow = false"
+                    @input="chatCmdFilter(); $el.style.height='auto'; $el.style.height = Math.min($el.scrollHeight, 160) + 'px'"
+                    rows="1"
+                    :placeholder="language === 'en' ? 'Type a message... (Shift+Enter for newline)' : '输入消息... (Shift+Enter 换行)'"
+                    class="flex-1 bg-transparent text-gray-100 placeholder-gray-500 resize-none outline-none text-sm leading-relaxed max-h-40 overflow-y-auto"
+                ></textarea>
+                <input type="file" x-ref="chatFileInput" class="hidden" @change="chatUploadFile($event)" multiple />
+                <button @click="$refs.chatFileInput.click()" :disabled="!chatConnected"
+                    class="w-9 h-9 flex-shrink-0 rounded-xl flex items-center justify-center transition-colors"
+                    :class="chatConnected ? 'text-gray-400 hover:text-white hover:bg-gray-700' : 'text-gray-600 cursor-not-allowed'">
+                    <i class="fas fa-paperclip text-sm"></i>
+                </button>
+                <button @click="chatSend()" :disabled="(!chatInput.trim() && !chatPendingFiles.length) || !chatConnected"
+                    class="w-9 h-9 flex-shrink-0 rounded-xl flex items-center justify-center transition-colors"
+                    :class="(chatInput.trim() || chatPendingFiles.length) && chatConnected ? 'bg-blue-600 hover:bg-blue-500 text-white' : 'bg-gray-700 text-gray-500 cursor-not-allowed'">
+                    <i class="fas fa-paper-plane text-sm"></i>
+                </button>
+                </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <!-- Global Toast -->
@@ -2497,7 +2602,8 @@
                     { id: 'subscriptions', label: '推送管理', labelEn: 'Push Subscriptions', icon: 'fas fa-bell', desc: '用于获取定时任务执行推送信息的订阅配置', descEn: 'Manage subscriptions for scheduled task notifications' },
                     { id: 'automation', label: '自动化任务', labelEn: 'Automation Jobs', icon: 'fas fa-clock', desc: '任务管理、手动执行、模板安装与运行历史', descEn: 'Job management, manual runs, templates, and run history' },
                     { id: 'token_usage', label: 'Token 用量', labelEn: 'Token Usage', icon: 'fas fa-chart-bar', desc: 'LLM Token 使用明细与统计', descEn: 'LLM token usage details and analytics' },
-                    { id: 'logs', label: '实时日志', labelEn: 'Live Logs', icon: 'fas fa-terminal', desc: '查看后端实时运行状态', descEn: 'View backend runtime logs in real time' }
+                    { id: 'logs', label: '实时日志', labelEn: 'Live Logs', icon: 'fas fa-terminal', desc: '查看后端实时运行状态', descEn: 'View backend runtime logs in real time' },
+                    { id: 'chat', label: 'Agent 对话', labelEn: 'Agent Chat', icon: 'fas fa-comment-dots', desc: '直接与 Agent 对话调试', descEn: 'Chat with agent directly' }
                 ],
                 imPlatforms: [
                     {
@@ -2554,6 +2660,17 @@
                 config: { provider: { activeId: '', instances: [] }, channel: { activeId: null, accounts: [] }, agents: { defaults: {} } },
                 logs: [],
                 toasts: [],
+                chatMessages: [],
+                chatInput: '',
+                chatWs: null,
+                chatConnected: false,
+                chatBusy: false,
+                _chatStreamBuf: {},
+                chatPendingFiles: [],
+                chatCmdList: [],
+                chatCmdFiltered: [],
+                chatCmdShow: false,
+                chatCmdIdx: 0,
                 showGateway404: false,
                 gatewayFailCount: 0,
                 gatewayFailThreshold: 5,
@@ -3242,6 +3359,9 @@
                         if (val === 'subscriptions') {
                             this.loadChatContacts();
                         }
+                        if (val === 'chat' && !this.chatWs) {
+                            this.chatConnect();
+                        }
                     });
                     this.startGatewayHealthMonitor();
                     window.addEventListener('beforeunload', () => this.stopGatewayHealthMonitor(), { once: true });
@@ -3266,6 +3386,144 @@
                     this.showBackupViewer = true;
                 },
 
+                // ---- Chat ----
+                chatConnect() {
+                    if (this.chatWs) return;
+                    const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+                    const ws = new WebSocket(`${proto}://${location.host}/ws/chat`);
+                    ws.onopen = () => {
+                        this.chatConnected = true;
+                        this.chatLoadHistory();
+                    };
+                    ws.onclose = () => {
+                        this.chatConnected = false;
+                        this.chatWs = null;
+                        // auto-reconnect if still on chat tab
+                        if (this.tab === 'chat') {
+                            setTimeout(() => this.chatConnect(), 3000);
+                        }
+                    };
+                    ws.onerror = () => { ws.close(); };
+                    ws.onmessage = (e) => {
+                        try {
+                            const data = JSON.parse(e.data);
+                            this.chatHandleMessage(data);
+                        } catch (_) {}
+                    };
+                    this.chatWs = ws;
+                },
+                chatHandleMessage(data) {
+                    if (data.type === 'message') {
+                        if (data.role === 'user') {
+                            this.chatMessages.push({ role: 'user', content: data.content, media: data.media || [] });
+                        } else {
+                            // Complete assistant message — flush stream buffer
+                            this._chatStreamBuf = {};
+                            if (!data.is_notification) this.chatBusy = false;
+                            this.chatMessages.push({ role: 'assistant', content: data.content, media: data.media || [] });
+                        }
+                        this.$nextTick(() => this.chatScrollDown());
+                    } else if (data.type === 'chunk') {
+                        const sid = data.stream_id || 'main';
+                        if (data.new_message || !this._chatStreamBuf[sid]) {
+                            // Start a new assistant bubble for this stream
+                            this._chatStreamBuf[sid] = { idx: this.chatMessages.length };
+                            this.chatMessages.push({ role: 'assistant', content: data.content });
+                        } else {
+                            const idx = this._chatStreamBuf[sid].idx;
+                            this.chatMessages[idx] = {
+                                ...this.chatMessages[idx],
+                                content: this.chatMessages[idx].content + data.content
+                            };
+                        }
+                        this.$nextTick(() => this.chatScrollDown());
+                    } else if (data.type === 'status') {
+                        this.chatBusy = data.busy;
+                    }
+                },
+                chatSend() {
+                    const text = this.chatInput.trim();
+                    const media = this.chatPendingFiles.map(f => f.path);
+                    if ((!text && !media.length) || !this.chatWs || this.chatWs.readyState !== 1) return;
+                    const payload = { type: 'message', content: text || this.chatPendingFiles.map(f => f.name).join(', ') };
+                    if (media.length) payload.media = media;
+                    this.chatWs.send(JSON.stringify(payload));
+                    this.chatInput = '';
+                    this.chatPendingFiles = [];
+                    if (this.$refs.chatInput) {
+                        this.$refs.chatInput.style.height = 'auto';
+                    }
+                },
+                chatReset() {
+                    if (!this.chatWs || this.chatWs.readyState !== 1) return;
+                    this.chatWs.send(JSON.stringify({ type: 'message', content: '/reset' }));
+                    this.chatMessages = [];
+                    this._chatStreamBuf = {};
+                    this.chatBusy = false;
+                },
+                chatScrollDown() {
+                    const el = this.$refs.chatScroll;
+                    if (el) el.scrollTop = el.scrollHeight;
+                },
+                async chatLoadHistory() {
+                    try {
+                        const res = await fetch('/api/chat/history?limit=20');
+                        if (!res.ok) return;
+                        const msgs = await res.json();
+                        if (msgs.length) {
+                            this.chatMessages = msgs;
+                            this.$nextTick(() => this.chatScrollDown());
+                        }
+                    } catch (_) {}
+                },
+                async chatLoadCommands() {
+                    if (this.chatCmdList.length) return;
+                    try {
+                        const res = await fetch('/api/chat/commands');
+                        if (res.ok) this.chatCmdList = await res.json();
+                    } catch (_) {}
+                },
+                chatCmdFilter() {
+                    const text = this.chatInput;
+                    if (!text.startsWith('/')) { this.chatCmdShow = false; return; }
+                    // Don't show autocomplete if there's already a space (user is typing args)
+                    if (text.includes(' ')) { this.chatCmdShow = false; return; }
+                    this.chatLoadCommands();
+                    const q = text.toLowerCase();
+                    this.chatCmdFiltered = this.chatCmdList.filter(c => c.name.startsWith(q));
+                    this.chatCmdIdx = 0;
+                    this.chatCmdShow = this.chatCmdFiltered.length > 0;
+                },
+                chatCmdSelect(cmd) {
+                    if (!cmd) return;
+                    this.chatInput = cmd.requires_args ? cmd.name + ' ' : cmd.name;
+                    this.chatCmdShow = false;
+                    this.$nextTick(() => { if (this.$refs.chatInput) this.$refs.chatInput.focus(); });
+                },
+                async chatUploadFile(event) {
+                    const files = event.target.files;
+                    if (!files.length) return;
+                    for (const file of files) {
+                        const form = new FormData();
+                        form.append('file', file);
+                        try {
+                            const res = await fetch('/api/chat/upload', { method: 'POST', body: form });
+                            if (!res.ok) continue;
+                            const data = await res.json();
+                            this.chatPendingFiles.push({ name: data.name, path: data.path });
+                        } catch (_) {}
+                    }
+                    event.target.value = '';
+                },
+                chatCmdScrollTo() {
+                    this.$nextTick(() => {
+                        const panel = this.$refs.chatCmdPanel;
+                        if (!panel) return;
+                        const el = panel.querySelector(`[data-cmd-idx="${this.chatCmdIdx}"]`);
+                        if (el) el.scrollIntoView({ block: 'nearest' });
+                    });
+                },
+
                 async viewDefaultConfig() {
                     if (!this.defaultConfigContent) {
                         await this.loadDefaultConfigInfo();
@@ -3279,11 +3537,13 @@
                         : '确认重启服务？进行中的对话将会中断。';
                     if (!confirm(msg)) return;
                     this.restarting = true;
-                    // Pause gateway health check to prevent the offline overlay
+                    // Pause gateway health check and reset fail state to prevent offline overlay
                     if (this._gatewayHealthTimer) {
                         clearInterval(this._gatewayHealthTimer);
                         this._gatewayHealthTimer = null;
                     }
+                    this.gatewayFailCount = 0;
+                    this.showGateway404 = false;
                     try {
                         await fetch('/api/restart', { method: 'POST' });
                     } catch (e) {

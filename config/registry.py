@@ -47,6 +47,7 @@ class CommandDef:
     args_usage: str = ""
     tool_name: str = ""
     tool_arg_key: str = ""
+    hidden: bool = False
 
 
 @dataclass(frozen=True)
@@ -151,6 +152,7 @@ class ConfigRegistry:
                 args_usage=entry.get("args_usage", ""),
                 tool_name=entry.get("tool_name", ""),
                 tool_arg_key=entry.get("tool_arg_key", ""),
+                hidden=entry.get("hidden", False),
             )
             self._commands[cmd.name] = cmd
             for alias in cmd.aliases:
@@ -210,6 +212,10 @@ class ConfigRegistry:
 
     def get_all_commands(self) -> dict[str, CommandDef]:
         return dict(self._commands)
+
+    def get_visible_commands(self) -> dict[str, CommandDef]:
+        """Return commands that are not hidden — single source of truth for UI and system prompt."""
+        return {k: v for k, v in self._commands.items() if not v.hidden}
 
     def list_command_names(self) -> list[str]:
         """All command names including aliases."""
