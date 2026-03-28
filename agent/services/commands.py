@@ -922,11 +922,47 @@ class CleanupHandler(BaseCommandHandler):
 
 
 def build_help_text(in_project: bool = False) -> str:
-    """Build user-facing help text with available commands."""
-    if in_project:
-        return t("help.text_zh")
-    else:
-        return t("help.text_zh_no_project")
+    """Build user-facing help text dynamically from commands.json (single source of truth)."""
+    try:
+        from config.registry import ConfigRegistry
+        registry = ConfigRegistry()
+        cmds = registry.get_visible_commands()
+    except Exception:
+        # Fallback to static i18n text if registry fails
+        return t("help.text_zh") if in_project else t("help.text_zh_no_project")
+
+    general_lines = []
+    project_lines = []
+    task_lines = []
+
+    for name, cmd in cmds.items():
+        desc = cmd.description
+        usage = cmd.args_usage.split("\n")[0] if cmd.args_usage else ""
+        # Use args_usage first line as display if it starts with the command name
+        if usage.startswith(name):
+            line = f"  {usage}"
+        elif cmd.requires_args:
+            line = f"  {name} ... — {desc}"
+        else:
+            line = f"  {name}  — {desc}"
+
+        if name in ("/task", "/start", "/done"):
+            task_lines.append(line)
+        elif cmd.require_project:
+            project_lines.append(line)
+        else:
+            general_lines.append(line)
+
+    sections = ["📖 Available Commands:\n"]
+    if general_lines:
+        sections.append("General:\n" + "\n".join(general_lines))
+    if project_lines:
+        label = "Project:" if in_project else "Project (enter a project first):"
+        sections.append(label + "\n" + "\n".join(project_lines))
+    if task_lines:
+        sections.append("Task Mode:\n" + "\n".join(task_lines))
+    sections.append("\n💡 You can also chat in natural language — I'll use the right tools automatically.")
+    return "\n\n".join(sections)
 
 
 def build_greeting_text() -> str:

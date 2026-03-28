@@ -142,7 +142,7 @@ class ContextManager:
         if not registry:
             return ""
         try:
-            all_cmds = registry.get_all_commands()
+            all_cmds = registry.get_visible_commands()
             if not all_cmds:
                 return ""
             lines = []

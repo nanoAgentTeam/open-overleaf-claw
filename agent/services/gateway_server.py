@@ -57,6 +57,10 @@ bus = MessageBus()
 im_runtime = get_im_runtime(bus)
 automation_runtime: Optional[AutomationRuntime] = None
 
+# WebUI Chat (router registered here, init deferred until after agent_loop is created)
+from agent.services.chat_api import chat_router, init_chat_api
+app.include_router(chat_router)
+
 # Global chat contact registry
 _chat_registry: Optional[ChatContactRegistry] = None
 
@@ -91,6 +95,7 @@ agent_loop = AgentLoop(
     workspace=_gw_workspace,
     model=_gw_model,
 )
+init_chat_api(bus, agent_loop)
 
 
 class JobSchedulePayload(BaseModel):
