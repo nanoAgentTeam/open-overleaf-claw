@@ -110,7 +110,7 @@ def _list_overleaf_projects(services: "AgentServices") -> CommandResult:
         if getattr(p, 'trashed', False):
             flags.append("TRASHED")
         flag_str = f" [{' '.join(flags)}]" if flags else ""
-        lines.append(f"  {idx}. [{pid[:10]}...] {name}{flag_str}")
+        lines.append(f"  {idx}. [{pid}] {name}{flag_str}")
     if len(projects) > 30:
         lines.append(f"  ... 以及另外 {len(projects) - 30} 个项目")
     lines.append("\n回复序号或项目名即可下载到本地。")
