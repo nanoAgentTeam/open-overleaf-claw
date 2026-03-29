@@ -1923,8 +1923,8 @@
     "ar": "\n📖 أوامر سريعة:\n  /compile — تجميع PDF\n  /sync pull — سحب من Overleaf\n  /sync push — دفع إلى Overleaf\n  /git — التحكم بالإصدارات Git\n  /task <هدف> — بدء جلسة مهام\n  /help — عرض جميع الأوامر"
   },
   "project.not_in_default": {
-    "zh": "[ERROR] project_manager 仅在 Default 工作区可用。请先用 /back 返回。",
-    "en": "[ERROR] project_manager is only available in Default workspace. Use /back to return first."
+    "zh": "[ERROR] 此操作仅在 Default 工作区可用。请先用 /back 返回。（link_overleaf 和 info 可在项目内使用）",
+    "en": "[ERROR] This action is only available in Default workspace. Use /back first. (link_overleaf and info work inside projects)"
   },
   "project.delete_not_found": {
     "zh": "[ERROR] 项目 '{project_name}' 不存在。",
