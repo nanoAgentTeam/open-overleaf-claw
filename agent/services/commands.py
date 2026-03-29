@@ -1286,8 +1286,7 @@ def build_help_text(in_project: bool = False) -> str:
         registry = ConfigRegistry()
         cmds = registry.get_visible_commands()
     except Exception:
-        # Fallback to static i18n text if registry fails
-        return t("help.text_zh") if in_project else t("help.text_zh_no_project")
+        return t("help.fallback")
 
     general_lines = []
     project_lines = []
@@ -1304,7 +1303,7 @@ def build_help_text(in_project: bool = False) -> str:
         else:
             line = f"  {name}  — {desc}"
 
-        if name in ("/task", "/start", "/done"):
+        if name in ("/task", "/start", "/done", "/resume"):
             task_lines.append(line)
         elif cmd.require_project:
             project_lines.append(line)
