@@ -243,9 +243,9 @@ This will prompt you to choose an Overleaf instance:
 | Option | Instance | Required package |
 |--------|----------|-----------------|
 | 1 | [Overleaf](https://www.overleaf.com) (default) | `pip install overleaf-sync` |
-| 2 | [CSTCloud](https://latex.cstcloud.cn) (China Science & Technology Cloud) | `pip install overleaf-sync-cstcloud` |
+| 2 | [CSTCloud](https://latex.cstcloud.cn) (China Science & Technology Cloud) | `pip install PySide6` (built-in, browser login only) |
 
-The login command will call the corresponding package's login tool, generate `.olauth`, and save the instance config to `settings.json`.
+The login command will call the corresponding login tool, generate `.olauth`, and save the instance config to `settings.json`.
 
 Once `.olauth` is created, the system auto-detects it. Use `/sync pull` and `/sync push` inside any project.
 
@@ -298,7 +298,7 @@ The system has two spaces:
 |                 | Default (Lobby)                          | Project (Workspace)                                             |
 | --------------- | ---------------------------------------- | --------------------------------------------------------------- |
 | Purpose         | Create, list, switch projects            | Work on a specific paper                                        |
-| Available tools | Project management, Overleaf list/create | File editing, LaTeX compile, Git, sub-agents, literature search |
+| Available tools | Project management (create, import from Overleaf), Overleaf list | File editing, LaTeX compile, Git, Overleaf sync, sub-agents, literature search |
 
 ```
 workspace/
@@ -315,14 +315,22 @@ workspace/
 
 | Command          | What it does                                                 |
 | ---------------- | ------------------------------------------------------------ |
+| `/help`        | Show all available commands                                  |
+| `/list`        | List local projects in workspace                             |
+| `/olist`       | List remote Overleaf projects                                |
+| `/switch <name>` | Switch to a project                                       |
 | `/task <goal>` | Decompose a complex goal into sub-tasks, execute in parallel |
+| `/start`       | Approve the task plan and begin execution                    |
+| `/done`        | End current TASK session and return to normal mode           |
+| `/resume`      | Resume a failed or interrupted task from checkpoint          |
 | `/compile`     | Compile LaTeX to PDF                                         |
 | `/sync pull`   | Pull latest files from Overleaf                              |
 | `/sync push`   | Push local changes to Overleaf                               |
+| `/session`     | List or switch sessions in current project                   |
 | `/git`         | Enter interactive Git mode (history, diff, rollback)         |
+| `/stop`        | Force-cancel the current operation                           |
 | `/reset`       | Clear current session history                                |
 | `/back`        | Return to Default lobby                                      |
-| `/done`        | End current TASK session and return to normal mode           |
 
 ### Task Mode
 

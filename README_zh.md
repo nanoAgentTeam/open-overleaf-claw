@@ -243,9 +243,9 @@ python cli/main.py login
 | 选项 | 实例 | 所需安装 |
 |------|------|----------|
 | 1 | [Overleaf](https://www.overleaf.com)（默认） | `pip install overleaf-sync` |
-| 2 | [中国科技云](https://latex.cstcloud.cn)（CSTCloud） | `pip install overleaf-sync-cstcloud` |
+| 2 | [中国科技云](https://latex.cstcloud.cn)（CSTCloud） | `pip install PySide6`（已内置，仅需浏览器登录依赖） |
 
-登录命令会调用对应包完成认证、生成 `.olauth`，并将实例配置写入 `settings.json`。
+登录命令会调用对应的登录工具完成认证、生成 `.olauth`，并将实例配置写入 `settings.json`。
 
 `.olauth` 创建后系统会自动检测。之后即可在任何项目中使用 `/sync pull` 和 `/sync push`。
 
@@ -298,7 +298,7 @@ graph TB
 |          | Default（大厅）              | Project（工作间）                             |
 | -------- | ---------------------------- | --------------------------------------------- |
 | 用途     | 创建、列出、切换项目         | 在具体论文项目中工作                          |
-| 可用工具 | 项目管理、Overleaf 列表/创建 | 文件编辑、LaTeX 编译、Git、子 Agent、文献检索 |
+| 可用工具 | 项目管理（创建、从 Overleaf 导入）、Overleaf 列表 | 文件编辑、LaTeX 编译、Git、Overleaf 同步、子 Agent、文献检索 |
 
 ```
 workspace/
@@ -315,14 +315,22 @@ workspace/
 
 | 命令             | 功能                                    |
 | ---------------- | --------------------------------------- |
+| `/help`        | 显示所有可用命令                        |
+| `/list`        | 列出本地项目                            |
+| `/olist`       | 列出 Overleaf 远程项目                  |
+| `/switch <名称>` | 切换到指定项目                       |
 | `/task <目标>` | 将复杂目标分解为子任务，并行执行        |
+| `/start`       | 确认任务计划并开始执行                  |
+| `/done`        | 结束 Task 会话，回到普通模式            |
+| `/resume`      | 从断点恢复中断或失败的任务              |
 | `/compile`     | 编译 LaTeX 生成 PDF                     |
 | `/sync pull`   | 从 Overleaf 拉取最新文件                |
 | `/sync push`   | 推送本地修改到 Overleaf                 |
+| `/session`     | 查看或切换当前项目的会话                |
 | `/git`         | 进入交互式 Git 模式（历史、差异、回退） |
+| `/stop`        | 强制中断当前操作                        |
 | `/reset`       | 清空当前 Session 对话历史               |
 | `/back`        | 返回 Default 大厅                       |
-| `/done`        | 结束 Task 会话，回到普通模式            |
 
 ### Task 模式
 
