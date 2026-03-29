@@ -24,7 +24,7 @@ except ImportError:
 class OverleafTool(BaseTool):
     """
     Tool to interact with Overleaf projects using pyoverleaf.
-    Supports: list, download (full), sync (incremental upload/delete).
+    Supports: list, pull (from Overleaf), push (to Overleaf).
     """
 
     def __init__(self, workspace: Path, work_dir: Optional[Path] = None, project: Any = None):
@@ -58,9 +58,8 @@ class OverleafTool(BaseTool):
         return (
             "Interact with Overleaf.\n"
             "- list: List all Overleaf projects.\n"
-            "- create_project: Create a new blank project on Overleaf (returns project ID).\n"
-            "- download: Pull latest files from Overleaf to local (requires active project linked to Overleaf).\n"
-            "- sync: Push local changes to Overleaf (requires active project linked to Overleaf)."
+            "- pull: Pull latest files from Overleaf to local (requires active project linked to Overleaf).\n"
+            "- push: Push local changes to Overleaf (requires active project linked to Overleaf)."
         )
 
     @property
@@ -71,7 +70,7 @@ class OverleafTool(BaseTool):
                 "action": {
                     "type": "string",
                     "description": "Action to perform.",
-                    "enum": ["list", "download", "sync", "create_project"]
+                    "enum": ["list", "pull", "push"]
                 },
                 "project_name": {
                     "type": "string",
@@ -91,7 +90,7 @@ class OverleafTool(BaseTool):
             if action == "list":
                 return self._list_projects(api)
             
-            elif action == "download":
+            elif action == "pull":
                 # Pull latest files from Overleaf (same as /sync pull)
                 if not self._project:
                     return (
@@ -113,14 +112,14 @@ class OverleafTool(BaseTool):
                     msg += f"\n  Deleted {len(result.deleted)} file(s) no longer on remote."
                 return msg
             
-            elif action == "sync":
+            elif action == "push":
                 # Delegate to Project.sync_to_overleaf() — the canonical push path
                 if not self._project:
                     return (
                         "[ERROR] Cannot sync: no active project in current session. "
                         "You are in Default mode. To sync, you MUST first call "
                         "project_manager(action='switch', project_name='...') to enter the project, "
-                        "then retry overleaf(action='sync'). "
+                        "then retry overleaf(action='push'). "
                         "Do NOT attempt to sync via bash or read .overleaf.json as a workaround."
                     )
                 if self._project.is_default:
@@ -140,11 +139,6 @@ class OverleafTool(BaseTool):
                     for err in result.errors:
                         msg += f"\n  - {err}"
                 return msg
-
-            elif action == "create_project":
-                if not project_name:
-                    return "[ERROR] project_name is required for create_project."
-                return self._create_project(api, project_name)
 
             else:
                 return f"Unknown action: {action}"

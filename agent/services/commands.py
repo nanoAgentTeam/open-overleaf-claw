@@ -184,7 +184,7 @@ class PullProjectHandler(BaseCommandHandler):
             f"I will now Sync the project **{project_name}** with Overleaf.\n"
             f"Steps:\n"
             f"1. Check `overleaf(action='list')` to find a matching project.\n"
-            f"2. If found, run `overleaf(action='sync', project_name='{project_name}')`.\n"
+            f"2. If found, run `overleaf(action='push', project_name='{project_name}')`.\n"
             f"3. If successful, run `git add .` and `git commit -m 'Sync {project_name} from Overleaf'` in the project folder.\n"
             "Please execute this workflow now."
         )
