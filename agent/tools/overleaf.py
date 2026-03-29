@@ -115,13 +115,7 @@ class OverleafTool(BaseTool):
                     if not project_name:
                         project_name = f"project_{project_id}"
 
-                result = self._download_project(api, project_id, project_name)
-
-                # Auto-create Project structure and link Overleaf
-                if "[ERROR]" not in result and "failed" not in result.lower():
-                    result = self._promote_to_project(project_id, project_name, result)
-
-                return result
+                return self._download_project(api, project_id, project_name)
             
             elif action == "sync":
                 # Delegate to Project.sync_to_overleaf() — the canonical push path
@@ -303,40 +297,6 @@ class OverleafTool(BaseTool):
             
         except Exception as e:
             return f"[ERROR] creating project: {e}"
-
-    # =========================================================================
-    # Helper: Promote downloaded flat folder to Project structure
-    # =========================================================================
-
-    def _promote_to_project(self, project_id: str, project_name: str, download_result: str) -> str:
-        """After _download_project succeeds, move files into a proper Project
-        core directory and auto-link Overleaf.  Keeps _download_project untouched."""
-        safe_name = project_name.replace("/", "_").replace(" ", "_")
-        flat_dir = self.projects_root / safe_name  # where _download_project put files
-
-        try:
-            from core.project import Project
-            proj = Project(safe_name, self.workspace)
-            core_dir = proj.core  # workspace/<safe_name>/<safe_name>/
-
-            # Move files from flat dir into core (skip Project-owned entries)
-            skip = {safe_name, "project.yaml", ".project_memory"}
-            for item in list(flat_dir.iterdir()):
-                if item.name in skip:
-                    continue
-                dest = core_dir / item.name
-                if item.is_dir():
-                    shutil.copytree(item, dest, dirs_exist_ok=True)
-                    shutil.rmtree(item)
-                else:
-                    shutil.move(str(item), str(dest))
-
-            proj.link_overleaf(project_id)
-            return (f"✅ 已下载项目 '{project_name}' 并自动关联 Overleaf。\n"
-                    f"使用 switch 进入项目即可开始工作。")
-        except Exception as e:
-            logger.warning(f"Auto-promote to Project failed: {e}")
-            return download_result + f"\n⚠️ 自动关联失败: {e}。请手动使用 link_overleaf。"
 
     # =========================================================================
     # Action: Download
