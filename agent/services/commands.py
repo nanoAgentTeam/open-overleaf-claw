@@ -1289,12 +1289,12 @@ def build_help_text(in_project: bool = False) -> str:
     task_lines = []
 
     for name, cmd in cmds.items():
-        desc = cmd.description
-        usage = cmd.args_usage.split("\n")[0] if cmd.args_usage else ""
-        # Use args_usage first line as display if it starts with the command name
-        if usage.startswith(name):
-            line = f"  {usage}"
-        elif cmd.requires_args:
+        # Try i18n translation for description; fall back to commands.json value
+        i18n_key = f"help.cmd.{name}"
+        desc_translated = t(i18n_key)
+        desc = desc_translated if desc_translated != i18n_key else cmd.description
+
+        if cmd.requires_args:
             line = f"  {name} ... — {desc}"
         else:
             line = f"  {name}  — {desc}"
@@ -1306,15 +1306,15 @@ def build_help_text(in_project: bool = False) -> str:
         else:
             general_lines.append(line)
 
-    sections = ["📖 Available Commands:\n"]
+    sections = [t("help.title")]
     if general_lines:
-        sections.append("General:\n" + "\n".join(general_lines))
+        sections.append(t("help.section_general") + "\n" + "\n".join(general_lines))
     if project_lines:
-        label = "Project:" if in_project else "Project (enter a project first):"
+        label = t("help.section_project") if in_project else t("help.section_project_hint")
         sections.append(label + "\n" + "\n".join(project_lines))
     if task_lines:
-        sections.append("Task Mode:\n" + "\n".join(task_lines))
-    sections.append("\n💡 You can also chat in natural language — I'll use the right tools automatically.")
+        sections.append(t("help.section_task") + "\n" + "\n".join(task_lines))
+    sections.append(t("help.tip"))
     return "\n\n".join(sections)
 
 
